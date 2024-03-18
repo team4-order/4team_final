@@ -1,4 +1,5 @@
-# Front 메인 레포
+# 4team front Repo
+front 메인 레포
 
 <h2 align ="center">이제 개발을 시작하지.. ㅎㅎ</h2>
 
