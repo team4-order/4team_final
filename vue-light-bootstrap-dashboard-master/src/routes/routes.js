@@ -11,6 +11,8 @@ import Icons from 'src/pages/Icons.vue'
 import Maps from 'src/pages/Maps.vue'
 import Notifications from 'src/pages/Notifications.vue'
 import Upgrade from 'src/pages/Upgrade.vue'
+import WarehouseList from 'src/components/WarehouseList.vue'
+
 
 const routes = [
   {
@@ -27,6 +29,11 @@ const routes = [
         path: 'overview',
         name: 'Overview',
         component: Overview
+      },
+      {
+        path: 'warehouses',
+        name: 'Warehouses',
+        component: WarehouseList // 추가된 컴포넌트 라우트 창고페이지
       },
       {
         path: 'user',

@@ -69,7 +69,7 @@
                       :chart-options="lineChart.options"
                       :responsive-options="lineChart.responsiveOptions">
             <template slot="header">
-              <h4 class="card-title">Users Behavior</h4>
+              <h4 class="card-title">테스트중1..</h4>
               <p class="card-category">24 Hours performance</p>
             </template>
             <template slot="footer">

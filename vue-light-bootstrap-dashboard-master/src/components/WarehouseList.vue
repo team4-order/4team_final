@@ -1,0 +1,63 @@
+<template>
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <card class="strpied-tabled-with-hover"
+                body-classes="table-full-width table-responsive"
+          >
+            <template #header>
+              <h4 class="card-title">창고 목록</h4>
+              <p class="card-category">창고의 상세 정보를 확인할 수 있습니다</p>
+            </template>
+            <l-table class="table-hover table-striped"
+                     :columns="warehouses.columns"
+                     :data="warehouses.data">
+            </l-table>
+          </card>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import LTable from 'src/components/Table.vue'
+import Card from 'src/components/Cards/Card.vue'
+import axios from 'axios'
+
+export default {
+  components: {
+    LTable,
+    Card
+  },
+  data () {
+    return {
+      warehouses: {
+        columns: ['창고 코드', '창고 이름', '창고 주소'],
+        data: []
+      }
+    }
+  },
+  mounted() {
+    this.fetchWarehouses();
+  },
+  methods: {
+    fetchWarehouses() {
+      axios.get('http://localhost:8080/api/warehouses')
+        .then(response => {
+          this.warehouses.data = response.data.map(warehouse => {
+            return {
+              '창고 코드': warehouse.contactCode,
+              '창고 이름': warehouse.contactName,
+              '창고 주소': warehouse.contactAddress
+            };
+          });
+        })
+        .catch(error => {
+          console.error("창고 목록을 가져오는 데 실패했습니다.", error);
+        });
+    }
+  }
+}
+</script>

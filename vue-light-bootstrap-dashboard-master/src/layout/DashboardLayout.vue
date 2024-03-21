@@ -30,6 +30,10 @@
         <i class="nc-icon nc-bell-55"></i>
         <p>Notifications</p>
       </sidebar-link>
+      <sidebar-link to="/admin/warehouses">
+        <i class="nc-icon nc-bell-55"></i>
+        <p>창고 관리</p>
+      </sidebar-link>
 
       <template slot="bottom-links">
         <sidebar-link class="active"

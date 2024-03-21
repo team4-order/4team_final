@@ -5,28 +5,10 @@
         <div class="col-12">
           <card>
             <template slot="header">
-              <h4 class="card-title">Light Bootstrap Table Heading</h4>
-              <p class="card-category">Created using Roboto Font Family</p>
+              <h3 class="card-title">창고목록</h3>
             </template>
-            <div class="typo-line">
-              <h1><p class="category">Header 1</p>Light Bootstrap Table Heading </h1>
-            </div>
 
-            <div class="typo-line">
-              <h2><p class="category">Header 2</p>Light Bootstrap Table Heading</h2>
-            </div>
-            <div class="typo-line">
-              <h3><p class="category">Header 3</p>Light Bootstrap Table Heading</h3>
-            </div>
-            <div class="typo-line">
-              <h4><p class="category">Header 4</p>Light Bootstrap Table Heading</h4>
-            </div>
-            <div class="typo-line">
-              <h5><p class="category">Header 5</p>Light Bootstrap Table Heading</h5>
-            </div>
-            <div class="typo-line">
-              <h6><p class="category">Header 6</p>Light Bootstrap Table Heading</h6>
-            </div>
+
             <div class="typo-line">
               <p><span class="category">Paragraph</span>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam.
               </p>
@@ -83,16 +65,16 @@
     </div>
   </div>
 </template>
-<script>
-  import Card from 'src/components/Cards/Card.vue'
+<!--<script>-->
+<!--  import Card from 'src/components/Cards/Card.vue'-->
 
-  export default {
-    components: {
-      Card
-    }
-  }
+<!--  export default {-->
+<!--    components: {-->
+<!--      Card-->
+<!--    }-->
+<!--  }-->
 
-</script>
+<!--</script>-->
 <style>
 
 </style>
