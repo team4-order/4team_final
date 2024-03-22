@@ -12,6 +12,8 @@ import Maps from 'src/pages/Maps.vue'
 import Notifications from 'src/pages/Notifications.vue'
 import Upgrade from 'src/pages/Upgrade.vue'
 import WarehouseList from 'src/components/WarehouseList.vue'
+import InventoryList from "src/components/InventoryList.vue";
+import InventoryAll from "../components/InventoryAll.vue";
 
 
 const routes = [
@@ -34,6 +36,16 @@ const routes = [
         path: 'warehouses',
         name: 'Warehouses',
         component: WarehouseList // 추가된 컴포넌트 라우트 창고페이지
+      },
+      {
+        path: 'inventory',
+        name: 'Inventory',
+        component: InventoryList // 추가된 컴포넌트 라우트 창고별 인벤토리
+      },
+      {
+        path: 'inventoryAll',
+        name: 'InventoryAll',
+        component: InventoryAll // 모든재고목록 페이지
       },
       {
         path: 'user',

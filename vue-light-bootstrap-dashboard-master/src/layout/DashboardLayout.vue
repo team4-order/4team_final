@@ -18,10 +18,6 @@
         <i class="nc-icon nc-paper-2"></i>
         <p>Typography</p>
       </sidebar-link>
-      <sidebar-link to="/admin/icons">
-        <i class="nc-icon nc-atom"></i>
-        <p>Icons</p>
-      </sidebar-link>
       <sidebar-link to="/admin/maps">
         <i class="nc-icon nc-pin-3"></i>
         <p>Maps</p>
@@ -33,6 +29,10 @@
       <sidebar-link to="/admin/warehouses">
         <i class="nc-icon nc-bank"></i>
         <p>창고 관리</p>
+      </sidebar-link>
+      <sidebar-link to="/admin/inventoryAll">
+        <i class="nc-icon nc-bank"></i>
+        <p>재고</p>
       </sidebar-link>
 
       <template slot="bottom-links">
