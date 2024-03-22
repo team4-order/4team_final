@@ -37,11 +37,19 @@ const routes = [
         name: 'Warehouses',
         component: WarehouseList // 추가된 컴포넌트 라우트 창고페이지
       },
+
       {
-        path: 'inventory',
+        path: 'inventory/:storageCode',
         name: 'Inventory',
-        component: InventoryList // 추가된 컴포넌트 라우트 창고별 인벤토리
+        component: InventoryList,
+        props: true // 이렇게 설정하면 컴포넌트 내에서 $route.params를 통해 파라미터에 접근할 수 있습니다.
       },
+
+      // {
+      //   path: 'inventory',
+      //   name: 'Inventory',
+      //   component: InventoryList // 추가된 컴포넌트 라우트 창고별 인벤토리
+      // },
       {
         path: 'inventoryAll',
         name: 'InventoryAll',

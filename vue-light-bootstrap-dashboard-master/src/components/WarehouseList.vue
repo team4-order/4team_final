@@ -23,7 +23,7 @@
           <div class="card">
             <div class="card-header">
               <h4 class="card-title">창고 목록</h4>
-              <p class="card-category">창고클릭시 창고의 재고페이로 이동합니다</p>
+              <p class="card-category">창고 클릭 시 해당 창고의 재고 페이지로 이동합니다.</p>
             </div>
             <div class="card-body">
               <ul class="list-group">
@@ -47,7 +47,6 @@
 </template>
 
 <script>
-// 가정: LTable과 Card 컴포넌트는 더 이상 사용되지 않으므로 제거됨
 import axios from 'axios';
 
 export default {
@@ -65,8 +64,7 @@ export default {
   },
   methods: {
     fetchWarehouses() {
-      axios
-        .get('http://localhost:8080/api/warehouses')
+      axios.get('http://localhost:8080/api/warehouses')
         .then(response => {
           this.warehouses.data = response.data.map(warehouse => ({
             '창고 코드': warehouse.contactCode,
@@ -87,7 +85,8 @@ export default {
         this.warehouses.data;
     },
     navigateToInventory(storageCode) {
-      this.$router.push({ path: `/admin/inventory`, query: { storageCode } });
+      // URL 파라미터를 포함한 경로로 이동합니다.
+      this.$router.push({ path: `/admin/inventory/${storageCode}` });
     },
   },
 };
@@ -100,5 +99,4 @@ export default {
 .table-hover.table-striped {
   cursor: pointer;
 }
-
 </style>
