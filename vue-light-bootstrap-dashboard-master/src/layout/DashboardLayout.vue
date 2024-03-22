@@ -31,7 +31,7 @@
         <p>Notifications</p>
       </sidebar-link>
       <sidebar-link to="/admin/warehouses">
-        <i class="nc-icon nc-bell-55"></i>
+        <i class="nc-icon nc-bank"></i>
         <p>창고 관리</p>
       </sidebar-link>
 
