@@ -13,6 +13,7 @@ import Notifications from 'src/pages/Notifications.vue'
 import Upgrade from 'src/pages/Upgrade.vue'
 import BusinessTable from 'src/pages/TableList1.vue'
 import OrderList from 'src/pages/TableList2.vue'
+import OrderDetailList from 'src/pages/TableList3.vue'
 
 const routes = [
   {
@@ -64,12 +65,13 @@ const routes = [
         path: 'upgrade',
         name: 'Upgrade to PRO',
         component: Upgrade
-      },
-      {
-        path: '/orders/customer/:customerCode', // 라우트 경로에 매개변수를 추가합니다.
-    name: 'OrderList',
-    component: OrderList
       }
+      // ,
+      // {
+      //   path: '/customer/:customerCode', // 라우트 경로에 매개변수를 추가합니다.
+      //   name: 'OrderList',
+      //   component: OrderList
+      // }
     ]
   },
   {
@@ -77,11 +79,23 @@ const routes = [
     name: 'Business',
     component: BusinessTable
   },
-  // {
-  //   path: '/orders/customer/:customerCode', // 라우트 경로에 매개변수를 추가합니다.
-  //   name: 'OrderList',
-  //   component: OrderList
-  // },
+  {
+    path: '/orders', // 라우트 경로에 매개변수를 추가합니다.
+    component: OrderList,
+    children: [
+      {
+        path: 'customer/:customerCode',
+        name: 'OrderList',
+        component: OrderList
+      },
+      {
+        path: 'detail/:orderNumber',
+        name: 'OrderDetailList',
+        component: OrderDetailList,
+        props: true
+      }
+    ]
+  },
   { path: '*', component: NotFound }
 ]
 
