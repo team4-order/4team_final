@@ -5,7 +5,7 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h4 class="card-title">창고별 재고 목록</h4>
+              <h4 class="card-title">창고별 재고 목록 test</h4>
               <p class="card-category">창고별 재고를 확인하세요.</p>
             </div>
             <div class="card-body">
@@ -15,8 +15,7 @@
                   상품 코드: {{ inventory['상품 코드'] }},
                   등급: {{ inventory['등급'] }},
                   수량: {{ inventory['수량'] }},
-                  판매 가격: {{ inventory['판매 가격'] }},
-                  창고 코드: {{ inventory['창고 코드'] }}
+                  판매 가격: {{ inventory['판매 가격'] }}
                 </li>
               </ul>
             </div>
@@ -52,7 +51,6 @@ export default {
             '등급': inventory.goodsGrade,
             '수량': inventory.inventoryQuantity,
             '판매 가격': inventory.salesPrice,
-            '창고 코드': inventory.storageCode, // 백엔드에서 제공하는 창고 코드 사용
           }));
         })
         .catch(error => {

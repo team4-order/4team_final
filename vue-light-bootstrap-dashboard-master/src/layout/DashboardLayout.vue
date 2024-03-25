@@ -31,7 +31,7 @@
         <p>창고 관리</p>
       </sidebar-link>
       <sidebar-link to="/admin/inventoryAll">
-        <i class="nc-icon nc-bank"></i>
+        <i class="nc-icon nc-bullet-list-67"></i>
         <p>재고</p>
       </sidebar-link>
 
