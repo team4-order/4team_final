@@ -14,11 +14,12 @@
                 <div class="form-group">
                   <select v-model="selectedSearchOption" class="form-control">
                     <option value="">전체</option>
-                    <option value="재고 입고일">재고 입고일</option>
                     <option value="상품 코드">상품 코드</option>
                     <option value="등급">등급</option>
                     <option value="수량">수량</option>
                     <option value="창고 코드">창고 코드</option>
+                    <option value="재고 입고일">재고 입고일</option>
+                    <option value="재품 이름">재품 이름</option>
                   </select>&nbsp;&nbsp;
                 </div>
                 <div class="input-group no-border">
@@ -42,22 +43,24 @@
                 <table class="table table-hover">
                   <thead>
                   <tr>
-                    <th>재고 입고일</th>
+                    <th>상품 이름</th>
                     <th>상품 코드</th>
                     <th>등급</th>
                     <th>수량</th>
                     <th>판매 가격</th>
                     <th>창고 코드</th>
+                    <th>재고 입고일</th>
                   </tr>
                   </thead>
                   <tbody>
                   <tr v-for="inventory in inventories.filteredData" :key="inventory.goodsCode">
-                    <td>{{ formatDate(inventory.firstStockDate) }}</td>
+                    <td>{{inventory.goodsMaster.goodsName}}</td>
                     <td>{{ inventory.goodsCode }}</td>
                     <td>{{ inventory.goodsGrade }}</td>
                     <td>{{ inventory.inventoryQuantity }}</td>
                     <td>{{ inventory.salesPrice }}</td>
                     <td>{{ inventory.storageCode }}</td>
+                    <td>{{ formatDate(inventory.firstStockDate) }}</td>
                   </tr>
                   </tbody>
                 </table>
