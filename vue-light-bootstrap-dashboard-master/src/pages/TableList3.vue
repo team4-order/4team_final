@@ -7,12 +7,12 @@
                     body-classes="table-full-width table-responsive"
               >
                 <template slot="header">
-                  <h4 class="card-title">Order List</h4>
+                  <h4 class="card-title">Order Detail List</h4>
                   <p class="card-category">Here is a subtitle for this table</p>
                 </template>
                 <l-table class="table-hover table-striped"
-                  :columns="orders.columns"
-                     :data="orders.filteredData">
+                  :columns="orderDetails.columns"
+                  :data="orderDetails.filteredData">
                 </l-table>
               </card>
 
@@ -36,33 +36,37 @@ export default {
   data() {
     return {
       searchQuery: '',
-      orders: {
-        columns: ['주문 번호', '주문 금액'],
+      orderDetails: {
+        columns: ['주문 상품(코드)', '상품 등급', '주문 금액'],
         data: [],
         filteredData: []
       }
     };
   },
   mounted() {
-    this.fetchOrderList();
+    this.fetchOrderDetailList();
   },
   methods: {
     // API 엔드포인트 URL 생성
     //const apiUrl = ;
-    fetchOrderList(){
+    fetchOrderDetailList(){
     // API에서 주문 목록을 가져와서 orders 배열에 할당
-    axios.get(`http://localhost:8080/api/orders/customer/${this.$route.params.customerCode}`)
+    const orderNumber = this.$route.params.orderNumber;
+      // Use the orderNumber variable to fetch data
+      axios.get(`http://localhost:8080/api/order/detail/${orderNumber}`)
     .then(response => {
-          this.orders.data = response.data.map(order => {
+          this.orderDetails.data = response.data.map(orderDetail => {
             return {
-              '주문 번호': order.orderNumber,
-              '주문 금액': order.orderPrice
+              '주문 번호': orderDetail.orderNumber,
+              '주문 금액': orderDetail.orderPrice,
+              '주문 상품(코드)': orderDetail.goodsCode,
+              '상품 등급': orderDetail.goodsGrade
             };
           });
-          this.orders.filteredData = this.orders.data;
+          this.orderDetails.filteredData = this.orderDetails.data;
         })
         .catch(error => {
-          console.error("창고 목록을 가져오는 데 실패했습니다.", error);
+          console.error("주문 상세 목록을 가져오는 데 실패했습니다.", error);
         });
     }
   }

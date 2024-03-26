@@ -13,7 +13,7 @@ import Notifications from 'src/pages/Notifications.vue'
 import Upgrade from 'src/pages/Upgrade.vue'
 import BusinessTable from 'src/pages/TableList1.vue'
 import OrderList from 'src/pages/TableList2.vue'
-import OrderDetailList from 'src/pages/TableList3.vue'
+import OrderDetail from 'src/pages/TableList3.vue'
 
 const routes = [
   {
@@ -80,21 +80,15 @@ const routes = [
     component: BusinessTable
   },
   {
-    path: '/orders', // 라우트 경로에 매개변수를 추가합니다.
-    component: OrderList,
-    children: [
-      {
-        path: 'customer/:customerCode',
-        name: 'OrderList',
-        component: OrderList
-      },
-      {
-        path: 'detail/:orderNumber',
-        name: 'OrderDetailList',
-        component: OrderDetailList,
-        props: true
-      }
-    ]
+    path: '/orders/customer/:customerCode', 
+    name: 'OrderList',
+    component: OrderList
+  },
+  {
+    path: '/orders/detail/:orderNumber', 
+    name: 'OrderDetail',
+    component: OrderDetail,
+    props: true
   },
   { path: '*', component: NotFound }
 ]
@@ -104,8 +98,8 @@ const routes = [
  * The specified component must be inside the Views folder
  * @param  {string} name  the filename (basename) of the view to load.
 function view(name) {
-   var res= require('../components/Dashboard/Views/' + name + '.vue');
-   return res;
+var res= require('../components/Dashboard/Views/' + name + '.vue');
+return res;
 };**/
 
 export default routes
