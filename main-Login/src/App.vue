@@ -6,6 +6,7 @@
       <router-link v-if="authenticated" to="/secure">Secure</router-link>
       <router-link v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Logout</router-link>
       <router-link v-else to="/login">Login</router-link>
+      <router-link to="/Register">Register</router-link>
     </div>
     <router-view @authenticated="setAuthenticated"/>
   </div>
@@ -13,6 +14,7 @@
 
 <script>
 import axios from 'axios';
+import Swal from "sweetalert2";
     export default {
         name: 'App',
         data() {
@@ -28,6 +30,12 @@ import axios from 'axios';
                 this.authenticated = status;
             },
             logout() {
+              Swal.fire({
+                title: 'LogOut Success!',
+                text: '성공적으로 로그아웃 되었습니다.',
+                icon: 'success',
+                confirmButtonText: '확인'
+              })
                 this.authenticated = false;
             }
         }

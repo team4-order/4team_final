@@ -10,13 +10,37 @@
       <input type="password" id="password" name="password" v-model="input.password" placeholder="Password" />
     </div>
     <button type="button" v-on:click="login()">Login</button>
-    <button type="button" v-on:click="register()">Register</button>
-  </div>
-</template>
+    <button>비밀번호 : 영문 숫자 특수기호 조합 8자리 이상 16자리 이하</button>
 
+
+
+
+  </div>
+
+
+</template>
+<script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
 <script>
 import axios from 'axios';
+// import Swal from 'sweetalert2'
+import Swal from 'sweetalert2'
+
+
 import router from '@/router'; // Import your Vue Router instance
+let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export default {
   name: 'Login',
@@ -32,9 +56,20 @@ export default {
     async login() {
       try {
         const formData = new FormData();
+
+
         formData.append("username", this.input.username); // Add username to FormData
         formData.append("password", this.input.password); // Add password to FormData
+
         const response = await axios.post('http://localhost:8080/login', formData);
+
+        Swal.fire({
+          title: 'Login Success!',
+          text: '로그인 되었습니다. 메인 페이지로 이동합니다.',
+          icon: 'success',
+          confirmButtonText: '확인'
+        })
+
         // Assuming your backend returns a JWT token upon successful login
         const token = response.headers.authorization;
         // You can store the token in localStorage or Vuex for future API requests
@@ -49,25 +84,11 @@ export default {
         console.error("Login failed:", error.response.data);
         // Handle login failure (display error message, clear inputs, etc.)
       }
-    },
-    async register() {
-      try {
-        const formData = new FormData();
-        formData.append("username", this.input.username); // Add username to FormData
-        formData.append("password", this.input.password); // Add password to FormData
-        const response = await axios.post('http://localhost:8080/join', formData);
-        // Assuming your backend returns some data upon successful registration
-        console.log("Registered successfully!");
-        window.location.reload()
-
-      } catch (error) {
-        console.error("Registration failed:", error.response.data);
-        // Handle registration failure (display error message, clear inputs, etc.)
-      }
     }
   }
 }
 </script>
+
 
 <style>
 
