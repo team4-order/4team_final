@@ -12,12 +12,11 @@ import Icons from 'src/pages/Icons.vue'
 import Maps from 'src/pages/Maps.vue'
 import Notifications from 'src/pages/Notifications.vue'
 import Upgrade from 'src/pages/Upgrade.vue'
-import BusinessTable from 'src/pages/TableList1.vue'
-//import OrderList from 'src/pages/TableList2.vue'
 import OrderList from 'src/pages/TableList6.vue'
 import OrderDetail from 'src/pages/TableList3.vue'
 import CustomerOrderList from 'src/pages/TableList4.vue'
 import CustomerOrderDetail from 'src/pages/TableList5.vue'
+import orderApply from 'src/pages/TableList2.vue'
 
 const routes = [
   {
@@ -84,6 +83,7 @@ const routes = [
     ]
   },
   {
+    // 판매처
     path: '/buyer',
     component: CustomerDashboardLayout,
     redirect: '/buyer/:customerCode',
@@ -100,6 +100,12 @@ const routes = [
         name: 'CustomerOrderDetail',
         component: CustomerOrderDetail,
         props: true
+      },
+      {
+        //주문 등록(판매처)
+        path: 'order',
+        name: 'orderApply',
+        component: orderApply
       }
     ]
   },
