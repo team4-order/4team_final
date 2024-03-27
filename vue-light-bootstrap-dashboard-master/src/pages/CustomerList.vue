@@ -66,8 +66,8 @@
       filterWarehouses() {
         if(this.searchQuery) {
           this.adjustment.filteredData = this.adjustment.data.filter(adjustment =>
-            adjustment['판매처 코드'].toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-            adjustment['판매처 이름'].toLowerCase().includes(this.searchQuery.toLowerCase())
+            warehouse['판매처 코드'].toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+            warehouse['판매처 이름'].toLowerCase().includes(this.searchQuery.toLowerCase())
             // warehouse['창고 주소'].toLowerCase().includes(this.searchQuery.toLowerCase())
           );
         } else {
@@ -88,4 +88,3 @@
   }
   </style>
   
->>>>>>> origin/main

@@ -27,14 +27,13 @@
         <p>Maps</p>
       </sidebar-link>
       <sidebar-link to="/admin/notifications">
-        <i class="nc-icon nc-bell-55"></i>
+        <i class="nc-icon nc-pin-3"></i>
         <p>Notifications</p>
       </sidebar-link>
       <sidebar-link to="/admin/customer_list">
         <i class="nc-icon nc-money-coins"></i>
         <p>거래처 목록</p>
       </sidebar-link>
-
 
       <template slot="bottom-links">
         <sidebar-link class="active"
