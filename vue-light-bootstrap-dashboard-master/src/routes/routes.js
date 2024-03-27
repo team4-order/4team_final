@@ -14,6 +14,7 @@ import Upgrade from 'src/pages/Upgrade.vue'
 import WarehouseList from 'src/components/WarehouseList.vue'
 import InventoryList from "src/components/InventoryList.vue";
 import InventoryAll from "../components/InventoryAll.vue";
+import CstoragePage from "src/components/CStoragePage.vue";
 
 
 const routes = [
@@ -32,6 +33,14 @@ const routes = [
         name: 'Overview',
         component: Overview
       },
+
+      {
+        path: 'cstoragePage',
+        name: 'CstoragePage',
+        component: CstoragePage // 거래처 창고관리 페이지
+      },
+
+
       {
         path: 'warehouses',
         name: 'Warehouses',

@@ -35,6 +35,11 @@
         <p>재고</p>
       </sidebar-link>
 
+      <sidebar-link to="/admin/cstoragePage">
+        <i class="nc-icon nc-delivery-fast"></i>
+        <p>거래처 창고관리</p>
+      </sidebar-link>
+
 <!--      <template slot="bottom-links">-->
 <!--        <sidebar-link class="active"-->
 <!--                      to="/admin/upgrade">-->
