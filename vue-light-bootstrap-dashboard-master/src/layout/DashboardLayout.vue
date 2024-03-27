@@ -35,13 +35,13 @@
         <p>재고</p>
       </sidebar-link>
 
-      <template slot="bottom-links">
-        <sidebar-link class="active"
-                      to="/admin/upgrade">
-          <i class="nc-icon nc-alien-33"></i>
-          <p>Upgrade to PRO</p>
-        </sidebar-link>
-      </template>
+<!--      <template slot="bottom-links">-->
+<!--        <sidebar-link class="active"-->
+<!--                      to="/admin/upgrade">-->
+<!--          <i class="nc-icon nc-alien-33"></i>-->
+<!--          <p>Upgrade to PRO</p>-->
+<!--        </sidebar-link>-->
+<!--      </template>-->
     </side-bar>
     <div class="main-panel">
       <top-navbar></top-navbar>

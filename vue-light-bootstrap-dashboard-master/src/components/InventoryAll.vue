@@ -5,30 +5,49 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h4 class="card-title">총 재고 목록</h4>
+              <h4 class="card-title">총 재고 목록222</h4>
               <p class="card-category">ui수정 예정입니다..</p>
             </div>
             <div class="card-body">
               <div class="toolbar">
-                <!-- 검색 옵션 -->
-                <div class="form-group">
-                  <select v-model="selectedSearchOption" class="form-control">
-                    <option value="">전체</option>
-                    <option value="재고 입고일">재고 입고일</option>
-                    <option value="상품 코드">상품 코드</option>
-                    <option value="등급">등급</option>
-                    <option value="수량">수량</option>
-                    <option value="창고 코드">창고 코드</option>
-                  </select>&nbsp;&nbsp;
-                </div>
-                <div class="input-group no-border">
-                  <input v-model="searchQuery" type="text" value="" class="form-control" placeholder="재고 검색...">
-                  <button @click.prevent="filterInventories" type="submit" class="btn btn-white btn-round btn-just-icon">
-                    <i class="material-icons">search</i>
-                    <div class="ripple-container"></div>
-                  </button>
+                <div class="form-row align-items-center">
+                  <div class="col-auto">
+                    <select class="form-control">
+                      <option value="">전체</option>
+                      <option value="상품 코드">상품 코드</option>
+                      <option value="등급">등급</option>
+                      <option value="수량">수량</option>
+                      <option value="창고 코드">창고 코드</option>
+                      <option value="재고 입고일">재고 입고일</option>
+                      <option value="재품 이름">재품 이름</option>
+                    </select>
+                  </div>
+                  <div class="col-auto">
+                    <input class="form-control" type="text" placeholder="재고 검색...">
+                  </div>
+                  <div class="col-auto">
+                    <button class="btn btn-white btn-round btn-just-icon" type="submit">
+                      <em class="material-icons">search</em>
+                    </button>
+                  </div>
                 </div>
               </div>
+
+
+
+              <!-- 재고현황 박스 -->
+              <div class="card">
+                <div class="card-header">
+                  <h4 class="card-title">상품별 총 재고 현황</h4>
+                </div>
+                <div class="card-body">
+                  <div v-for="(quantity, productNameAndGrade) in inventoriesByProductAndGrade" :key="productNameAndGrade" class="total-inventory">
+                    {{ productNameAndGrade }}: 총 {{ quantity }}개
+                  </div>
+                </div>
+              </div>
+
+
 
               <div class="form-group">
                 <select v-model="sortOption" class="form-control" @change="sortInventories">
@@ -38,30 +57,35 @@
                 </select>
               </div>
 
+<!--              총 재고목록-->
+              <div class="card">
               <div class="table-responsive">
                 <table class="table table-hover">
                   <thead>
                   <tr>
-                    <th>재고 입고일</th>
+                    <th>상품 이름</th>
                     <th>상품 코드</th>
                     <th>등급</th>
                     <th>수량</th>
                     <th>판매 가격</th>
                     <th>창고 코드</th>
+                    <th>재고 입고일</th>
                   </tr>
                   </thead>
                   <tbody>
                   <tr v-for="inventory in inventories.filteredData" :key="inventory.goodsCode">
-                    <td>{{ formatDate(inventory.firstStockDate) }}</td>
+                    <td>{{inventory.goodsMaster.goodsName}}</td>
                     <td>{{ inventory.goodsCode }}</td>
                     <td>{{ inventory.goodsGrade }}</td>
                     <td>{{ inventory.inventoryQuantity }}</td>
                     <td>{{ inventory.salesPrice }}</td>
                     <td>{{ inventory.storageCode }}</td>
+                    <td>{{ formatDate(inventory.firstStockDate) }}</td>
                   </tr>
                   </tbody>
                 </table>
               </div>
+            </div>
             </div>
 
             <div class="grades-section">
@@ -71,7 +95,7 @@
                   <table class="table">
                     <thead>
                     <tr>
-                      <th>상품 코드</th>
+                      <th>상품 이름</th>
                       <th>수량</th>
                       <th>판매 가격</th>
                       <th>창고 코드</th>
@@ -79,7 +103,7 @@
                     </thead>
                     <tbody>
                     <tr v-for="inventory in filteredInventoriesByGrade(grade)" :key="inventory.goodsCode">
-                      <td>{{ inventory.goodsCode }}</td>
+                      <td>{{ inventory.goodsMaster.goodsName }}</td>
                       <td>{{ inventory.inventoryQuantity }}</td>
                       <td>{{ inventory.salesPrice }}</td>
                       <td>{{ inventory.storageCode }}</td>
@@ -154,6 +178,25 @@ export default {
       return this.inventories.filteredData.filter(inventory => inventory.goodsGrade === grade);
     },
   },
+
+
+
+//총 재고
+  computed: {
+    inventoriesByProductAndGrade() {
+      const summary = {};
+      this.inventories.data.forEach(inventory => {
+        const key = `${inventory.goodsMaster.goodsName} ${inventory.goodsGrade}`;
+        if (!summary[key]) {
+          summary[key] = 0;
+        }
+        summary[key] += parseInt(inventory.inventoryQuantity, 10);
+      });
+      return summary;
+    },
+  },
+
+
   watch: {
     searchQuery() {
       this.filterInventories();
@@ -224,6 +267,10 @@ h5 {
 /* 버튼 아이콘 크기 조정 */
 .btn .material-icons {
   font-size: 18px; /* 아이콘 글꼴 크기 줄임 */
+}
+
+.total-inventory {
+  margin-bottom: 10px;
 }
 
 </style>

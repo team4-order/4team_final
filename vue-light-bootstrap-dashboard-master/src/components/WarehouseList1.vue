@@ -3,6 +3,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
+          <!-- 검색 바 -->
           <div class="input-group no-border">
             <input
               type="text"
@@ -17,9 +18,11 @@
               </div>
             </div>
           </div>
+
+          <!-- 카드를 사용하여 창고 목록 표시 -->
           <div class="card">
             <div class="card-header">
-              <h4 class="card-title">창고 목록9</h4>
+              <h4 class="card-title">창고 목록</h4>
               <p class="card-category">창고 옆의 버튼을 클릭 시 해당 창고의 재고 페이지로 이동합니다.</p>
             </div>
             <div class="card-body">
@@ -28,46 +31,41 @@
                   v-for="warehouse in warehouses.filteredData"
                   :key="warehouse['창고 코드']"
                   class="list-group-item d-flex justify-content-between align-items-center"
-                  @click="fetchInventoryData(warehouse['창고 코드'])"
                 >
-                <div>
-                  <span class="text-primary">{{ warehouse['창고 코드'] }}</span> -
-                  {{ warehouse['창고 이름'] }},
-                  {{ warehouse['창고 주소'] }}
-                </div>
-                <button class="btn btn-primary btn-sm" @click.stop="navigateToInventory(warehouse['창고 코드'])">이동</button>
+                  <div>
+                    <span class="text-primary">{{ warehouse['창고 코드'] }}</span> -
+                    {{ warehouse['창고 이름'] }},
+                    {{ warehouse['창고 주소'] }}
+                  </div>
+                  <button class="btn btn-primary btn-sm" @click="navigateToInventory(warehouse['창고 코드'])">이동</button>
                 </li>
               </ul>
             </div>
           </div>
+
+          <!-- 새로운 박스 추가: '2014 Sales' 차트 -->
           <div class="card">
             <div class="card-body">
-<!--              <chart-card-->
-<!--                :chart-data="barChart.data"-->
-<!--                :chart-options="barChart.options"-->
-<!--                :chart-responsive-options="barChart.responsiveOptions"-->
-<!--                chart-type="Bar"-->
-<!--              >-->
-<!--                <template v-slot:header>-->
-<!--                  <h4 class="card-title">{{ selectedWarehouseName }}</h4>-->
-<!--                  <p class="card-category">선택창고 상품별 수량입니다..</p>-->
-<!--                </template>-->
-<!--                <template v-slot:footer>-->
-
-
-<!--                </template>-->
-<!--              </chart-card>-->
-
               <chart-card
-                :key="chartKey"
                 :chart-data="barChart.data"
                 :chart-options="barChart.options"
                 :chart-responsive-options="barChart.responsiveOptions"
-                chart-type="Bar"
-              />
-
-
-
+                chart-type="Bar">
+                <template v-slot:header>
+                  <h4 class="card-title">2014 Sales</h4>
+                  <p class="card-category">All products including Taxes</p>
+                </template>
+                <template v-slot:footer>
+                  <div class="legend">
+                    <i class="fa fa-circle text-info"></i> Tesla Model S
+                    <i class="fa fa-circle text-danger"></i> BMW 5 Series
+                  </div>
+                  <hr>
+                  <div class="stats">
+                    <i class="fa fa-check"></i> Data information certified
+                  </div>
+                </template>
+              </chart-card>
             </div>
           </div>
         </div>
@@ -86,25 +84,25 @@ export default {
   },
   data() {
     return {
-
       searchQuery: '',
       warehouses: {
         data: [],
         filteredData: [],
-
       },
-      selectedWarehouseName: '', // 선택된 창고 이름
       barChart: {
         data: {
-          labels: [],
-          series: [[]],
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          series: [
+            [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895],
+            [412, 243, 280, 580, 453, 353, 300, 364, 368, 410, 636, 695]
+          ]
         },
         options: {
           seriesBarDistance: 10,
           axisX: {
-            showGrid: false,
+            showGrid: false
           },
-          height: '245px',
+          height: '245px'
         },
         responsiveOptions: [
           ['screen and (max-width: 640px)', {
@@ -112,14 +110,11 @@ export default {
             axisX: {
               labelInterpolationFnc(value) {
                 return value[0];
-              },
-            },
-          }],
-
+              }
+            }
+          }]
         ]
       },
-
-      chartKey: Date.now(), // 차트 키 초기화
     };
   },
   mounted() {
@@ -150,47 +145,6 @@ export default {
     navigateToInventory(storageCode) {
       this.$router.push({ path: `/admin/inventory/${storageCode}` });
     },
-
-    async fetchInventoryData(storageCode) {
-      try {
-        const response = await axios.get(`/api/inventories/read/${storageCode}`);
-        const inventoryData = response.data;
-        let productQuantities = {};
-
-        inventoryData.forEach(item => {
-          const productName = item.goodsMaster.goodsName;
-          const quantity = item.inventoryQuantity;
-          if (!productQuantities[productName]) {
-            productQuantities[productName] = 0;
-          }
-          productQuantities[productName] += quantity;
-        });
-
-        // 새로운 차트 데이터 객체 생성
-        const newChartData = {
-          labels: Object.keys(productQuantities),
-          series: [Object.values(productQuantities)]
-        };
-
-        // 차트 데이터와 선택된 창고 이름 업데이트
-        this.barChart.data = newChartData;
-        const selectedWarehouse = this.warehouses.data.find(wh => wh['창고 코드'] === storageCode);
-        this.selectedWarehouseName = selectedWarehouse ? selectedWarehouse['창고 이름'] : '';
-
-        // 차트 컴포넌트 강제 업데이트를 위한 key 값 변경
-        this.chartKey = Date.now();
-      } catch (error) {
-        console.error("Error fetching inventory data for warehouse", error);
-      }
-
-      console.log("새 차트 데이터:", newChartData); // 새로운 차트 데이터 로깅
-      this.chartKey = Date.now();
-      console.log("차트 키 업데이트:", this.chartKey); // 차트 키 업데이트 로깅
-    }
-
-
-
-
   },
 }
 </script>
@@ -202,6 +156,7 @@ export default {
 .table-hover.table-striped {
   cursor: pointer;
 }
+/* 여기에 추가적으로 필요한 스타일을 정의할 수 있습니다. */
 .btn-sm {
   margin-left: auto; /* '이동' 버튼을 오른쪽 정렬합니다. */
 }

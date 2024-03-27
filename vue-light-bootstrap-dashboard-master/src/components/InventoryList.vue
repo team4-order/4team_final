@@ -11,6 +11,7 @@
             <div class="card-body">
               <ul class="list-group">
                 <li v-for="inventory in inventories" :key="inventory.goodsCode" class="list-group-item">
+                  상품 이름: {{ inventory['상품 이름'] }},
                   재고 입고일: {{ inventory['재고 입고일'] }},
                   상품 코드: {{ inventory['상품 코드'] }},
                   등급: {{ inventory['등급'] }},
@@ -40,12 +41,12 @@ export default {
   },
   methods: {
     fetchInventories() {
-      // URL에서 storageCode 파라미터를 읽어옵니다.
       const storageCode = this.$route.params.storageCode; // 경로 파라미터로 변경됨
       axios.get(`/api/inventories/read/${storageCode}`) // 경로를 수정하여 요청합니다.
         .then(response => {
           // 응답 데이터를 사용하여 inventories 배열을 업데이트합니다.
           this.inventories = response.data.map(inventory => ({
+            '상품 이름': inventory.goodsMaster.goodsName, // 상품 이름 추가
             '재고 입고일': inventory.firstStockDate,
             '상품 코드': inventory.goodsCode,
             '등급': inventory.goodsGrade,
