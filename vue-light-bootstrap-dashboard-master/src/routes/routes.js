@@ -12,8 +12,11 @@ import Maps from 'src/pages/Maps.vue'
 import Notifications from 'src/pages/Notifications.vue'
 import Upgrade from 'src/pages/Upgrade.vue'
 import BusinessTable from 'src/pages/TableList1.vue'
-import OrderList from 'src/pages/TableList2.vue'
+//import OrderList from 'src/pages/TableList2.vue'
+import OrderList from 'src/pages/TableList6.vue'
 import OrderDetail from 'src/pages/TableList3.vue'
+import CustomerOrderList from 'src/pages/TableList4.vue'
+import CustomerOrderDetail from 'src/pages/TableList5.vue'
 
 const routes = [
   {
@@ -65,6 +68,11 @@ const routes = [
         path: 'upgrade',
         name: 'Upgrade to PRO',
         component: Upgrade
+      },
+      {
+        path: 'orders',
+        name: 'OrderList',
+      component: OrderList
       }
       // ,
       // {
@@ -79,15 +87,37 @@ const routes = [
     name: 'Business',
     component: BusinessTable
   },
+  // {
+  //   //주문 목록(기업)
+  //   path: '/orders/:customerCode', 
+  //   name: 'OrderList',
+  //   component: OrderList
+  // },
   {
-    path: '/orders/customer/:customerCode', 
-    name: 'OrderList',
-    component: OrderList
-  },
+      //주문 목록(기업)
+      path: '/orders',
+      name: 'OrderList',
+      component: OrderList
+    },
   {
+    //주문 상세(기업)
     path: '/orders/detail/:orderNumber', 
     name: 'OrderDetail',
     component: OrderDetail,
+    props: true
+  },
+  {
+    //주문 목록(판매처)
+    path: '/buyer/:customerCode', 
+    name: 'CustomerOrderList',
+    component: CustomerOrderList
+    //, props: true
+  },
+  {
+    //주문 상세(판매처)
+    path: '/buyer/detail/:orderNumber', 
+    name: 'CustomerOrderDetail',
+    component: CustomerOrderDetail,
     props: true
   },
   { path: '*', component: NotFound }

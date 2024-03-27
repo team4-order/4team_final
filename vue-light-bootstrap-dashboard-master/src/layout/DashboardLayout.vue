@@ -30,6 +30,10 @@
         <i class="nc-icon nc-bell-55"></i>
         <p>Notifications</p>
       </sidebar-link>
+      <sidebar-link to="/admin/orders">
+        <i class="nc-icon nc-pin-3"></i>
+        <p>주문</p>
+      </sidebar-link>
 
       <template slot="bottom-links">
         <sidebar-link class="active"
