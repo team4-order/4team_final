@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import axios from 'axios';
     export default {
         name: 'App',
         data() {
@@ -19,10 +20,7 @@
                 authenticated: false,
                 // this is only for testing purposes no actual app will have this
                 // an api call will validate user credentials
-                mockAccount: {
-                    username: "ameyrupji",
-                    password: "P@ssword!"
-                }
+
             }
         },
         methods: {
