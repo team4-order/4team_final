@@ -1,4 +1,5 @@
 import DashboardLayout from '../layout/DashboardLayout.vue'
+import CustomerDashboardLayout from '../layout/CustomerDashboardLayout.vue'
 // GeneralViews
 import NotFound from '../pages/NotFoundPage.vue'
 
@@ -72,53 +73,35 @@ const routes = [
       {
         path: 'orders',
         name: 'OrderList',
-      component: OrderList
+        component: OrderList
+      },
+      {
+        path: '/orders/detail/:orderNumber', 
+        name: 'OrderDetail',
+        component: OrderDetail,
+        props: true
       }
-      // ,
-      // {
-      //   path: '/customer/:customerCode', // 라우트 경로에 매개변수를 추가합니다.
-      //   name: 'OrderList',
-      //   component: OrderList
-      // }
     ]
   },
   {
-    path: '/business/:businessId', 
-    name: 'Business',
-    component: BusinessTable
-  },
-  // {
-  //   //주문 목록(기업)
-  //   path: '/orders/:customerCode', 
-  //   name: 'OrderList',
-  //   component: OrderList
-  // },
-  {
-      //주문 목록(기업)
-      path: '/orders',
-      name: 'OrderList',
-      component: OrderList
-    },
-  {
-    //주문 상세(기업)
-    path: '/orders/detail/:orderNumber', 
-    name: 'OrderDetail',
-    component: OrderDetail,
-    props: true
-  },
-  {
-    //주문 목록(판매처)
-    path: '/buyer/:customerCode', 
-    name: 'CustomerOrderList',
-    component: CustomerOrderList
-    //, props: true
-  },
-  {
-    //주문 상세(판매처)
-    path: '/buyer/detail/:orderNumber', 
-    name: 'CustomerOrderDetail',
-    component: CustomerOrderDetail,
-    props: true
+    path: '/buyer',
+    component: CustomerDashboardLayout,
+    redirect: '/buyer/:customerCode',
+    children: [
+      {
+        //주문 목록(판매처)
+        path: ':customerCode',
+        name: 'CustomerOrderList',
+        component: CustomerOrderList
+      },
+      {
+        //주문 상세(판매처)
+        path: 'detail/:orderNumber', 
+        name: 'CustomerOrderDetail',
+        component: CustomerOrderDetail,
+        props: true
+      }
+    ]
   },
   { path: '*', component: NotFound }
 ]
