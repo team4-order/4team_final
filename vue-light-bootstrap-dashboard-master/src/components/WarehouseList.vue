@@ -42,21 +42,6 @@
           </div>
           <div class="card">
             <div class="card-body">
-<!--              <chart-card-->
-<!--                :chart-data="barChart.data"-->
-<!--                :chart-options="barChart.options"-->
-<!--                :chart-responsive-options="barChart.responsiveOptions"-->
-<!--                chart-type="Bar"-->
-<!--              >-->
-<!--                <template v-slot:header>-->
-<!--                  <h4 class="card-title">{{ selectedWarehouseName }}</h4>-->
-<!--                  <p class="card-category">선택창고 상품별 수량입니다..</p>-->
-<!--                </template>-->
-<!--                <template v-slot:footer>-->
-
-
-<!--                </template>-->
-<!--              </chart-card>-->
 
               <chart-card
                 :key="chartKey"
@@ -158,8 +143,9 @@ export default {
         let productQuantities = {};
 
         inventoryData.forEach(item => {
-          const productName = item.goodsMaster.goodsName;
-          const quantity = item.inventoryQuantity;
+          // 상품 이름을 직접 DTO에서 가져옵니다.
+          const productName = item.goodsName;
+          const quantity = Number(item.inventoryQuantity); // `Number()`는 필요에 따라 사용
           if (!productQuantities[productName]) {
             productQuantities[productName] = 0;
           }
