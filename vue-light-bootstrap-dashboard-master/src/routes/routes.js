@@ -11,7 +11,9 @@ import Icons from 'src/pages/Icons.vue'
 import Maps from 'src/pages/Maps.vue'
 import Notifications from 'src/pages/Notifications.vue'
 import Upgrade from 'src/pages/Upgrade.vue'
-import CustomerList from 'src/pages/CustomerList.vue' // 경로가 수정되었습니다.
+import BCustomerList from 'src/pages/BCustomerList.vue'
+import BAdjustment from 'src/pages/BAdjustment.vue' // 경로 수정
+import CustomerList from 'src/pages/CustomerList.vue'
 
 const routes = [
   {
@@ -63,6 +65,17 @@ const routes = [
         path: 'upgrade',
         name: 'Upgrade to PRO',
         component: Upgrade
+      },
+      {
+        path: 'bcustomer_list',
+        name: 'B Customer List',
+        component: BCustomerList
+      },
+      {
+        path: '/bcustomer_list/b_adjustment/:contactCode', // 변경된 부분: customerCode -> contactCode
+        name: 'B Adjustment List',
+        component: BAdjustment,
+        props: true
       },
       {
         path: 'customer_list',

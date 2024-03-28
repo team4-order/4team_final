@@ -30,9 +30,13 @@
         <i class="nc-icon nc-bell-55"></i>
         <p>Notifications</p>
       </sidebar-link>
-      <sidebar-link to="/admin/customer_list">
+      <sidebar-link to="/admin/bcustomer_list">
         <i class="nc-icon nc-money-coins"></i>
-        <p>거래처 목록</p>
+        <p>정산</p>
+      </sidebar-link>
+      <sidebar-link to="/admin/customer_list">
+        <i class="nc-icon nc-badge"></i>
+        <p>거래처 관리</p>
       </sidebar-link>
 
 
