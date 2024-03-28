@@ -72,7 +72,7 @@ app.get("/callback", async function (req, res) {
 
     //3단계: access_token으로 사용자 정보 받아오기
     if ("access_token" in tokenRequest) {
-        const { access_token } = tokenRequest;
+        const  access_token  = tokenRequest;
         const apiUrl = "https://openapi.naver.com/v1/nid/me";
 
         const data = await fetch(apiUrl, {
@@ -86,17 +86,24 @@ app.get("/callback", async function (req, res) {
         //사용자 정보 콘솔로 받아오기 -> DB에 저장해야 합니다.
 
         console.log("userData:"+ userData);
-        this.$router.push({
-            name: 'App',
-            // key: value
-            params: { token : userData }
-        })
+
+
+
+
 
     }
-
     return res.send("DB에 저장하고 랜드페이지로 redirect ");
+
+
 });
 
 app.listen(3000, function () {
     console.log("http://localhost:3000/naverlogin app listening on port 3000!");
+
+    /*this.$router.push({
+        name: 'Login',
+        // key: value
+        params: {token: '1'}
+    })*/
+
 });

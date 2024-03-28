@@ -9,7 +9,7 @@
       <label for="password">Password</label>
       <input type="password" id="password" name="password" v-model="input.password" placeholder="Password" />
     </div>
-
+    <button type="button" v-on:click="check()">check</button>
 <!--    <button v-on:click="redirectToNaverLogin">Naver Login</button>-->
 
 
@@ -119,7 +119,16 @@ export default {
 
 
 
+    },check(){
+    const tokens =  this.$route.params.token
+    if(tokens != false)
+    {
+      this.$emit("authenticated", true);
+      this.$router.replace({ name: "Secure" });
+      console.log(tokens);
     }
+
+  }
   }
 }
 </script>
