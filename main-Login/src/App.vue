@@ -6,6 +6,7 @@
       <router-link v-if="authenticated" to="/secure">Secure</router-link>
       <router-link v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Logout</router-link>
       <router-link v-else to="/login">Login</router-link>
+      <button type="button" v-on:click="check()">check</button>
       <router-link to="/Register">Register</router-link>
     </div>
     <router-view @authenticated="setAuthenticated"/>
@@ -28,6 +29,7 @@ import Swal from "sweetalert2";
         methods: {
             setAuthenticated(status) {
                 this.authenticated = status;
+
             },
             logout() {
               Swal.fire({
@@ -37,7 +39,17 @@ import Swal from "sweetalert2";
                 confirmButtonText: '확인'
               })
                 this.authenticated = false;
+            },check(){
+            const tokens =  this.$route.params.token
+            if(tokens == true)
+            {
+              this.$emit("authenticated", true);
+              this.$router.replace({ name: "Secure" });
+              console.log(tokens);
             }
+
+          }
+
         }
     }
 </script>

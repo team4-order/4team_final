@@ -32,6 +32,7 @@ const routes = [
     name: 'Login',
     component: function () {
       return import(/* webpackChunkName: "about" */ '../views/Login.vue')
+
     }
   },
   {
@@ -39,6 +40,14 @@ const routes = [
     name: 'Register',
     component: function() {
       return import('../views/Register.vue')
+    }
+
+  },
+  {
+    path: '/login',
+    name: 'App',
+    component: function (){
+      return import('../App.vue')
     }
   }
 ]
