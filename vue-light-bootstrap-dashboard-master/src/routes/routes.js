@@ -16,7 +16,7 @@ import OrderList from 'src/pages/TableList6.vue'
 import OrderDetail from 'src/pages/TableList3.vue'
 import CustomerOrderList from 'src/pages/TableList4.vue'
 import CustomerOrderDetail from 'src/pages/TableList5.vue'
-import orderApply from 'src/pages/TableList2.vue'
+import OrderApply from 'src/pages/TableList2.vue'
 
 const routes = [
   {
@@ -100,15 +100,22 @@ const routes = [
         name: 'CustomerOrderDetail',
         component: CustomerOrderDetail,
         props: true
-      },
+      }
+      ,
       {
         //주문 등록(판매처)
-        path: 'order',
-        name: 'orderApply',
-        component: orderApply
+        path: 'apply',
+        name: 'OrderApply',
+        component: OrderApply
       }
     ]
   },
+  {
+    // 판매처
+    path: '/apply',
+    name: 'OrderApply',
+    component: OrderApply
+  }, 
   { path: '*', component: NotFound }
 ]
 

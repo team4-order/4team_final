@@ -9,11 +9,14 @@
             <template slot="header">
               <h4 class="card-title">Order List</h4>
               <p class="card-category">Here is a subtitle for this table</p>
+              <button>Save Changes</button>
+              <!-- <button @click="saveOrderChanges"></button> -->
             </template>
             <l-table class="table-hover table-striped"
                     :columns="orders.columns"
                     :data="orders.filteredData"
-                    @row-click="handleRowClick">
+                    :editable="true" 
+            >
             </l-table>
           </card>
         </div>
@@ -24,7 +27,7 @@
 
 <script>
 import axios from 'axios';
-import LTable from 'src/components/Table.vue';
+import LTable from 'src/components/InputTable.vue';
 import Card from 'src/components/Cards/Card.vue';
 
 export default {
@@ -36,7 +39,7 @@ export default {
     return {
       searchQuery: '',
       orders: {
-        columns: ['주문 번호', '주문 금액', '주문 일자', '판매처 코드'],
+        columns: ['주문 번호', '주문 금액', '주문 일자', '입력 필드'],
         data: [],
         filteredData: []
       }
@@ -47,14 +50,14 @@ export default {
   },
   methods: {
     fetchOrderList() {
-      axios.get(`http://localhost:8080/api/orders/customer/${this.$route.params.customerCode}`)
+      axios.get(`http://localhost:8080/api/orders/customer`)
         .then(response => {
           this.orders.data = response.data.map(order => {
             return {
               '주문 번호': order.orderNumber,
               '주문 금액': order.orderPrice,
               '주문 일자': order.orderDate,
-              '판매처 코드': order.customerCode
+              '입력 필드': null // Initialize input field value
             };
           });
           this.orders.filteredData = this.orders.data;
@@ -62,12 +65,18 @@ export default {
         .catch(error => {
           console.error("주문 목록을 가져오는 데 실패했습니다.", error);
         });
-    },
-    handleRowClick(row) {
-      const orderNumber = row['주문 번호'];
-      // 주문 상세 페이지 URL로 이동
-      window.location.href = `http://localhost:8080/#/admin/orders/detail/${orderNumber}`;
     }
+  //   ,
+  //   saveOrderChanges() {
+  //   // 변경된 데이터만 필터링하거나 모든 주문 데이터를 전송할 수 있습니다.
+  //   axios.post(`http://api/orders/update`, this.orders.data)
+  //     .then(response => {
+  //       alert("주문 정보가 성공적으로 업데이트되었습니다.");
+  //     })
+  //     .catch(error => {
+  //       console.error("주문 정보 업데이트에 실패했습니다.", error);
+  //     });
+  // }
   }
 };
 </script>
