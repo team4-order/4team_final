@@ -15,6 +15,8 @@ import WarehouseList from 'src/components/WarehouseList.vue'
 import InventoryList from "src/components/InventoryList.vue";
 import InventoryAll from "../components/InventoryAll.vue";
 import CstoragePage from "src/components/CStoragePage.vue";
+import vendorList from "../components/VendorList.vue";
+import VendorDetails from "src/components/VendorDetails.vue";
 
 
 const routes = [
@@ -64,6 +66,20 @@ const routes = [
         name: 'InventoryAll',
         component: InventoryAll // 모든재고목록 페이지
       },
+
+      {
+        path: 'vendorList',
+        name: 'VendorList',
+        component: vendorList // 공급처 관리 페이지
+      },
+
+      {
+        path: '/vendor/:contactCode',
+        name: 'VendorDetails',
+        component: VendorDetails, // 공급처 상세정보 페이지
+        props: true
+      },
+
       {
         path: 'user',
         name: 'User',

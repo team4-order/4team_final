@@ -40,7 +40,7 @@
         <p>거래처 관리</p>
       </sidebar-link>
 
-      <sidebar-link to="/admin/cstoragePage">
+      <sidebar-link to="/admin/vendorList">
         <i class="nc-icon nc-delivery-fast"></i>
         <p>공급처 관리</p>
       </sidebar-link>

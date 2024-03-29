@@ -19,7 +19,7 @@
           </div>
           <div class="card">
             <div class="card-header">
-              <h4 class="card-title">창고 목록9</h4>
+              <h4 class="card-title">창고 목록</h4>
               <p class="card-category">창고 옆의 버튼을 클릭 시 해당 창고의 재고 페이지로 이동합니다.</p>
             </div>
             <div class="card-body">
