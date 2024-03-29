@@ -11,7 +11,7 @@
             <template slot="header">
               <h4 class="card-title">거래처 목록</h4>
               <div class="text-center">
-                <button type="submit" class="btn btn-info btn-fill float-right" @click="$router.push('/join')">
+                <button type="submit" class="btn btn-info btn-fill float-right" @click="$router.push('/admin/input_customer')">
                   거래처 등록
                 </button>
               </div>

@@ -14,6 +14,7 @@ import Upgrade from 'src/pages/Upgrade.vue'
 import BCustomerList from 'src/pages/BCustomerList.vue'
 import BAdjustment from 'src/pages/BAdjustment.vue' // 경로 수정
 import CustomerList from 'src/pages/CustomerList.vue'
+import InputCustomer from 'src/pages/InputCustomer.vue'
 
 const routes = [
   {
@@ -81,6 +82,11 @@ const routes = [
         path: 'customer_list',
         name: 'Customer List',
         component: CustomerList
+      },
+      {
+        path: 'input_customer',
+        name: 'Input Customer',
+        component: InputCustomer
       }
     ]
   },

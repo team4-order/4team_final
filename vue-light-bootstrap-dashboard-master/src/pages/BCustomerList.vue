@@ -56,9 +56,7 @@ export default {
           this.Bcontacts.data = response.data.map(Bcontact => ({
             '연락처 코드': Bcontact.contactCode,
             '연락처 이름': Bcontact.contactName,
-            '연락처 주소': Bcontact.contactAddress,
-            '전화번호': Bcontact.phoneNumber, // 전화번호 추가
-            '이메일 주소': Bcontact.emailAddress // 이메일 주소 추가
+            '연락처 주소': Bcontact.contactAddress
           }));
           this.Bcontacts.filteredData = this.Bcontacts.data;
           this.sortContacts('연락처 이름'); // 메서드 이름 수정
@@ -74,9 +72,7 @@ export default {
         this.Bcontacts.filteredData = this.Bcontacts.data.filter(Bcontact =>
           Bcontact['연락처 코드'].toLowerCase().includes(this.searchQuery.toLowerCase()) ||
           Bcontact['연락처 이름'].toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          Bcontact['연락처 주소'].toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          Bcontact['전화번호'].toLowerCase().includes(this.searchQuery.toLowerCase()) || // 전화번호 검색 추가
-          Bcontact['이메일 주소'].toLowerCase().includes(this.searchQuery.toLowerCase()) // 이메일 주소 검색 추가
+          Bcontact['연락처 주소'].toLowerCase().includes(this.searchQuery.toLowerCase())
         );
       } else {
         this.Bcontacts.filteredData = this.Bcontacts.data;
