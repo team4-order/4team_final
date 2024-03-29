@@ -2,13 +2,24 @@
   <div class="cstorage-page container mt-4">
     <h2 class="mb-4">거래처 관리</h2>
 
-    <div v-if="cStorages.length > 0" class="card custom-card mb-5">
+    <!-- 검색 유형 선택 필드 추가 -->
+    <div class="mb-3 d-flex">
+      <select class="form-select w-auto mr-2" v-model="searchType">
+        <option value="customerCode">거래처 코드</option>
+        <option value="storageCode">창고 코드</option>
+      </select>
+      <!-- 검색 쿼리 입력 필드 -->
+      <input type="text" v-model="searchQuery" placeholder="검색" class="form-control">
+    </div>
+
+    <!-- 필터링된 목록을 표시 -->
+    <div v-if="filteredCStorages.length > 0" class="card custom-card mb-5">
       <div class="card-header">
         <h3 class="card-title">거래처와 창고 목록</h3>
       </div>
       <div class="card-body p-0">
         <ul class="list-group list-group-flush">
-          <li v-for="item in cStorages" :key="item.customerCode" class="list-group-item">
+          <li v-for="item in filteredCStorages" :key="item.customerCode" class="list-group-item">
             <div class="d-flex justify-content-between align-items-center">
               <span>거래처 코드: {{ item.customerCode }}, 창고 코드: {{ item.storageCode }}</span>
               <button class="btn btn-danger btn-sm" @click="deleteCStorage(item.customerCode, item.storageCode)">삭제</button>
@@ -49,12 +60,28 @@ export default {
       cStorages: [], // 서버에서 받아온 거래처와 창고 코드 목록
       uniqueCustomers: [], // 중복 제거된 거래처 코드 목록
       selectedCustomerCode: '', // 선택된 거래처 코드
-      newStorageCode: '' // 입력된 새 창고 코드
+      newStorageCode: '', // 입력된 새 창고 코드
+      searchQuery: '',
+      searchType: 'customerCode', // 검색 유형 ('customerCode' 또는 'storageCode')
     };
   },
   created() {
     this.fetchCStorages();
   },
+
+  computed: {
+    // 필터링된 거래처와 창고 목록을 계산하는 computed 속성
+    filteredCStorages() {
+      if (this.searchQuery) {
+        return this.cStorages.filter(item =>
+          item[this.searchType].toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+      }
+      return this.cStorages;
+    },
+  },
+
+
   methods: {
     fetchCStorages() {
       axios.get('/api/cstorage/list')
@@ -65,7 +92,6 @@ export default {
           this.uniqueCustomers = Array.from(customerCodes).map(code => {
             return {
               customerCode: code,
-              // 선택된 거래처 코드로 해당 거래처 정보 찾기 (예시: 첫 번째 매칭되는 거래처 정보 사용)
               ...this.cStorages.find(item => item.customerCode === code)
             };
           });

@@ -93,7 +93,7 @@
     <div class="card mt-4">
       <div class="card-header">
         <h4 class="card-title">공급처 입고내역</h4>
-        <p>각 헤더클릭시 정렬됩니다.</p>
+        <p style="color: #bb0502">각 헤더클릭시 정렬됩니다.</p>
       </div>
       <div class="card-body">
         <div class="table-responsive">
