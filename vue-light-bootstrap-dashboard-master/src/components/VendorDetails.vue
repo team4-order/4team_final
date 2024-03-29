@@ -21,14 +21,35 @@
               <th scope="row">공급처 주소</th>
               <td>{{ vendor.contactAddress }}</td>
             </tr>
+
             <tr>
               <th scope="row">창고 코드</th>
               <td>{{ vendor.storageCode }}</td>
             </tr>
+
             </tbody>
           </table>
         </div>
       </div>
+
+
+      <div class="card mt-4">
+        <div class="card-header">
+          <h4 class="card-title">창고 코드 변경</h4>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="storageCodeSelect">새로운 창고 코드 선택</label>
+            <select id="storageCodeSelect" v-model="selectedStorageCode" class="form-control">
+              <option v-for="code in storageCodes" :key="code" :value="code">{{ code }}</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" @click="updateStorageCode">창고 코드 업데이트</button>
+        </div>
+      </div>
+
+
+
     </div>
 
     <!-- 공급처 입고내역 섹션 -->
@@ -73,14 +94,42 @@ export default {
   data() {
     return {
       vendor: {},
-      inputs: []
+      inputs: [],
+      selectedStorageCode: '',
+      storages: [] // 사용자가 보유한 창고 목록을 저장할 배열 추가
     };
   },
   mounted() {
     this.fetchVendorDetails();
     this.fetchVendorInputs();
+    this.fetchStorages(); // 사용자가 보유한 창고 목록가져오기
   },
   methods: {
+
+
+    updateStorageCode() {
+      axios.put(`/api/vendors/updateStorageCode/${this.vendor.contactCode}?storageCode=${this.selectedStorageCode}`)
+        .then(response => {
+          alert('창고 코드가 성공적으로 업데이트되었습니다.');
+          // 필요한 경우, 추가적인 처리를 여기에 추가합니다.
+        })
+        .catch(error => {
+          console.error("창고 코드 업데이트에 실패했습니다.", error);
+          alert('창고 코드 업데이트에 실패했습니다.');
+        });
+    },
+
+    // fetchCStorages() {
+    //   axios.get('/api/cstorage/list')
+    //     .then(response => {
+    //       this.storages = response.data;
+    //     })
+    //     .catch(error =>{
+    //       console.error('창고 목록불러오는중 에러발생',error);
+    //     });
+    // },
+
+
     fetchVendorDetails() {
       axios.get(`/api/vendors/read/${this.$route.params.contactCode}`)
         .then(response => {
