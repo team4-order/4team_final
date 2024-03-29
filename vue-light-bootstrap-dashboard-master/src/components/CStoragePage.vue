@@ -1,27 +1,26 @@
 <template>
   <div class="cstorage-page container mt-4">
-    <h2 class="mb-4">거래처 관리5</h2>
+    <h2 class="mb-4">거래처 관리</h2>
 
-    <!-- 거래처와 창고 목록 표시 -->
-    <div v-if="cStorages.length > 0" class="mb-5">
-      <h3>거래처와 창고 목록</h3>
-      <div class="card">
-        <div class="card-body">
-          <ul class="list-unstyled">
-            <li v-for="item in cStorages" :key="item.customerCode" class="mb-2">
-              거래처 코드: {{ item.customerCode }}, 창고 코드: {{ item.storageCode }}
-              <!-- 삭제 버튼을 여기로 이동 -->
-              <button class="btn btn-danger btn-sm" @click="deleteCStorage(item.customerCode, item.storageCode)">창고코드 삭제</button>
-            </li>
-          </ul>
-        </div>
+    <div v-if="cStorages.length > 0" class="card custom-card mb-5">
+      <div class="card-header">
+        <h3 class="card-title">거래처와 창고 목록</h3>
+      </div>
+      <div class="card-body p-0">
+        <ul class="list-group list-group-flush">
+          <li v-for="item in cStorages" :key="item.customerCode" class="list-group-item">
+            <div class="d-flex justify-content-between align-items-center">
+              <span>거래처 코드: {{ item.customerCode }}, 창고 코드: {{ item.storageCode }}</span>
+              <button class="btn btn-danger btn-sm" @click="deleteCStorage(item.customerCode, item.storageCode)">삭제</button>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
 
-    <!-- 거래처 선택 -->
-    <div class="form-group">
-      <label for="selectedCustomerCode">거래처 선택</label>
-      <select id="selectedCustomerCode" v-model="selectedCustomerCode" class="form-control">
+    <div class="mb-4">
+      <label for="selectedCustomerCode" class="form-label">거래처 선택</label>
+      <select id="selectedCustomerCode" v-model="selectedCustomerCode" class="form-select">
         <option disabled value="">거래처를 선택해주세요</option>
         <option v-for="item in uniqueCustomers" :value="item.customerCode" :key="item.customerCode">
           {{ item.customerCode }}
@@ -29,14 +28,16 @@
       </select>
     </div>
 
-    <!-- 창고 코드 추가 폼 -->
-    <div class="form-group">
-      <label for="storageCode">창고코드 입력</label>
+    <div class="mb-4">
+      <label for="storageCode" class="form-label">창고코드 입력</label>
       <input type="text" id="storageCode" v-model="newStorageCode" class="form-control">
     </div>
-    <button @click="addCStorage" class="btn btn-success">창고코드 추가</button>
+    <div class="text-end">
+      <button @click="addCStorage" class="btn btn-primary">창고코드 추가</button>
+    </div>
   </div>
 </template>
+
 
 
 <script>
@@ -119,8 +120,75 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .container {
-  max-width: 600px;
+max-width: 800px;
 }
+
+.custom-card {
+border-radius: 0.5rem;
+box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.card-header {
+background-color: #007bff;
+color: white;
+border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.card-title {
+margin-bottom: 0;
+}
+
+.list-group-item {
+border: none;
+border-bottom: 1px solid #f0f0f0;
+}
+
+.btn-sm {
+padding: 0.25rem 0.5rem;
+}
+
+/* 폼 요소 스타일링 */
+.form-label {
+font-weight: bold;
+}
+
+.form-select, .form-control {
+border-radius: 0.25rem;
+}
+
+/* 마지막 리스트 아이템의 하단 테두리 제거 */
+.list-group-item:last-child {
+border-bottom: none;
+}
+
+/* 버튼 스타일링 */
+.btn-primary, .btn-danger {
+  color: white; /* 버튼 내 글자색을 흰색으로 설정합니다. */
+  border: none; /* 테두리 제거 */
+  padding: 0.5rem 1rem; /* 상하 좌우 패딩 조정 */
+}
+
+.btn-primary {
+  background-color: #0056b3;
+}
+
+.btn-primary:hover {
+  background-color: #004494;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+/* 추가적으로, 버튼에 대한 호버 효과를 강조하기 위해 색상 변경 범위를 확대합니다. */
+.btn:hover {
+  filter: brightness(90%); /* 버튼 호버 시 색상을 약간 어둡게 조정 */
+}
+
 </style>
