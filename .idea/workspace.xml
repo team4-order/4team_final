@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="17978ec9-8a02-4589-a749-74b5aa98339a" name="변경" comment="">
+      <change afterPath="$PROJECT_DIR$/vue-light-bootstrap-dashboard-master/src/components/VendorDetails.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vue-light-bootstrap-dashboard-master/src/components/VendorList.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-light-bootstrap-dashboard-master/src/components/WarehouseList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-light-bootstrap-dashboard-master/src/components/WarehouseList.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-light-bootstrap-dashboard-master/src/layout/DashboardLayout.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-light-bootstrap-dashboard-master/src/layout/DashboardLayout.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-light-bootstrap-dashboard-master/src/routes/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-light-bootstrap-dashboard-master/src/routes/routes.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="2eIPAyFmkEByfznogxqDbf3fUoH" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "c__storage/0.1.1/K",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "//wsl.localhost/Ubuntu-22.04/home/seull/final",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2023.3.5\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-17.0.10-corretto-17.0.10-4caba194b151-5cd809f4" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="디폴트 작업">
+      <changelist id="17978ec9-8a02-4589-a749-74b5aa98339a" name="변경" comment="" />
+      <created>1711588986211</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1711588986211</updated>
+      <workItem from="1711588993884" duration="2364000" />
+      <workItem from="1711596163964" duration="29000" />
+      <workItem from="1711605210554" duration="4992000" />
+      <workItem from="1711611453642" duration="38072000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/vue-light-bootstrap-dashboard-master/src/components/WarehouseList.vue</url>
+          <line>183</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
