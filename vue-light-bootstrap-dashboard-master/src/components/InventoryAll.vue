@@ -1,97 +1,90 @@
 <template>
   <div class="inventory-page">
-    <div class="inventory-header">
-      <div class="header-content">
-        <p class="inventory-subtitle">전체 재고 현황</p>
+    <!-- NAV 영역: 총 재고 요약 -->
+    <div class="nav-section">
+      <h2 class="section-title">제품별 총 재고</h2>
+      <div class="table-responsive">
+        <table class="inventory-table">
+          <thead>
+          <tr>
+            <th>제품 이름</th>
+            <th>재고량</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(total, productName, index) in totalInventoryByProduct" :key="index">
+            <td>{{ productName }}</td>
+            <td>{{ total }}개</td>
+          </tr>
+          </tbody>
+        </table>
       </div>
-      <section class="inventory-card total-inventory-card">
-        <h2 class="section-title">제품별 총 재고</h2>
+    </div>
+
+    <!-- SECTION 영역: 등급별 재고 목록 -->
+    <div class="section-area">
+      <div class="inventory-section" v-for="(grade, index) in grades" :key="index">
+        <h2 class="section-title">{{ grade }} 등급 과일</h2>
         <div class="table-responsive">
-          <table class="table-hover table-striped">
+          <table class="inventory-table">
             <thead>
             <tr>
               <th>제품 이름</th>
-              <th>재고량</th>
+              <th>수량</th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(total, productName, index) in paginatedTotalInventory" :key="index">
+            <tr v-for="(quantity, productName, index) in aggregatedInventories[grade]" :key="index">
               <td>{{ productName }}</td>
-              <td>{{ total }}개</td>
+              <td>{{ quantity }}개</td>
             </tr>
             </tbody>
           </table>
         </div>
-        <div class="pagination-controls">
-          <button @click="prevPage('total')">이전</button>
-          <button @click="nextPage('total')">다음</button>
-        </div>
-      </section>
+      </div>
     </div>
 
-    <div class="inventory-content">
-      <div class="inventory-sections">
-        <section class="inventory-card grade-inventory-card" v-for="(grade, index) in grades" :key="index">
-          <h2 class="section-title">{{ grade }} 등급 재고</h2>
-          <div class="table-responsive">
-            <table class="table-hover table-striped">
-              <thead>
-              <tr>
-                <th>제품 이름</th>
-                <th>수량</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="(quantity, productName, index) in paginatedGradesInventory[grade]" :key="index">
-                <td>{{ productName }}</td>
-                <td>{{ quantity }}개</td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="pagination-controls">
-            <button @click="prevPage(grade)">이전</button>
-            <button @click="nextPage(grade)">다음</button>
-          </div>
-        </section>
-
-        <div class="inventory-table-section">
-          <div class="card detailed-inventory-card">
-            <div class="card-header">
-              <h4 class="card-title">재고 상세 목록</h4>
-            </div>
-            <div class="table-responsive">
-              <table class="table inventory-table">
-                <thead class="thead-dark">
-                <tr>
-                  <th>상품 이름</th>
-                  <th>상품 코드</th>
-                  <th>등급</th>
-                  <th>수량</th>
-                  <th>판매 가격</th>
-                  <th>창고 코드</th>
-                  <th>재고 입고일</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="inventory in paginatedInventories" :key="inventory.goodsCode">
-                  <td>{{ inventory.goodsName }}</td>
-                  <td>{{ inventory.goodsCode }}</td>
-                  <td>{{ inventory.goodsGrade }}</td>
-                  <td>{{ inventory.inventoryQuantity }}</td>
-                  <td>{{ inventory.salesPrice }}</td>
-                  <td>{{ inventory.storageCode }}</td>
-                  <td>{{ new Date(inventory.firstStockDate).toLocaleDateString() }}</td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="pagination-controls">
-              <button @click="prevPage('details')">이전</button>
-              <button @click="nextPage('details')">다음</button>
-            </div>
-          </div>
-        </div>
+    <!-- FOOTER 영역: 재고 상세 목록 -->
+    <div class="footer-section">
+      <h4 class="card-title">과일 상세 목록</h4>
+      <div class="search-area">
+        <select v-model="searchCategory">
+          <option value="goodsName">상품 이름</option>
+          <option value="goodsCode">상품 코드</option>
+          <option value="goodsGrade">등급</option>
+          <option value="inventoryQuantity">수량</option>
+          <option value="salesPrice">판매 가격</option>
+          <option value="storageCode">창고 코드</option>
+          <option value="firstStockDate">재고 입고일</option>
+        </select>
+        <input type="text" v-model="searchQuery" placeholder="검색...">
+        <button @click="performSearch">조회</button>
+      </div>
+      <div class="table-responsive">
+        <table class="inventory-table">
+          <thead class="thead-dark">
+          <tr>
+            <th>상품 이름</th>
+            <th>상품 코드</th>
+            <th>등급</th>
+            <th>수량</th>
+            <th>판매 가격</th>
+            <th>창고 코드</th>
+            <th>재고 입고일</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="inventory in filteredInventories" :key="inventory.goodsCode">
+            <td>{{ inventory.goodsName }}</td>
+            <td>{{ inventory.goodsCode }}</td>
+            <td>{{ inventory.goodsGrade }}</td>
+            <td>{{ inventory.inventoryQuantity }}</td>
+            <td>{{ inventory.salesPrice }}</td>
+            <td>{{ inventory.storageCode }}</td>
+            <td>{{ new Date(inventory.firstStockDate).toLocaleDateString() }}</td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -105,18 +98,13 @@ export default {
     return {
       inventories: [],
       grades: ['A', 'B', 'C', '폐기'],
-      currentPage: {
-        total: 1,
-        details: 1,
-        A: 1,
-        B: 1,
-        C: 1,
-        폐기: 1,
-      },
-      itemsPerPage: 10, // Adjust according to your need
+      searchQuery: '',
+      searchCategory: 'goodsName',
+      filteredInventories: [],
     };
   },
   computed: {
+
     totalInventoryByProduct() {
       const totals = {};
       this.inventories.forEach(item => {
@@ -127,60 +115,37 @@ export default {
       });
       return totals;
     },
-    paginatedTotalInventory() {
-      const start = (this.currentPage.total - 1) * this.itemsPerPage;
-      const end = start + this.itemsPerPage;
-      return Object.entries(this.totalInventoryByProduct)
-        .slice(start, end)
-        .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
-    },
+
     aggregatedInventories() {
       const result = {};
       this.grades.forEach(grade => {
         result[grade] = this.inventories
           .filter(inventory => inventory.goodsGrade === grade)
           .reduce((acc, curr) => {
-            if (acc[curr.goodsName]) {
-              acc[curr.goodsName] += parseInt(curr.inventoryQuantity, 10);
-            } else {
-              acc[curr.goodsName] = parseInt(curr.inventoryQuantity, 10);
+            if (!acc[curr.goodsName]) {
+              acc[curr.goodsName] = 0;
             }
+            acc[curr.goodsName] += parseInt(curr.inventoryQuantity, 10);
             return acc;
           }, {});
       });
       return result;
-    },
-    paginatedGradesInventory() {
-      const pagination = {};
-      for (const grade of this.grades) {
-        const start = (this.currentPage[grade] - 1) * this.itemsPerPage;
-        const end = start + this.itemsPerPage;
-        pagination[grade] = Object.entries(this.aggregatedInventories[grade])
-          .slice(start, end)
-          .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
-      }
-      return pagination;
-    },
-    paginatedInventories() {
-      const start = (this.currentPage.details - 1) * this.itemsPerPage;
-      return this.inventories.slice(start, start + this.itemsPerPage);
     },
   },
   methods: {
     fetchInventories() {
       axios.get('/api/inventories').then(response => {
         this.inventories = response.data;
+        this.filteredInventories = response.data;
       }).catch(error => {
         console.error("재고 목록을 가져오는 데 실패했습니다.", error);
       });
     },
-    nextPage(section) {
-      this.currentPage[section]++;
-    },
-    prevPage(section) {
-      if (this.currentPage[section] > 1) {
-        this.currentPage[section]--;
-      }
+    performSearch() {
+      this.filteredInventories = this.inventories.filter(inventory => {
+        const value = inventory[this.searchCategory] ? inventory[this.searchCategory].toString() : '';
+        return value.toLowerCase().includes(this.searchQuery.toLowerCase());
+      });
     },
   },
   mounted() {
@@ -190,93 +155,64 @@ export default {
 </script>
 
 <style>
-/* 전체 페이지와 헤더 스타일 조정 */
+/* 전체 페이지 스타일 */
 .inventory-page {
-  max-width: 1200px;
-  margin: 20px auto;
+  background-color: #FAFAFA;
+  font-family: 'Roboto', sans-serif;
   padding: 20px;
 }
 
-.inventory-header, .inventory-content, .inventory-sections, .inventory-table-section {
+/* NAV, SECTION, FOOTER 공통 스타일 */
+.nav-section, .inventory-section, .footer-section {
+  background-color: #FFFFFF;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+/* 스크롤 가능한 테이블 컨테이너 스타일 */
+.table-responsive {
+  max-height: 400px; /* 목록이 이 높이를 초과하면 스크롤바 생성 */
+  overflow-y: auto; /* 세로 방향 스크롤바 자동으로 생성되게 설정 */
   margin-bottom: 20px;
 }
 
-/* 섹션 카드 스타일 */
-.inventory-card {
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  padding: 10px; /* 패딩 줄임 */
-  display: flex;
-  flex-direction: column;
-  font-size: 0.8rem; /* 글자 크기 줄임 */
+/* 테이블 스타일 */
+.inventory-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-/* 스크롤 적용 부분 조정 */
-.scrollable-content {
-  overflow-y: auto;
-  max-height: 150px; /* 섹션 높이 줄임 */
+.inventory-table th, .inventory-table td {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid #E0E0E0;
 }
 
-/* 테이블 섹션 스타일 유지 */
-.detailed-inventory-card {
-  min-height: 400px; /* 상세 목록 높이 조정 */
+.thead-dark th {
+  background-color: #4A4A4A;
+  color: white;
 }
 
-/* 페이지네이션 컨트롤 스타일 */
-.pagination-controls {
-  display: flex;
-  justify-content: center;
-  margin-top: auto;
+/* 제목 스타일 */
+.section-title {
+  margin-bottom: 20px;
+  color: #32325D;
+  font-size: 18px;
+  font-weight: 600;
 }
 
-.pagination-controls button {
-  margin: 0 5px;
-  padding: 5px 10px;
-  background: #f0f0f0;
-  border: 1px solid #d0d0d0;
-  cursor: pointer;
-}
+/* 반응형 레이아웃 */
+@media (min-width: 768px) {
+  .section-area {
+    display: flex;
+    justify-content: space-between;
+  }
 
-/* 섹션 가로 배열 */
-.inventory-sections {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.total-inventory-card, .grade-inventory-card {
-  width: calc(20% - 10px); /* 각 카드의 너비 조정 */
-  margin-bottom: 20px; /* 마진으로 카드 사이 간격 조정 */
-}
-
-/* 상세 재고 목록 박스 스타일 조정 */
-.inventory-table-section {
-  width: auto;
-  height: 1000px;
-}
-
-/// 헤더 영역 스타일 조정
-.inventory-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
-}
-
-.header-content {
-  flex: 1;
-}
-
-/* 제품별 총 재고 목록 스타일 조정 */
-.total-inventory-card {
-  width: 600px; /* 너비 자동 조정 */
-  flex: 1;
-  margin-left: 20px; /* 헤더와의 간격 조정 */
-  padding: 10px;
-  font-size: 0.9rem; /* 글자 크기 추가 조정 */
-  max-height: 400px; /* 높이 조정 */
+  .inventory-section {
+    flex-basis: 48%;
+    margin-bottom: 20px;
+  }
 }
 </style>
-
