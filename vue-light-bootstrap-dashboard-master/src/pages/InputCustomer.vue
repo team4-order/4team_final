@@ -1,97 +1,114 @@
 <template>
-    <div class="content">
-      <div class="container-fluid">
-        <div class="row justify-content-center"> <!-- 컨테이너를 중앙 정렬 -->
-          <div class="col-md-8"> <!-- 카드의 너비를 제어하기 위한 부트스트랩 클래스 추가 -->
-            <!-- 거래처 정보 등록을 위한 카드 컴포넌트 -->
-            <card class="card-form mx-auto"> <!-- 카드 폼 중앙 정렬을 위한 클래스 추가 -->
-              <template slot="header">
-                <h4 class="card-title">거래처 등록</h4>
-                <p class="card-category">거래처 정보를 등록할 수 있습니다.</p>
-              </template>
-              <!-- 거래처 정보 입력 폼 -->
-              <form @submit.prevent="submitClient">
-                <div class="form-group text-left"> <!-- 텍스트 왼쪽 정렬 -->
-                  <label for="customerName">거래처 명</label>
-                  <input type="text" class="form-control" id="customerName" v-model="customer.contactName" required>
-                </div>
-                <div class="form-group text-left"> <!-- 텍스트 왼쪽 정렬 -->
-                  <label for="customerAddress">거래처 주소</label>
-                  <input type="text" class="form-control" id="customerAddress" v-model="customer.contactAddress" required>
-                </div>
-                <div class="form-group text-left"> <!-- 텍스트 왼쪽 정렬 -->
-                  <label for="customerPhone">거래처 연락처</label>
-                  <input type="text" class="form-control" id="customerPhone" v-model="customer.customerPhone" required>
-                </div>
-                <div class="form-group text-right"> <!-- 버튼 오른쪽 정렬 -->
-                  <button type="submit" class="btn btn-primary" :disabled="!isFormValid">등록</button>
-                </div>
-              </form>
-            </card>
-          </div>
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row justify-content-center"> <!-- 컨테이너를 중앙 정렬 -->
+        <div class="col-md-8"> <!-- 카드의 너비를 제어하기 위한 부트스트랩 클래스 추가 -->
+          <!-- 거래처 정보 등록을 위한 카드 컴포넌트 -->
+          <card class="card-form mx-auto"> <!-- 카드 폼 중앙 정렬을 위한 클래스 추가 -->
+            <template slot="header">
+              <h4 class="card-title">거래처 등록</h4>
+              <p class="card-category">거래처 정보를 등록할 수 있습니다.</p>
+            </template>
+            <!-- 거래처 정보 입력 폼 -->
+            <form @submit.prevent="submitClient">
+              <div class="form-group text-left"> <!-- 텍스트 왼쪽 정렬 -->
+                <label for="customerName">거래처 명</label>
+                <input type="text" class="form-control" id="customerName" v-model="customer.contactName" required>
+              </div>
+              <div class="form-group text-left"> <!-- 텍스트 왼쪽 정렬 -->
+                <label for="customerAddress">거래처 주소</label>
+                <input type="text" class="form-control" id="customerAddress" v-model="customer.contactAddress" required>
+              </div>
+              <div class="form-group text-left"> <!-- 텍스트 왼쪽 정렬 -->
+                <label for="customerPhone">거래처 연락처</label>
+                <input type="text" class="form-control" id="customerPhone" v-model="customer.customerPhone" required>
+              </div>
+              <div class="form-group text-right"> <!-- 버튼 오른쪽 정렬 -->
+                <button type="submit" class="btn btn-primary">등록</button>
+              </div>
+            </form>
+          </card>
         </div>
       </div>
     </div>
-  </template>
-  
-  
-  <script>
-  import Card from 'src/components/Cards/Card.vue'
-  import axios from 'axios'
-  
-  export default {
-    components: {
-      Card // 카드 컴포넌트 등록
+  </div>
+</template>
+
+<script>
+import Card from 'src/components/Cards/Card.vue'
+import axios from 'axios'
+
+export default {
+  components: {
+    Card
+  },
+  data() {
+    return {
+      customer: {
+        contactName: '',
+        contactAddress: '',
+        customerPhone: '',
+        businessId: 'BUS002' // businessId에 "BUS002" 할당 --> businessId는 기업이 로그인하면 그것에 맞는 ID들어가게 수정해야 함
+      },
+      registeredId: '', // 등록된 아이디 저장 변수
+      registeredPassword: '' // 등록된 비밀번호 저장 변수
+    }
+  },
+  methods: {
+    submitClient() {
+      // 영문 3자리와 숫자 3자리의 난수 생성
+      const randomCodeId = this.generateRandomCode();
+      const randomCodePassword = this.generateRandomCode();
+
+      // 거래처 정보 및 난수를 서버로 전송
+      axios.post('http://localhost:8080/api/contact/inputcustomer', {
+        contactCode: randomCodeId,
+        customerPassword: randomCodePassword,
+        contactName: this.customer.contactName,
+        contactAddress: this.customer.contactAddress,
+        customerPhone: this.customer.customerPhone,
+        businessId: this.customer.businessId // businessId도 함께 전송 (지금은 지정된  ID가 정송됌)
+      })
+      .then(response => {
+        // 서버 응답으로부터 등록된 아이디와 비밀번호 받아오기
+        this.registeredId = response.data.contactCode;
+        this.registeredPassword = response.data.customerPassword;
+        
+        // 알림창에 등록된 아이디와 비밀번호 표시
+        alert(`거래처가 성공적으로 등록되었습니다. \n아이디: ${this.registeredId}, 비밀번호: ${this.registeredPassword}`); //추가
+        
+        // 폼 리셋
+        this.resetForm();
+      })
+      .catch(error => {
+        console.error("거래처 등록에 실패했습니다.", error);
+      });
     },
-    data() {
-      return {
-        customer: {
-          contactCode: this.generateRandomCode(), // 거래처 코드에 대한 랜덤 값 초기화
-          customerPassword: this.generateRandomPassword(), // 고객 비밀번호에 대한 랜덤 값 초기화
-          contactName: '',     // 거래처 이름
-          contactAddress: '',  // 거래처 주소
-          customerPhone: ''    // 거래처 연락처
-        }
-      }
+    resetForm() {
+      this.customer.contactName = '';
+      this.customer.contactAddress = '';
+      this.customer.customerPhone = '';
     },
-    methods: {
-      // 거래처 코드에 대한 랜덤 값을 생성하는 메소드
-      generateRandomCode() {
-        return Math.random().toString(36).substring(2, 5); // 랜덤 알파벳 문자열 생성
-      },
-      // 고객 비밀번호에 대한 랜덤 값을 생성하는 메소드
-      generateRandomPassword() {
-        return Math.random().toString(36).substring(2, 10); // 랜덤 알파벳 문자열 생성
-      },
-      // 거래처 정보를 서버에 등록하는 메소드
-      submitClient() {
-        // 랜덤 값이 필요한 경우 여기에서도 업데이트 할 수 있음
-        axios.post('http://localhost:8080/api/contact/inputcustomer', this.customer)
-          .then(response => {
-            // 성공적으로 등록되면 사용자에게 알림
-            alert('거래처가 성공적으로 등록되었습니다.');
-            // 폼 필드 초기화 및 랜덤 값 재생성
-            this.resetForm();
-          })
-          .catch(error => {
-            // 등록 실패 시 오류 메시지 출력
-            console.error("거래처 등록에 실패했습니다.", error);
-          });
-      },
-      // 폼 필드를 초기화하는 메소드
-      resetForm() {
-        this.customer.contactName = '';
-        this.customer.contactAddress = '';
-        this.customer.customerPhone = '';
-        // 랜덤 값 다시 생성
-        this.customer.contactCode = this.generateRandomCode();
-        this.customer.customerPassword = this.generateRandomPassword();
+    generateRandomCode() { //난수 생성 함수
+      const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      let code = '';
+
+      // 영문 3자리 생성
+      for (let i = 0; i < 3; i++) {
+        code += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
       }
+
+      // 숫자 3자리 생성
+      for (let i = 0; i < 3; i++) {
+        code += Math.floor(Math.random() * 10);
+      }
+
+      return code;
     }
   }
-  </script>
-  
- 
+}
+</script>
+
 <style scoped>
 .card-form {
   margin-top: 20px;

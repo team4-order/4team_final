@@ -60,14 +60,15 @@ export default {
   methods: {
     fetchBAdjustments() {
       // API를 통해 주문 데이터 가져오기
-      axios.get(`http://localhost:8080/api/orders/customer/${this.$route.params.contactCode}`)
+      axios.get(`http://localhost:8080/api/orders/customer/${this.$route.params.customerCode}`)
         .then(response => {
           // API 응답을 데이터로 변환하여 저장
           this.Badjustments.data = response.data.map(Badjustment => ({
             '주문번호': Badjustment.orderNumber,
             '주문일자': Badjustment.orderDate,
             '금액': Badjustment.orderPrice,
-            '정산상태': Badjustment.adjustmentStatus
+            '정산상태': Badjustment.adjustmentStatus,
+            '판매처 코드': Badjustment.customerCode
           }));
           this.filterBAdjustments(); // 초기 필터링을 위한 호출
         })
