@@ -49,6 +49,12 @@ const routes = [
     component: function (){
       return import('../App.vue')
     }
+  },{
+    path: '/naverlogin',
+    name: 'NaverLogin',
+    component: function (){
+      return import('../views/NaverLogin.vue')
+    }
   }
 ]
 

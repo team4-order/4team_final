@@ -9,22 +9,19 @@
       <label for="password">Password</label>
       <input type="password" id="password" name="password" v-model="input.password" placeholder="Password" />
     </div>
-    <button type="button" v-on:click="check()">check</button>
-<!--    <button v-on:click="redirectToNaverLogin">Naver Login</button>-->
-
-
-    <button type="button" v-on:click="login()">Login</button>
-
-    <div @click="redirectToNaverLogin" style="cursor: pointer;">
-      <img src="https://ndevthumb-phinf.pstatic.net/20240328_198/17115883494735spOD_PNG/T8ahNFGIcZ1c20240328101229.png" height="50px"
-           width="50px" alt="Naver Login">
-
-
-
-
-
+    <div>
+      <!-- 네이버 로그인 버튼 노출 영역 -->
+      <div id="naver_id_login"></div>
     </div>
+
+
+    <button type="button" v-on:click="api()">check</button>
+    <button type="button" v-on:click="login()">Login</button>
     <button>비밀번호 : 영문 숫자 특수기호 조합 8자리 이상 16자리 이하</button>
+
+
+
+
 
   </div>
 
@@ -45,12 +42,11 @@ import Swal from 'sweetalert2'
 
 
 
-
 // ---------------------------------------------------
 
 import router from '@/router'; // Import your Vue Router instance
 let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
-
+const clientId = "sFFJbHM5h_DLHn_E5qOH";
 // ---------------------------------------------------
 
 
@@ -61,6 +57,7 @@ let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
 
 // ---------------------------------------------------
 export default {
+  components: {},
   name: 'Login',
   data() {
     return {
@@ -69,6 +66,18 @@ export default {
         password: ""
       }
     }
+  },
+  mounted() {
+    this.naverLogin = new window.naver_id_login(
+        clientId,
+        "http://localhost:8081/naverlogin"  // 개발자센터에서 등록한 Callback URL
+    );
+    var state = this.naverLogin.getUniqState();
+    this.naverLogin.setButton("white", 2, 40); // 버튼설정
+    this.naverLogin.setDomain("http://localhost:8081/login");
+    this.naverLogin.setState(state);
+   //this.naverLogin.setPopup(); // 팝업 여부
+    this.naverLogin.init_naver_id_login();
   },
   methods: {
     async login() {
@@ -111,25 +120,10 @@ export default {
         console.error("Login failed:", error.response.data);
         // Handle login failure (display error message, clear inputs, etc.)
       }
-    },
-    async redirectToNaverLogin() {
-
-        window.location.href = 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=sFFJbHM5h_DLHn_E5qOH&redirect_uri=http://localhost:8081/secure&state=RAMDOM_STATE-anyword';
-
-
-
-
-    },check(){
-    const tokens =  this.$route.params.token
-    if(tokens != false)
-    {
-      this.$emit("authenticated", true);
-      this.$router.replace({ name: "Secure" });
-      console.log(tokens);
+    }
     }
 
-  }
-  }
+
 }
 </script>
 
