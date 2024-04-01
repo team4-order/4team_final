@@ -5,9 +5,9 @@ const fetch = require("node-fetch");
 var express = require("express");
 var app = express();
 var client_id = "sFFJbHM5h_DLHn_E5qOH";
-var client_secret = "Tx1BG4oxPQ";
+var client_secret = "nY4MfCVgFJ";
 var state = "RAMDOM_STATE-anyword";
-var redirectURI = encodeURI("http://localhost:8081/secure");
+var redirectURI = encodeURI("http://localhost:8081/about");
 var api_url = "";
 
 app.use(cors());
@@ -97,7 +97,7 @@ app.get("/callback", async function (req, res) {
 
 });
 
-app.listen(3000, function () {
+app.listen(3001, function () {
     console.log("http://localhost:3000/naverlogin app listening on port 3000!");
 
     /*this.$router.push({
