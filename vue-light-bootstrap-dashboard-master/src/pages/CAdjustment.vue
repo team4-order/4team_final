@@ -20,9 +20,10 @@
               <p class="card-category">거래처의 정산 상태를 확인하는 페이지</p>
             </template>
             <!-- 테이블 컴포넌트로 데이터 표시 -->
-            <div>
+            <div class="adjustment">
               <l-table class="table-hover table-striped" :columns="Cadjustments.columns" :data="Cadjustments.filteredData"></l-table>
               <p class="all" v-if="showTotalUnadjustedAmount">미정산된 총 금액: {{ totalUnadjustedAmount }}원 </p>
+              <button v-if="showAdjustButton" @click="adjustmentAction" class="btn btn-primary">정산하기</button>
             </div>
           </card>
         </div>
@@ -110,10 +111,22 @@ export default {
     },
     adjustmentAction() {
       const unadjustedOrders = this.getUnadjustedOrders();
-      unadjustedOrders.forEach(order => {
+      const promises = unadjustedOrders.map(order => {
         order.정산상태 = '정산 완료';
-        // API를 통해 서버에 상태 업데이트 요청을 보낼 수도 있습니다.
+        // API를 통해 서버에 상태 업데이트 요청을 보냅니다.
+        return axios.put(`http://localhost:8080/api/orders/adjustment/${order.주문번호}`, { adjustmentStatus: '정산 완료' });
       });
+
+      // 모든 요청이 완료될 때까지 기다립니다.
+      Promise.all(promises)
+        .then(responses => {
+          // 모든 요청이 성공적으로 완료되었을 때 실행됩니다.
+          console.log('정산 완료: ', responses);
+        })
+        .catch(error => {
+          // 요청 중 오류가 발생했을 때 실행됩니다.
+          console.error('정산 처리 중 오류 발생: ', error);
+        });
     },
     getTotalUnadjustedAmount() {
       const unadjustedOrders = this.getUnadjustedOrders();
@@ -143,10 +156,18 @@ export default {
 .date-filter select {
   margin-right: 10px;
 }
+.adjustment {
+  margin-top: 10px;
+}
+.adjustment button {
+  margin-top: 5px;
+  margin-left: 92%;
+}
 .all {
   font-size: larger;
   font-style: inherit;
   text-align: center;
   margin-top: 25px;
 }
+
 </style>

@@ -15,6 +15,7 @@ import BCustomerList from 'src/pages/BCustomerList.vue'
 import BAdjustment from 'src/pages/BAdjustment.vue' // 경로 수정
 import CustomerList from 'src/pages/CustomerList.vue'
 import InputCustomer from 'src/pages/InputCustomer.vue'
+import CAdjustment from 'src/pages/CAdjustment.vue'
 
 const routes = [
   {
@@ -73,7 +74,7 @@ const routes = [
         component: BCustomerList
       },
       {
-        path: '/bcustomer_list/b_adjustment/:contactCode', // 변경된 부분: customerCode -> contactCode
+        path: '/bcustomer_list/b_adjustment/:customerCode',
         name: 'B Adjustment List',
         component: BAdjustment,
         props: true
@@ -86,7 +87,30 @@ const routes = [
       {
         path: 'input_customer',
         name: 'Input Customer',
-        component: InputCustomer
+        component: InputCustomer,
+        props: true
+      }
+    ]
+  },
+  {
+    path: '/customer',
+    component: DashboardLayout,
+    redirect: '/customer/:customerCode',
+    children: [
+      {
+        path: 'overview',
+        name: 'Overview',
+        component: Overview
+      },
+      {
+        path: 'icons',
+        name: 'Icons',
+        component: Icons
+      },
+      {
+        path: ':customerCode',
+        name: 'customer Adjustment',
+        component: CAdjustment
       }
     ]
   },
