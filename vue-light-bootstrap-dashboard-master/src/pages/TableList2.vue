@@ -7,9 +7,9 @@
                 body-classes="table-full-width table-responsive"
           >
             <template slot="header">
-              <h4 class="card-title">Order List</h4>
-              <p class="card-category">Here is a subtitle for this table</p>
-              <button>Save Changes</button>
+              <h4 class="card-title">주문 등록</h4>
+              <p class="card-category">apply</p>
+              <button class="btn btn-info btn-fill float-right">submit</button>
               <!-- <button @click="saveOrderChanges"></button> -->
             </template>
             <l-table class="table-hover table-striped"
@@ -39,7 +39,7 @@ export default {
     return {
       searchQuery: '',
       orders: {
-        columns: ['주문 번호', '주문 금액', '주문 일자', '입력 필드'],
+        columns: ['상품 코드', '상품 등급', '주문 가능 수량', '입력 필드'],
         data: [],
         filteredData: []
       }
@@ -50,14 +50,31 @@ export default {
   },
   methods: {
     fetchOrderList() {
-      axios.get(`http://localhost:8080/api/orders/customer`)
+      const customerCode = this.$route.params.customerCode;
+      // axios.get(`http://localhost:8080/api/total/${customerCode}`)
+      //   .then(response => {
+      //     this.order1s.data = response.data.map(order1 => {
+      //       return {
+      //         '창고 번호': order1.storageCode,
+      //         '상품 코드': order1.goodsCode,
+      //         '상품 등급': order1.goodsGrade,
+      //         '주문 가능 수량': order1.totalQuantity,
+      //         '입력 필드': 0
+      //       };
+      //     });
+      //     this.order1s.filteredData = this.order1s.data;
+      //   })
+      //   .catch(error => {
+      //     console.error("주문 목록을 가져오는 데 실패했습니다.", error);
+      //   });
+      axios.get(`http://localhost:8080/api/total/summary/${customerCode}`)
         .then(response => {
           this.orders.data = response.data.map(order => {
             return {
-              '주문 번호': order.orderNumber,
-              '주문 금액': order.orderPrice,
-              '주문 일자': order.orderDate,
-              '입력 필드': null // Initialize input field value
+              '상품 코드': order.goodsCode,
+              '상품 등급': order.goodsGrade,
+              '주문 가능 수량': order.totalQuantity,
+              '입력 필드': 0
             };
           });
           this.orders.filteredData = this.orders.data;

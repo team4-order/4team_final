@@ -14,7 +14,7 @@
         <i class="nc-icon nc-cart-simple"></i>
         <p>주문</p>
       </sidebar-link>
-      <sidebar-link to="/buyer/apply">
+      <sidebar-link to="/buyer/apply/CON001">
         <i class="nc-icon nc-paper-2"></i>
         <p>주문 등록</p>
       </sidebar-link>

@@ -47,7 +47,8 @@ export default {
   },
   methods: {
     fetchOrderList() {
-      axios.get(`http://localhost:8080/api/orders/customer`)
+      const businessId = this.$route.params.businessId;
+      axios.get(`http://localhost:8080/api/orders/id/${businessId}`)
         .then(response => {
           this.orders.data = response.data.map(order => {
             return {

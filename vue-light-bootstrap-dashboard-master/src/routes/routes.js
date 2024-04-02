@@ -70,7 +70,7 @@ const routes = [
         component: Upgrade
       },
       {
-        path: 'orders',
+        path: 'orders/:businessId',
         name: 'OrderList',
         component: OrderList
       },
@@ -104,18 +104,18 @@ const routes = [
       ,
       {
         //주문 등록(판매처)
-        path: 'apply',
+        path: 'apply/:customerCode',
         name: 'OrderApply',
         component: OrderApply
       }
     ]
   },
-  {
-    // 판매처
-    path: '/apply',
-    name: 'OrderApply',
-    component: OrderApply
-  }, 
+  // {
+  //   // 판매처
+  //   path: '/apply',
+  //   name: 'OrderApply',
+  //   component: OrderApply
+  // }, 
   { path: '*', component: NotFound }
 ]
 
