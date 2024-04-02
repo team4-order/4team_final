@@ -44,7 +44,7 @@ export default {
       searchQuery: '',
       selectedContactName: '', // 추가: 선택된 연락처 이름
       contacts: {
-        columns: ['거래처 코드', '거래처 이름', '주소', '연락처'],
+        columns: ['거래처 이름'],
         data: [], // 거래처 데이터를 저장할 배열
         filteredData: [], // 검색 결과를 저장할 배열
         contactNames: [] // 연락처 이름을 저장할 배열
@@ -56,13 +56,11 @@ export default {
   },
   methods: {
     fetchContacts() {
-      axios.get('http://localhost:8080/api/contact/customers')
+      axios.get('http://localhost:8080/api/contact/customers/BUS002')
         .then(response => {
           this.contacts.data = response.data.map(contact => ({
-            '거래처 코드': contact.contactCode,
             '거래처 이름': contact.contactName,
-            '주소': contact.contactAddress,
-            '연락처': contact.customerPhone
+            '거래처 코드': contact.contactCode
           }));
           this.contacts.filteredData = this.contacts.data;
           this.sortContacts('거래처 이름'); // 연락처를 이름으로 정렬
@@ -76,7 +74,6 @@ export default {
     filterContacts() {
       if (this.searchQuery) {
         this.contacts.filteredData = this.contacts.data.filter(contact =>
-          contact['거래처 코드'].toLowerCase().includes(this.searchQuery.toLowerCase()) ||
           contact['거래처 이름'].toLowerCase().includes(this.searchQuery.toLowerCase())
         );
       } else {
@@ -91,11 +88,11 @@ export default {
         return 0;
       });
     },
-    // handleRowClick(row) {
-    //   const contactCode = row['연락처 코드']; // 변수명을 orderNumber에서 contactCode로 변경
-    //   // 주문 상세 페이지 URL로 이동
-    //   window.location.href = `http://localhost:8080/#/admin/customer_list/c_adjustment/${contactCode}`;
-    // }
+    handleRowClick(row) {
+      const contactCode = row['거래처 코드']; // 변수명을 orderNumber에서 contactCode로 변경
+      // 주문 상세 페이지 URL로 이동
+      window.location.href = `http://localhost:8080/#/admin/customer_list/customer_detail/${contactCode}`;
+    }
   }
 }
 </script>

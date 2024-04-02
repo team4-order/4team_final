@@ -15,6 +15,8 @@ import BCustomerList from 'src/pages/BCustomerList.vue'
 import BAdjustment from 'src/pages/BAdjustment.vue' // 경로 수정
 import CustomerList from 'src/pages/CustomerList.vue'
 import InputCustomer from 'src/pages/InputCustomer.vue'
+import Delivery from 'src/pages/Delivery.vue'
+import CustomerDetail from 'src/pages/CustomerDetail.vue'
 import CAdjustment from 'src/pages/CAdjustment.vue'
 
 const routes = [
@@ -89,31 +91,42 @@ const routes = [
         name: 'Input Customer',
         component: InputCustomer,
         props: true
+      },
+      {
+        path: 'delivery',
+        name: 'Delivery',
+        component: Delivery
+      },
+      {
+        path: '/customer_list/customer_detail/:customerCode',
+        name: 'Customer Detail',
+        component: CustomerDetail,
+        props: true
       }
     ]
   },
   {
-    path: '/customer',
-    component: DashboardLayout,
-    redirect: '/customer/:customerCode',
-    children: [
-      {
-        path: 'overview',
-        name: 'Overview',
-        component: Overview
-      },
-      {
-        path: 'icons',
-        name: 'Icons',
-        component: Icons
-      },
-      {
-        path: ':customerCode',
-        name: 'customer Adjustment',
-        component: CAdjustment
-      }
-    ]
-  },
+  path: '/customer',
+  component: DashboardLayout,
+  redirect: '/customer/:customerCode',
+  children: [
+    {
+      path: '/customer/overview',
+      name: 'Overview',
+      component: Overview
+    },
+    {
+      path: '/customer/icons',
+      name: 'Icons',
+      component: Icons
+    },
+    {
+      path: ':customerCode',
+      name: 'customer Adjustment',
+      component: CAdjustment
+    }
+  ]
+},
   { path: '*', component: NotFound }
 ]
 

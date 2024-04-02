@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     fetchBContacts() {
-      axios.get('http://localhost:8080/api/contact/customers')
+      axios.get('http://localhost:8080/api/contact/customers/BUS002')
         .then(response => {
           this.Bcontacts.data = response.data.map(Bcontact => ({
             '거래처 코드': Bcontact.contactCode,
@@ -69,12 +69,12 @@ export default {
     },
     filterContacts() {
       if (this.searchQuery) {
-        this.contacts.filteredData = this.contacts.data.filter(contact =>
+        this.Bcontacts.filteredData = this.Bcontacts.data.filter(contact =>
           contact['거래처 이름'].toLowerCase().includes(this.searchQuery.toLowerCase()) ||
           contact['주소'].toLowerCase().includes(this.searchQuery.toLowerCase())
         );
       } else {
-        this.contacts.filteredData = this.contacts.data;
+        this.Bcontacts.filteredData = this.Bcontacts.data;
       }
     },
         sortContacts(column) {
