@@ -17,6 +17,7 @@ import InventoryAll from "../components/InventoryAll.vue";
 import CstoragePage from "src/components/CStoragePage.vue";
 import vendorList from "../components/VendorList.vue";
 import VendorDetails from "src/components/VendorDetails.vue";
+import Fruit from "src/components/Fruit_Information";
 
 
 const routes = [
@@ -81,6 +82,13 @@ const routes = [
       },
 
       {
+        path: 'fruit',
+        name: 'Fruit',
+        component: Fruit, // 공급처 상세정보 페이지
+      },
+
+
+      {
         path: 'user',
         name: 'User',
         component: UserProfile
@@ -124,9 +132,9 @@ const routes = [
  * Asynchronously load view (Webpack Lazy loading compatible)
  * The specified component must be inside the Views folder
  * @param  {string} name  the filename (basename) of the view to load.
-function view(name) {
-   var res= require('../components/Dashboard/Views/' + name + '.vue');
-   return res;
-};**/
+ function view(name) {
+ var res= require('../components/Dashboard/Views/' + name + '.vue');
+ return res;
+ };**/
 
 export default routes

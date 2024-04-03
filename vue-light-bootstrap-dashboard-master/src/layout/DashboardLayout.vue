@@ -46,16 +46,21 @@
       </sidebar-link>
 
 
+      <sidebar-link to="/admin/fruit">
+        <p>Test</p>
+      </sidebar-link>
 
 
 
-<!--      <template slot="bottom-links">-->
-<!--        <sidebar-link class="active"-->
-<!--                      to="/admin/upgrade">-->
-<!--          <i class="nc-icon nc-alien-33"></i>-->
-<!--          <p>Upgrade to PRO</p>-->
-<!--        </sidebar-link>-->
-<!--      </template>-->
+
+
+      <!--      <template slot="bottom-links">-->
+      <!--        <sidebar-link class="active"-->
+      <!--                      to="/admin/upgrade">-->
+      <!--          <i class="nc-icon nc-alien-33"></i>-->
+      <!--          <p>Upgrade to PRO</p>-->
+      <!--        </sidebar-link>-->
+      <!--      </template>-->
     </side-bar>
     <div class="main-panel">
       <top-navbar></top-navbar>
@@ -72,33 +77,33 @@
 
 </style>
 <script>
-  import TopNavbar from './TopNavbar.vue'
-  import ContentFooter from './ContentFooter.vue'
-  import DashboardContent from './Content.vue'
-  import MobileMenu from './MobileMenu.vue'
-  export default {
-    components: {
-      TopNavbar,
-      ContentFooter,
-      DashboardContent,
-      MobileMenu
-    },
-    methods: {
-      toggleSidebar () {
-        if (this.$sidebar.showSidebar) {
-          this.$sidebar.displaySidebar(false)
-        }
-      }
-    },
-
-    // 거래처별 창고관리 아이콘
-    props: {
-      title: {
-        type: String,
-        default: "forklift"
+import TopNavbar from './TopNavbar.vue'
+import ContentFooter from './ContentFooter.vue'
+import DashboardContent from './Content.vue'
+import MobileMenu from './MobileMenu.vue'
+export default {
+  components: {
+    TopNavbar,
+    ContentFooter,
+    DashboardContent,
+    MobileMenu
+  },
+  methods: {
+    toggleSidebar () {
+      if (this.$sidebar.showSidebar) {
+        this.$sidebar.displaySidebar(false)
       }
     }
+  },
+
+  // 거래처별 창고관리 아이콘
+  props: {
+    title: {
+      type: String,
+      default: "forklift"
+    }
   }
+}
 
 
 </script>
