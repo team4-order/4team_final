@@ -16,7 +16,9 @@ import OrderList from 'src/pages/TableList6.vue'
 import OrderDetail from 'src/pages/TableList3.vue'
 import CustomerOrderList from 'src/pages/TableList4.vue'
 import CustomerOrderDetail from 'src/pages/TableList5.vue'
-import OrderApply from 'src/pages/TableList2.vue'
+import OrderApply1 from 'src/pages/TableList2.vue'
+import OrderApply from 'src/pages/TableList7.vue'
+
 
 const routes = [
   {
@@ -100,6 +102,13 @@ const routes = [
         name: 'CustomerOrderDetail',
         component: CustomerOrderDetail,
         props: true
+      }
+      ,
+      {
+        //주문 등록 - temp (판매처)
+        path: 'apply1/:customerCode',
+        name: 'OrderApply1',
+        component: OrderApply1
       }
       ,
       {

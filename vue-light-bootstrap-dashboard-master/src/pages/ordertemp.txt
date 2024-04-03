@@ -1,17 +1,92 @@
-<!-- <div class="content">
-      <h2>Order List</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>주문 번호</th>
-            <th>주문 가격</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(order, index) in orders" :key="index">
-            <td>{{ order.orderNumber }}</td>
-            <td>{{ order.orderPrice }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div> -->
+<template>
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <card class="strpied-tabled-with-hover" body-classes="table-full-width table-responsive">
+            <template slot="header">
+              <h4 class="card-title">주문 등록</h4>
+              <p class="card-category">apply</p>
+              <button class="btn btn-info btn-fill float-right">submit</button>
+              <!-- <button @click="saveOrderChanges"></button> -->
+            </template>
+            <select class="dropdown-item" v-model="selectedStorageCode">
+              <option disabled value="">Please select one</option>
+              <option v-for="code in storageCodes" :key="code" :value="code">{{ code }}</option>
+            </select>
+            <l-table class="table-hover table-striped" :columns="goodsList.columns" :data="goodsList.data"
+              :editable="true">
+            </l-table>
+          </card>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+import LTable from 'src/components/InputTable.vue';
+import Card from 'src/components/Cards/Card.vue';
+import BaseDropdown from 'src/component/layout/TopNavbar.vue';
+
+export default {
+  components: {
+    LTable,
+    Card,
+    BaseDropdown
+  },
+  data() {
+    return {
+      searchQuery: '',
+      storageCodes: [],
+      selectedStorageCode: '',
+      goodsList: {
+        columns: ['상품 코드', '상품 등급', '주문 가능 수량', '입력 필드'],
+        data: [],
+        filteredData: []
+      } // API로부터 받은 제품 리스트를 저장할 상태
+    };
+  },
+  watch: {
+    selectedStorageCode(newVal) {
+      if (newVal !== '') {
+        this.fetchGoodsList(newVal);
+      }
+    }
+  },
+  mounted() {
+    this.fetchOrderList();
+  },
+  methods: {
+    fetchOrderList() {
+      const customerCode = this.$route.params.customerCode;
+      axios.get(`http://localhost:8080/api/storage/${customerCode}`)
+        .then(response => {
+          this.storageCodes = response.data.map(item => item.storageCode);
+        })
+        .catch(error => {
+          console.error("There was an error fetching the order list:", error);
+        });
+    },
+    fetchGoodsList(storageCode) {
+      axios.get(`http://localhost:8080/api/total/storage/${storageCode}`)
+        .then(response => {
+          this.goodsList.data = response.data.map(goods => {
+            return {
+              '상품 코드': goods.goodsCode,
+              '상품 등급': goods.goodsGrade,
+              '주문 가능 수량': goods.totalQuantity,
+              '입력 필드': 0
+            };
+          }); // API 응답으로 받은 제품 리스트를 저장
+        })
+        .catch(error => {
+          console.error(`There was an error fetching the goods list for storageCode ${storageCode}:`, error);
+        });
+    }
+  }
+};
+</script>
+
+<style></style>
