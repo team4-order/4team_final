@@ -4,11 +4,11 @@ module.exports = defineConfig({
       transpileDependencies: true,
       devServer: {
     proxy: {
-      /*"/": {
-        target: "http://localhost:8081/login",
-        changeOrigin: true,
-        logLevel: "debug"
-      },*/
+        "/ROOT" : {
+            target : 'http://localhost:8081/',
+            changeOrigin : true,
+            logLevel : 'debug'
+        },
         "/oauth2.0": {
           target: "https://nid.naver.com/",
           changeOrigin: true,
