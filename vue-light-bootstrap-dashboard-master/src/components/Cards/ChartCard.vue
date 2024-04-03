@@ -1,7 +1,26 @@
+<!--<template>-->
+<!--  <div class="card">-->
+<!--    <div class="card-header" v-if="$slots.header">-->
+<!--      <slot name="header"></slot>-->
+<!--    </div>-->
+<!--    <div class="card-body">-->
+<!--      <div :id="chartId" class="ct-chart"></div>-->
+<!--    </div>-->
+<!--    <div class="card-footer" v-if="$slots.footer">-->
+<!--      <slot name="footer"></slot>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</template>-->
+
 <template>
   <div class="card">
-    <div class="card-header" v-if="$slots.header">
-      <slot name="header"></slot>
+    <!-- v-if 조건을 검사하여 header 슬롯 또는 title, subTitle이 제공되었을 때만 헤더를 렌더링 -->
+    <div class="card-header" v-if="$slots.header || title || subTitle">
+      <slot name="header">
+        <!-- title 또는 subTitle이 제공되었을 경우에만 해당 내용을 렌더링 -->
+        <h4 class="card-title" v-if="title">{{title}}</h4>
+        <p class="card-category" v-if="subTitle">{{subTitle}}</p>
+      </slot>
     </div>
     <div class="card-body">
       <div :id="chartId" class="ct-chart"></div>
@@ -11,6 +30,8 @@
     </div>
   </div>
 </template>
+
+
 <script>
   import Card from './Card.vue'
 
@@ -34,7 +55,7 @@
         type: Object,
         default: () => {
           return {
-            labels: [],
+            // labels: [],
             series: []
           }
         }

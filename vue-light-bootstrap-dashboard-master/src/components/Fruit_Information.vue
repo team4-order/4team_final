@@ -5,12 +5,8 @@
         <!-- 모든 과일에 대한 차트를 생성합니다 -->
         <div class="col-md-4" v-for="(chartData, fruitName) in fruitsChartData" :key="fruitName">
           <chart-card :chart-data="chartData.data" chart-type="Pie">
-            <template v-slot:header>
-              <h4 class="card-title">{{ fruitName }}</h4>
-              <p class="card-category">등급별 수량 분포</p>
-            </template>
             <template v-slot:footer>
-              <!--              범례 표시-->
+              <!-- 범례 표시 -->
               <div class="legend">
                 <i class="fa fa-circle text-info"></i> A 등급
                 <i class="fa fa-circle text-danger"></i> B 등급
@@ -19,7 +15,7 @@
               </div>
               <hr>
               <div class="stats">
-                <i class="fa fa-clock-o"></i> 최근 업데이트: 몇 분 전
+                <i class="fa fa-clock-o"></i> 최근 업데이트: 테스트
               </div>
             </template>
           </chart-card>
@@ -28,6 +24,8 @@
     </div>
   </div>
 </template>
+
+
 
 <script>
 import ChartCard from '@/components/Cards/ChartCard.vue'

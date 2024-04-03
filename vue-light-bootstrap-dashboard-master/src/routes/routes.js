@@ -18,6 +18,7 @@ import CstoragePage from "src/components/CStoragePage.vue";
 import vendorList from "../components/VendorList.vue";
 import VendorDetails from "src/components/VendorDetails.vue";
 import Fruit from "src/components/Fruit_Information";
+import DeliveryStatus from "src/components/DeliveryStatus.vue";
 
 
 const routes = [
@@ -85,6 +86,13 @@ const routes = [
         path: 'fruit',
         name: 'Fruit',
         component: Fruit, // 공급처 상세정보 페이지
+      },
+
+
+      {
+        path: 'deliveryStatus',
+        name: 'DeliveryStatus',
+        component: DeliveryStatus, // 배송 현황
       },
 
 

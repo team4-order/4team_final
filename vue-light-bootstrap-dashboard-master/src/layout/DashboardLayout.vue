@@ -47,10 +47,14 @@
 
 
       <sidebar-link to="/admin/fruit">
+        <i class="nc-icon nc-chart-pie-36"></i>
         <p>Test</p>
       </sidebar-link>
 
-
+      <sidebar-link to="/admin/deliveryStatus">
+        <i class="nc-icon nc-ambulance"></i>
+        <p>배송 현황</p>
+      </sidebar-link>
 
 
 
