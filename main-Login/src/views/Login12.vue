@@ -34,6 +34,7 @@
     <div v-on:click="googleLoginBtn">
       <img style="width: 150px; height: 46px" src="../assets/Oauth.png">
     </div>
+    <button type="button" v-on:click="getData()">data</button>
     <div id="my-signin2" style="display: none"></div>&ndash;&gt;
 
   </div>

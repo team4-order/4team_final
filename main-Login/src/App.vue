@@ -36,7 +36,9 @@ import Swal from "sweetalert2";
                 text: '성공적으로 로그아웃 되었습니다.',
                 icon: 'success',
                 confirmButtonText: '확인'
+
               })
+                localStorage.removeItem('token');
                 this.authenticated = false;
             }
 
