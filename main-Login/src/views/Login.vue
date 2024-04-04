@@ -21,6 +21,9 @@ import Swal from 'sweetalert2'
 import router from '@/router';
 // ---------------------------------------------------
 let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+axios.defaults.withCredentials = true;
+
+
 // ---------------------------------------------------
 
 export default {
@@ -39,10 +42,16 @@ export default {
         const formData = new FormData();
 
 
+
+
         formData.append("username", this.input.username); // Add username to FormData
         formData.append("password", this.input.password); // Add password to FormData
 
-        const response = await axios.post("http://localhost:8080/login", formData);
+        const response = await axios.post("http://localhost:8080/login", formData,{ headers : {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json; charset = utf-8'
+          }
+        })
 
         Swal.fire({
           title: 'Login Success!',
