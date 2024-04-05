@@ -1,25 +1,9 @@
-<!--<template>-->
-<!--  <div class="card">-->
-<!--    <div class="card-header" v-if="$slots.header">-->
-<!--      <slot name="header"></slot>-->
-<!--    </div>-->
-<!--    <div class="card-body">-->
-<!--      <div :id="chartId" class="ct-chart"></div>-->
-<!--    </div>-->
-<!--    <div class="card-footer" v-if="$slots.footer">-->
-<!--      <slot name="footer"></slot>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</template>-->
-
 <template>
   <div class="card">
-    <!-- v-if 조건을 검사하여 header 슬롯 또는 title, subTitle이 제공되었을 때만 헤더를 렌더링 -->
     <div class="card-header" v-if="$slots.header || title || subTitle">
       <slot name="header">
-        <!-- title 또는 subTitle이 제공되었을 경우에만 해당 내용을 렌더링 -->
-        <h4 class="card-title" v-if="title">{{title}}</h4>
-        <p class="card-category" v-if="subTitle">{{subTitle}}</p>
+        <h4 class="card-title" v-if="title">{{ title }}</h4>
+        <p class="card-category" v-if="subTitle">{{ subTitle }}</p>
       </slot>
     </div>
     <div class="card-body">
@@ -31,128 +15,54 @@
   </div>
 </template>
 
-
 <script>
-  import Card from './Card.vue'
-
-  export default {
-    name: 'chart-card',
-    components: {
-      Card
+export default {
+  name: 'chart-card',
+  props: {
+    chartType: {
+      type: String,
+      default: 'Line' // 기본 차트 타입
     },
-    props: {
-      chartType: {
-        type: String,
-        default: 'Line' // Line | Pie | Bar
-      },
-      chartOptions: {
-        type: Object,
-        default: () => {
-          return {}
-        }
-      },
-      chartData: {
-        type: Object,
-        default: () => {
-          return {
-            // labels: [],
-            series: []
-          }
-        }
-      },
-      responsiveOptions: [Object, Array]
+    chartOptions: {
+      type: Object,
+      default: () => ({})
     },
-    data () {
-      return {
-        chartId: 'no-id',
-        $Chartist: null,
-        chart: null
-      }
+    chartData: {
+      type: Object,
+      default: () => ({ series: [] })
     },
-    methods: {
-      /***
-       * Initializes the chart by merging the chart options sent via props and the default chart options
-       */
-      initChart () {
-        var chartIdQuery = `#${this.chartId}`
-        this.chart = this.$Chartist[this.chartType](chartIdQuery, this.chartData, this.chartOptions, this.responsiveOptions)
-        this.$emit('initialized', this.chart)
-        if (this.chartType === 'Line') {
-          this.animateLineChart()
-        }
-        if (this.chartType === 'Bar') {
-          this.animateBarChart()
-        }
-      },
-      /***
-       * Assigns a random id to the chart
-       */
-      updateChartId () {
-        const currentTime = new Date().getTime().toString()
-        const randomInt = this.getRandomInt(0, currentTime)
-        this.chartId = `div_${randomInt}`
-      },
-      getRandomInt (min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min
-      },
-      animateLineChart () {
-        let seq = 0
-        let durations = 500
-        let delays = 80
-        this.chart.on('draw', (data) => {
-          if (data.type === 'line' || data.type === 'area') {
-            data.element.animate({
-              d: {
-                begin: 600,
-                dur: 700,
-                from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
-                to: data.path.clone().stringify(),
-                easing: this.$Chartist.Svg.Easing.easeOutQuint
-              }
-            })
-          } else if (data.type === 'point') {
-            seq++
-            data.element.animate({
-              opacity: {
-                begin: seq * delays,
-                dur: durations,
-                from: 0,
-                to: 1,
-                easing: 'ease'
-              }
-            })
-          }
-        })
-        seq = 0
-      },
-      animateBarChart () {
-        let seq = 0
-        let durations = 500
-        let delays = 80
-        this.chart.on('draw', (data) => {
-          if (data.type === 'bar') {
-            seq++
-            data.element.animate({
-              opacity: {
-                begin: seq * delays,
-                dur: durations,
-                from: 0,
-                to: 1,
-                easing: 'ease'
-              }
-            })
-          }
-        })
-      }
-    },
-    async mounted () {
-      this.updateChartId()
-      const Chartist = await import('chartist')
-      this.$Chartist = Chartist.default || Chartist
-      this.initChart()
+    responsiveOptions: [Object, Array]
+  },
+  data () {
+    return {
+      chartId: 'no-id',
+      $Chartist: null,
+      chart: null
     }
-  }
-</script>
-<style>
+  },
+  methods: {
+    initChart () {
+      const chartIdQuery = `#${this.chartId}`;
+      // 원형 차트에 대해 레이블을 숨기는 옵션을 기본값으로 추가
+      const defaultPieOptions = this.chartType === 'Pie' ? { showLabel: false } : {};
+      const finalOptions = Object.assign({}, defaultPieOptions, this.chartOptions);
+      this.chart = this.$Chartist[this.chartType](chartIdQuery, this.chartData, finalOptions, this.responsiveOptions);
+      this.$emit('initialized', this.chart);
+    },
 
-</style>
+
+
+    updateChartId () {
+      const currentTime = new Date().getTime().toString();
+      const randomInt = Math.floor(Math.random() * (parseInt(currentTime, 10) - 0 + 1)) + 0;
+      this.chartId = `div_${randomInt}`;
+    },
+  },
+  async mounted () {
+    this.updateChartId();
+    const Chartist = await import('chartist');
+    this.$Chartist = Chartist.default || Chartist;
+    this.initChart();
+  }
+}
+</script>

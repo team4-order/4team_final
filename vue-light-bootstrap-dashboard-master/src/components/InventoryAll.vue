@@ -8,13 +8,17 @@
           <thead>
           <tr>
             <th>제품 이름</th>
-            <th>재고량</th>
+            <th>총 재고량</th>
+            <th>출고예정 재고량</th>
+            <th>가용 재고량</th>
           </tr>
           </thead>
           <tbody>
           <tr v-for="(total, productName, index) in totalInventoryByProduct" :key="index">
             <td>{{ productName }}</td>
             <td>{{ total }}개</td>
+            <td>{{ findOrderedQuantity(productName) }}개</td>
+            <td>{{ total - findOrderedQuantity(productName) }}개</td>
           </tr>
           </tbody>
         </table>
@@ -48,7 +52,7 @@
     <div class="footer-section">
       <h4 class="card-title">과일 상세 목록</h4>
       <div class="search-area">
-        <select v-model="searchCategory">
+        <select v-model="searchCategory" class="form-control d-inline-block w-auto">
           <option value="goodsName">상품 이름</option>
           <option value="goodsCode">상품 코드</option>
           <option value="goodsGrade">등급</option>
@@ -57,8 +61,8 @@
           <option value="storageCode">창고 코드</option>
           <option value="firstStockDate">재고 입고일</option>
         </select>
-        <input type="text" v-model="searchQuery" placeholder="검색...">
-        <button @click="performSearch">조회</button>
+        <input type="text" v-model="searchQuery" placeholder="검색..." class="form-control d-inline-block w-auto">
+        <button @click="performSearch" class="btn btn-primary">조회</button>
       </div>
       <div class="table-responsive">
         <table class="inventory-table">
@@ -101,6 +105,7 @@ export default {
       searchQuery: '',
       searchCategory: 'goodsName',
       filteredInventories: [],
+      orderedSummaries: [],
     };
   },
   computed: {
@@ -133,6 +138,30 @@ export default {
     },
   },
   methods: {
+
+
+    fetchOrderedSummaries() {
+      // "출고 준비 중" 상태에 대한 주문 요약 정보만 가져옵니다.
+      // 실제 API 엔드포인트 주소와 파라미터는 백엔드 구현에 따라 달라질 수 있습니다.
+      axios.get('/api/inventories/summaries', { params: { orderStatus: '출고 준비 중' } })
+        .then(response => {
+          this.orderedSummaries = response.data;
+        })
+        .catch(error => console.error("주문된 제품 요약 정보를 가져오는데 실패했습니다:", error));
+    },
+
+    findOrderedQuantity(goodsName) {
+      // 제품 이름으로 제품 코드 찾기
+      const product = this.inventories.find(item => item.goodsName === goodsName);
+      if (!product) return 0; // 제품을 찾지 못한 경우 0 반환
+      // 찾은 제품 코드로 주문된 수량 찾기
+      const summary = this.orderedSummaries.find(summary => summary.goodsCode === product.goodsCode);
+      return summary ? summary.totalQuantity : 0;
+    },
+
+
+
+
     fetchInventories() {
       axios.get('/api/inventories').then(response => {
         this.inventories = response.data;
@@ -141,15 +170,38 @@ export default {
         console.error("재고 목록을 가져오는 데 실패했습니다.", error);
       });
     },
+
+
     performSearch() {
-      this.filteredInventories = this.inventories.filter(inventory => {
-        const value = inventory[this.searchCategory] ? inventory[this.searchCategory].toString() : '';
-        return value.toLowerCase().includes(this.searchQuery.toLowerCase());
-      });
+      // 선택한 검색 카테고리에 따라 필터링
+      if (this.searchCategory && this.searchQuery) {
+        // 수량 또는 판매 가격으로 검색할 때 숫자로 비교
+        if (['inventoryQuantity', 'salesPrice'].includes(this.searchCategory)) {
+          const searchNumber = Number(this.searchQuery);
+          this.filteredInventories = this.inventories.filter(inventory => {
+            const value = Number(inventory[this.searchCategory]);
+            return !isNaN(searchNumber) && value === searchNumber;
+          });
+        } else {
+          // 기타 문자열 기반의 카테고리(상품 이름, 상품 코드 등)는 소문자 포함 여부로 필터링
+          this.filteredInventories = this.inventories.filter(inventory => {
+            const value = inventory[this.searchCategory] ? inventory[this.searchCategory].toString().toLowerCase() : '';
+            return value.includes(this.searchQuery.toLowerCase());
+          });
+        }
+      } else {
+        // 검색 조건이나 검색어가 지정되지 않은 경우 전체 목록을 표시
+        this.filteredInventories = this.inventories;
+      }
     },
+
+
+
+
   },
   mounted() {
     this.fetchInventories();
+    this.fetchOrderedSummaries();
   },
 };
 </script>

@@ -2,10 +2,16 @@
   <div class="content">
     <div class="container-fluid">
       <div class="row">
-        <!-- 모든 과일에 대한 차트를 생성합니다 -->
-        <div class="col-md-4" v-for="(chartData, fruitName) in fruitsChartData" :key="fruitName">
-          <chart-card :chart-data="chartData.data" chart-type="Pie">
-            <template v-slot:footer>
+        <div class="col-12">
+          <input type="text" v-model="searchQuery" placeholder="과일 검색..." class="form-control">
+          <br><br>
+        </div>
+        <!-- 과일 차트를 생성합니다 -->
+        <div class="col-md-4" v-for="(chartData, fruitName) in filteredFruitsChartData" :key="fruitName">
+          <chart-card :chart-data="chartData.data" chart-type="Pie" :title="fruitName">
+          <template v-slot:footer>
+            <h4 color="red">{{ fruitName }}</h4>
+
               <!-- 범례 표시 -->
               <div class="legend">
                 <i class="fa fa-circle text-info"></i> A 등급
@@ -15,11 +21,12 @@
               </div>
               <hr>
               <div class="stats">
-                <i class="fa fa-clock-o"></i> 최근 업데이트: 테스트
+                <i class="fa fa-clock-o"></i> 실시간
               </div>
             </template>
           </chart-card>
         </div>
+
       </div>
     </div>
   </div>
@@ -38,11 +45,33 @@ export default {
   data() {
     return {
       inventories: [],
+      searchQuery: '', // 검색어를 저장할 데이터 속성
     }
   },
 
 
   computed: {
+
+
+    filteredFruitsChartData() {
+      if (!this.searchQuery) {
+        return this.fruitsChartData; // 검색어가 없다면 모든 데이터 반환
+      }
+
+      const searchQueryLowerCase = this.searchQuery.toLowerCase();
+      const filteredData = {};
+      Object.entries(this.fruitsChartData).forEach(([fruitName, data]) => {
+        if (fruitName.toLowerCase().includes(searchQueryLowerCase)) {
+          filteredData[fruitName] = data; // 검색어가 포함된 과일만 필터링
+        }
+      });
+
+      return filteredData;
+    },
+
+
+
+
     fruitsChartData() {
       const gradeColors = {
         'A': '#4caf50',

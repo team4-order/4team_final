@@ -1,29 +1,27 @@
 <template>
-
   <div class="content">
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
+          <!-- 총 재고 목록 카드 -->
           <div class="card">
-            <div class="card-header">
-              <h4 class="card-title">창고별 재고 목록</h4>
-<!--              <p class="card-category">창고별 재고목록 입니다-->
-
+            <div class="card-header bg-primary text-white">
+              <h4 class="card-title">총 재고 목록</h4>
             </div>
             <div class="card-body">
-              <div class="mb-3">
-                <input v-model="searchQuery" type="text" placeholder="상품 검색..." class="form-control">
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <select v-model="totalInventorySearchCriteria" class="form-control">
+                    <option value="name">이름</option>
+                    <option value="quantity">수량</option>
+                    <option value="grade">등급</option>
+                  </select>
+                </div>
+                <div class="col-md-8">
+                  <input v-model="totalInventorySearchQuery" type="text" placeholder="검색..." class="form-control">
+                </div>
               </div>
-
-              <th @click="sort('goodsName')">이름 {{ sortKey === 'goodsName' ? sortOrder === 'ascending' ? '↑' : '↓' : '' }}</th>
-              <th> | </th>
-              <th @click="sort('firstStockDate')">입고일 {{ sortKey === 'firstStockDate' ? sortOrder === 'ascending' ? '↑' : '↓' : '' }}</th>
-              <th> | </th>
-              <th @click="sort('inventoryQuantity')">수량 {{ sortKey === 'inventoryQuantity' ? sortOrder === 'ascending' ? '↑' : '↓' : '' }}</th>
-
-
-              <div class="table-responsive mt-4">
-                <h4 class="mt-4">총 재고 목록</h4>
+              <div class="table-responsive">
                 <table class="table table-bordered">
                   <thead>
                   <tr>
@@ -33,16 +31,35 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr v-for="(value, key) in groupedInventories" :key="key">
-                    <td>{{ value.goodsName }}</td>
-                    <td>{{ value.goodsGrade }}</td>
-                    <td>{{ value.totalQuantity }}</td>
+                  <tr v-for="(inventory, index) in filteredGroupedInventories" :key="index">
+                    <td>{{ inventory.goodsName }}</td>
+                    <td>{{ inventory.goodsGrade }}</td>
+                    <td>{{ inventory.totalQuantity }}</td>
                   </tr>
                   </tbody>
                 </table>
               </div>
+            </div>
+          </div>
 
-
+          <!-- 개별 재고 목록 카드 -->
+          <div class="card mt-4">
+            <div class="card-header bg-success text-white">
+              <h4 class="card-title">재고 목록</h4>
+            </div>
+            <div class="card-body">
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <select v-model="inventorySearchCriteria" class="form-control">
+                    <option value="name">이름</option>
+                    <option value="quantity">수량</option>
+                    <option value="grade">등급</option>
+                  </select>
+                </div>
+                <div class="col-md-8">
+                  <input v-model="inventorySearchQuery" type="text" placeholder="검색..." class="form-control">
+                </div>
+              </div>
               <div class="table-responsive">
                 <table class="table table-striped">
                   <thead>
@@ -83,70 +100,62 @@ export default {
   data() {
     return {
       inventories: [],
-      searchQuery: '',
-      sortKey: '', // 정렬 기준 필드
-      sortOrder: 'ascending', // 정렬 순서
+      totalInventorySearchQuery: '',
+      totalInventorySearchCriteria: 'name',
+      inventorySearchQuery: '',
+      inventorySearchCriteria: 'name',
     };
   },
-
   computed: {
-
-    groupedInventories() {
-      let grouping = this.filteredInventories.reduce((acc, inventory) => {
-        let key = inventory.goodsName + '-' + inventory.goodsGrade;
-        if (!acc[key]) {
-          acc[key] = { goodsName: inventory.goodsName, goodsGrade: inventory.goodsGrade, totalQuantity: 0 };
+    filteredGroupedInventories() {
+      return this.groupedInventories.filter(inventory => {
+        switch (this.totalInventorySearchCriteria) {
+          case 'name':
+            return inventory.goodsName.toLowerCase().includes(this.totalInventorySearchQuery.toLowerCase());
+          case 'quantity':
+            return inventory.totalQuantity >= parseInt(this.totalInventorySearchQuery, 10) || this.totalInventorySearchQuery === '';
+          case 'grade':
+            return inventory.goodsGrade.toLowerCase().includes(this.totalInventorySearchQuery.toLowerCase());
+          default:
+            return true;
         }
-        acc[key].totalQuantity += parseInt(inventory.inventoryQuantity);
+      });
+    },
+    filteredInventories() {
+      return this.inventories.filter(inventory => {
+        switch (this.inventorySearchCriteria) {
+          case 'name':
+            return inventory.goodsName.toLowerCase().includes(this.inventorySearchQuery.toLowerCase());
+          case 'quantity':
+            return inventory.inventoryQuantity >= parseInt(this.inventorySearchQuery, 10) || this.inventorySearchQuery === '';
+          case 'grade':
+            return inventory.goodsGrade.toLowerCase().includes(this.inventorySearchQuery.toLowerCase());
+          default:
+            return true;
+        }
+      });
+    },
+    groupedInventories() {
+      const groups = this.inventories.reduce((acc, inventory) => {
+        const key = `${inventory.goodsName}-${inventory.goodsGrade}`;
+        if (!acc[key]) {
+          acc[key] = { ...inventory, totalQuantity: 0 };
+        }
+        acc[key].totalQuantity += parseInt(inventory.inventoryQuantity, 10);
         return acc;
       }, {});
-
-      // 객체를 배열로 변환하여 반환
-      return Object.values(grouping);
-    },
-
-
-    filteredInventories() {
-      // 검색 쿼리에 따라 inventories 배열을 필터링
-      return this.inventories.filter(inventory =>
-        inventory.goodsName.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
+      return Object.values(groups);
     },
   },
-
   mounted() {
     this.fetchInventories();
   },
   methods: {
-
-    sort(sortKey) {
-      if (this.sortKey === sortKey) {
-        // 이미 선택된 컬럼에 대해 정렬되어 있다면 순서를 토글
-        this.sortOrder = this.sortOrder === 'ascending' ? 'descending' : 'ascending';
-      } else {
-        // 새로운 컬럼에 대해 정렬
-        this.sortKey = sortKey;
-        this.sortOrder = 'ascending';
-      }
-
-      this.inventories.sort((a, b) => {
-        let valueA = sortKey === 'inventoryQuantity' ? parseInt(a[sortKey]) : a[sortKey].toLowerCase();
-        let valueB = sortKey === 'inventoryQuantity' ? parseInt(b[sortKey]) : b[sortKey].toLowerCase();
-
-        if (this.sortOrder === 'ascending') {
-          return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
-        } else {
-          return valueA > valueB ? -1 : valueA < valueB ? 1 : 0;
-        }
-      });
-    },
-
     fetchInventories() {
       const storageCode = this.$route.params.storageCode;
       axios.get(`/api/inventories/read/${storageCode}`)
         .then(response => {
-          // 응답 데이터를 사용하여 inventories 배열을 업데이트합니다.
-          this.inventories = response.data; // 직접 할당으로 변경
+          this.inventories = response.data;
         })
         .catch(error => {
           console.error("Error loading inventories", error);
@@ -158,24 +167,9 @@ export default {
 
 <style scoped>
 .card-header {
-  background-color: #007bff;
-  color: white;
-}
-
-.card-title {
   font-weight: bold;
 }
-
 .table-striped tbody tr:nth-of-type(odd) {
   background-color: rgba(0, 0, 0, .05);
-}
-
-.table th {
-  background-color: #007bff;
-  color: white;
-}
-
-.search-options input {
-  max-width: 300px;
 }
 </style>

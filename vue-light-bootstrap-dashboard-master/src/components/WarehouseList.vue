@@ -30,29 +30,33 @@
                   class="list-group-item d-flex justify-content-between align-items-center"
                   @click="fetchInventoryData(warehouse['창고 코드'])"
                 >
-                <div>
-                  <span class="text-primary">{{ warehouse['창고 코드'] }}</span> -
-                  {{ warehouse['창고 이름'] }},
-                  {{ warehouse['창고 주소'] }}
-                </div>
-                <button class="btn btn-primary btn-sm" @click.stop="navigateToInventory(warehouse['창고 코드'])">이동</button>
+                  <div>
+                    <span class="text-primary">{{ warehouse['창고 코드'] }}</span> -
+                    {{ warehouse['창고 이름'] }},
+                    {{ warehouse['창고 주소'] }}
+                  </div>
+                  <button class="btn btn-primary btn-sm" @click.stop="navigateToInventory(warehouse['창고 코드'])">이동</button>
                 </li>
               </ul>
             </div>
           </div>
           <div class="card">
             <div class="card-body">
+              <!-- 창고가 선택되었을 때만 그래프 표시 -->
+              <div v-if="selectedWarehouseName">
+                <chart-card
+                  :key="chartKey"
+                  :chart-data="barChart.data"
+                  :chart-options="barChart.options"
+                  :chart-responsive-options="barChart.responsiveOptions"
+                  chart-type="Bar"
+                />
+              </div>
 
-              <chart-card
-                :key="chartKey"
-                :chart-data="barChart.data"
-                :chart-options="barChart.options"
-                :chart-responsive-options="barChart.responsiveOptions"
-                chart-type="Bar"
-              />
-
-
-
+              <!-- 선택된 창고가 없을 때 안내 메시지 표시 -->
+              <div v-else class="text-center">
+                <h5 class="text-muted">창고목록선택시 ~~~</h5>
+              </div>
             </div>
           </div>
         </div>
@@ -71,12 +75,10 @@ export default {
   },
   data() {
     return {
-
       searchQuery: '',
       warehouses: {
         data: [],
         filteredData: [],
-
       },
       selectedWarehouseName: '', // 선택된 창고 이름
       barChart: {
@@ -100,10 +102,8 @@ export default {
               },
             },
           }],
-
         ]
       },
-
       chartKey: Date.now(), // 차트 키 초기화
     };
   },
@@ -135,7 +135,6 @@ export default {
     navigateToInventory(storageCode) {
       this.$router.push({ path: `/admin/inventory/${storageCode}` });
     },
-
     async fetchInventoryData(storageCode) {
       try {
         const response = await axios.get(`/api/inventories/read/${storageCode}`);
@@ -143,7 +142,6 @@ export default {
         let productQuantities = {};
 
         inventoryData.forEach(item => {
-          // 상품 이름을 직접 DTO에서 가져옵니다.
           const productName = item.goodsName;
           const quantity = Number(item.inventoryQuantity); // `Number()`는 필요에 따라 사용
           if (!productQuantities[productName]) {
@@ -152,31 +150,20 @@ export default {
           productQuantities[productName] += quantity;
         });
 
-        // 새로운 차트 데이터 객체 생성
         const newChartData = {
           labels: Object.keys(productQuantities),
           series: [Object.values(productQuantities)]
         };
 
-        // 차트 데이터와 선택된 창고 이름 업데이트
         this.barChart.data = newChartData;
         const selectedWarehouse = this.warehouses.data.find(wh => wh['창고 코드'] === storageCode);
         this.selectedWarehouseName = selectedWarehouse ? selectedWarehouse['창고 이름'] : '';
 
-        // 차트 컴포넌트 강제 업데이트를 위한 key 값 변경
-        this.chartKey = Date.now();
+        this.chartKey = Date.now(); // 차트 컴포넌트 강제 업데이트
       } catch (error) {
         console.error("Error fetching inventory data for warehouse", error);
       }
-
-      console.log("새 차트 데이터:", newChartData); // 새로운 차트 데이터 로깅
-      this.chartKey = Date.now();
-      console.log("차트 키 업데이트:", this.chartKey); // 차트 키 업데이트 로깅
     }
-
-
-
-
   },
 }
 </script>

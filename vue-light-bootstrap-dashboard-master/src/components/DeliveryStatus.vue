@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>배송 현황</h1>
+    <h1>배송 현황 (페이지 삭제 예정)</h1>
     <table>
       <thead>
       <tr>
@@ -11,6 +11,7 @@
         <th>상품 코드</th>
         <th>상품 이름</th>
         <th>거래처 이름</th>
+        <th>배송 상태</th>
       </tr>
       </thead>
       <tbody>
@@ -22,6 +23,8 @@
         <td>{{ delivery.goodsCode }}</td>
         <td>{{ delivery.goodsName }}</td>
         <td>{{ delivery.contactName }}</td>
+        <td>{{ getDeliveryStatus(delivery) }}</td>
+
       </tr>
       </tbody>
     </table>
@@ -48,6 +51,20 @@ export default {
           this.deliveries = response.data;
         })
         .catch(error => console.error("There was an error fetching the deliveries:", error));
+    },
+
+    getDeliveryStatus(delivery) {
+      const now = new Date();
+      const deliveryArrive = new Date(delivery.deliveryArrive);
+      const deliveryDate = new Date(delivery.deliveryDate);
+
+      if (now > deliveryArrive) {
+        return '배송 완료';
+      } else if (now < deliveryDate) {
+        return '배송 준비중';
+      } else {
+        return '배송 중';
+      }
     }
   }
 }
