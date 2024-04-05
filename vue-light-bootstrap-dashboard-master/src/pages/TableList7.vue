@@ -18,9 +18,16 @@
                 </a>
               </template>
             </base-dropdown>
-            <l-table class="table-hover table-striped" :columns="goodsList.columns" :data="goodsList.data"
-              :editable="true">
+
+            <input type="text" v-model="searchQuery" placeholder="상품명 검색" class="form-control"/>
+            <l-table class="table-hover table-striped" :columns="goodsList.columns" :data="filteredData"
+            :editable="true"
+            @update-total="updateTotalAmount">
             </l-table>
+
+            
+
+
           </card>
         </div>
       </div>
@@ -46,12 +53,26 @@ export default {
       storageCodes: [],
       selectedStorageCode: '',
       goodsList: {
-        columns: ['상품 코드', '상품 등급', '주문 가능 수량', '입력 필드'],
+        columns: ['상품명', '상품 등급', '주문 가능 수량', '가격', '입력 필드', '금액'],
         data: [],
         filteredData: []
       },
-      dropdownTitle: 'Select Storage Code'
+      dropdownTitle: 'Select Storage Code',
+      totalAmount: 0
     };
+  },
+  computed: {
+    // 검색된 데이터를 계산된 속성으로 필터링
+    filteredData() {
+      return this.goodsList.data.filter(goods => {
+        return goods['상품명'].toLowerCase().includes(this.searchQuery.toLowerCase());
+      });
+    },
+    totalAmount() {
+    return this.goodsList.data.reduce((acc, goods) => {
+      return acc + (goods['가격'] * goods['입력 필드'].value);
+    }, 0);
+  }
   },
   watch: {
     selectedStorageCode(newVal) {
@@ -64,6 +85,9 @@ export default {
     this.fetchOrderList();
   },
   methods: {
+    updateTotalAmount(amount) {
+    this.totalAmount = amount;
+  },
     selectStorageCode(code) {
       this.selectedStorageCode = code;
       this.dropdownTitle = code; // 드롭다운 타이틀 업데이트
@@ -91,9 +115,12 @@ export default {
           this.goodsList.data = response.data.map(goods => {
             return {
               '상품 코드': goods.goodsCode,
+              '상품명': goods.goodsName,
               '상품 등급': goods.goodsGrade,
               '주문 가능 수량': goods.totalQuantity,
-              '입력 필드': 0
+              '가격': Math.ceil(goods.inputPrice * (100 + goods.marginRate) / 100),
+              '입력 필드': 0,
+              '금액' : 0
             };
           }); // API 응답으로 받은 제품 리스트를 저장
         })
@@ -104,33 +131,39 @@ export default {
     submitOrder() {
       //const customerCode = this.$route.params.customerCode;
     const orderData = {
-      customerCode: "CON001", // 이 값은 사용자 선택 또는 다른 로직을 통해 설정되어야 합니다.
+      customerCode: "CON001", 
       storageCode: this.selectedStorageCode,
-      orderPrice: 0, // 예시 값, 실제로는 사용자 입력 또는 계산을 통해 결정될 수 있습니다.
-      adjustmentStatus: "미정산" // 기본값 설정 예시, 백엔드에서도 설정할 수 있습니다.
+      orderPrice: this.totalAmount, 
+      adjustmentStatus: "미정산"
     };
     axios.post('/api/orders/post', orderData)
       .then(response => {
         console.log('Order created!', response.data);
-        // 주문 생성 후 필요한 작업 수행, 예: 사용자에게 성공 메시지 표시
         const createdOrderNumber = response.data.orderNumber;
-      
-      // 두 번째 POST 요청 - 다른 테이블에 데이터 추가
-      // 이때, 첫 번째 요청으로부터 받은 orderNumber를 사용합니다.
-      const orderProduct = {
-        orderNumber: createdOrderNumber,
-        // 다른 필요한 데이터 필드...
-      };
-      return axios.post('/api/order/detail/post', orderProduct); // 두 번째 요청 실행
-    })
-    .then(response => {
-      // 두 번째 요청의 응답 처리
-      console.log('Data added to another table with the order number', response.data);
-    })
-      .catch(error => {
-        console.error('Error creating order:', error);
-        // 오류 처리, 예: 사용자에게 오류 메시지 표시
+        console.log(createdOrderNumber);
+
+        const nonZeroItems = this.goodsList.data.filter(item => item['입력 필드'] > 0);
+
+        nonZeroItems.forEach(item => {
+        const orderProductData = {
+          orderNumber: createdOrderNumber,
+          goodsCode: item['상품 코드'],
+          goodsGrade: item['상품 등급'],
+          orderQuantity: item['입력 필드'],
+          orderPrice: item['금액'] 
+        };
+        axios.post('/api/order/detail/post', orderProductData)
+          .then(res => {
+            console.log('Item added with the order number', res.data);
+          })
+          .catch(err => {
+            console.error('Error posting item:', err);
+          });
       });
+    })
+    .catch(error => {
+      console.error('Error creating order:', error);
+    });
   }
 
   }
@@ -140,5 +173,13 @@ export default {
 <style scoped>
 .dropdown .dropdown-toggle {
   cursor: pointer;
+}
+.total-amount h4 {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.table tbody tr:last-child td {
+  font-weight: bold;
 }
 </style>

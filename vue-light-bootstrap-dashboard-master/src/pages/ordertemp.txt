@@ -90,3 +90,19 @@ export default {
 </script>
 
 <style></style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="total-amount float-right">
+              <h4>총 금액: {{ totalAmount }}</h4>
+            </div>

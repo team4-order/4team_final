@@ -28,7 +28,7 @@ export default {
       type: String,
       default: 'Select Storage Code',
     },
-    title: String,
+    //title: String,
     icon: String,
     tag: {
       type: String,
@@ -56,5 +56,9 @@ export default {
 <style scoped>
 .dropdown .dropdown-toggle {
   cursor: pointer;
+}
+
+li {
+  list-style-type: none;
 }
 </style>

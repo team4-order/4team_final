@@ -37,7 +37,7 @@ export default {
     return {
       searchQuery: '',
       orderDetails: {
-        columns: ['주문 상품(코드)', '상품 등급', '주문 금액'],
+        columns: ['상품명', '상품 등급', '개수', '금액'],
         data: [],
         filteredData: []
       }
@@ -58,7 +58,9 @@ export default {
           this.orderDetails.data = response.data.map(orderDetail => {
             return {
               '주문 번호': orderDetail.orderNumber,
+              '상품명': orderDetail.goodsName,
               '주문 금액': orderDetail.orderPrice,
+              '개수': orderDetail.orderQuantity,
               '주문 상품(코드)': orderDetail.goodsCode,
               '상품 등급': orderDetail.goodsGrade
             };
