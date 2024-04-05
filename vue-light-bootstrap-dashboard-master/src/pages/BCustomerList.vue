@@ -14,9 +14,9 @@
             </template>
             <!-- LTable 컴포넌트를 사용하여 테이블을 표시합니다. -->
             <l-table class="table-hover table-striped" 
-            :columns="Bcontacts.columns" 
-            :data="Bcontacts.filteredData"
-            @row-click="handleRowClick"></l-table>
+                     :columns="Bcontacts.columns" 
+                     :data="BcontactsWithSettlementStatus"
+                     @row-click="handleRowClick"></l-table>
           </card>
         </div>
       </div>
@@ -50,22 +50,33 @@ export default {
     this.fetchBContacts();
   },
   methods: {
-    fetchBContacts() {
-      axios.get('http://localhost:8080/api/contact/customers/BUS002')
-        .then(response => {
-          this.Bcontacts.data = response.data.map(Bcontact => ({
-            '거래처 코드': Bcontact.contactCode,
-            '거래처 이름': Bcontact.contactName,
-            '주소': Bcontact.contactAddress
-          }));
-          this.Bcontacts.filteredData = this.Bcontacts.data;
-          this.sortContacts('거래처 이름'); // 메서드 이름 수정
-          // 연락처 이름 데이터를 중복 없이 추출하여 저장
-          this.Bcontacts.contactNames = [...new Set(this.Bcontacts.data.map(Bcontact => Bcontact['거래처 이름']))];
-        })
-        .catch(error => {
-          console.error("거래처 목록을 가져오는 데 실패했습니다.", error);
-        });
+    async fetchBContacts() {
+      try {
+        const response = await axios.get('http://localhost:8080/api/contact/customers/BUS002');
+        for (const contact of response.data) {
+          const settlementStatus = await this.isPendingSettlement(contact.contactCode);
+          this.Bcontacts.data.push({
+            '거래처 코드': contact.contactCode,
+            '거래처 이름': contact.contactName,
+            '주소': contact.contactAddress,
+            '정산현황': settlementStatus ? '정산 예정' : '완료'
+          });
+        }
+        this.Bcontacts.filteredData = this.Bcontacts.data;
+        this.sortContacts('거래처 이름');
+        this.Bcontacts.contactNames = [...new Set(this.Bcontacts.data.map(contact => contact['거래처 이름']))];
+      } catch (error) {
+        console.error("거래처 목록을 가져오는 데 실패했습니다.", error);
+      }
+    },
+    async isPendingSettlement(customerCode) {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/orders/pendingsettlement/${customerCode}`);
+        return response.data;
+      } catch (error) {
+        console.error("정산 상태를 확인하는 데 실패했습니다.", error);
+        throw error;
+      }
     },
     filterContacts() {
       if (this.searchQuery) {
@@ -77,8 +88,7 @@ export default {
         this.Bcontacts.filteredData = this.Bcontacts.data;
       }
     },
-        sortContacts(column) {
-      // 주어진 열을 기준으로 연락처 목록 정렬
+    sortContacts(column) {
       this.Bcontacts.filteredData.sort((a, b) => {
         if (a[column] < b[column]) return -1;
         if (a[column] > b[column]) return 1;
@@ -86,14 +96,17 @@ export default {
       });
     },
     handleRowClick(row) {
-      const customerCode = row['거래처 코드']; // 선택한 행의 거래처 코드
-      // BAdjustment 화면으로 네비게이션하고 해당 거래처의 데이터를 표시
+      const customerCode = row['거래처 코드'];
       window.location.href = `http://localhost:8081/#/bcustomer_list/b_adjustment/${customerCode}`;
+    }
+  },
+  computed: {
+    BcontactsWithSettlementStatus() {
+      return this.Bcontacts.filteredData;
     }
   }
 }
 </script>
-
 
 <style scoped>
 .search-bar {

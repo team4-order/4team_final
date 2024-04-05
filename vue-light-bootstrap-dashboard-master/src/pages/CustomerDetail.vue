@@ -279,11 +279,11 @@ export default {
     <!-- 공급처 상세정보 섹션 -->
     <div class="card">
       <div class="card-header">
-        <h4 class="card-title">판매처 상세정보</h4>
+        <h4 class="card-title"  style="text-align: center;">판매처 상세정보</h4>
       </div>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table">
+          <table class="table" style="margin-left: 120px;">
             <tbody>
               <tr>
                 <th scope="row">판매처 이름</th>

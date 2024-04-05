@@ -91,7 +91,7 @@ export default {
     handleRowClick(row) {
       const contactCode = row['거래처 코드']; // 변수명을 orderNumber에서 contactCode로 변경
       // 주문 상세 페이지 URL로 이동
-      window.location.href = `http://localhost:8080/#/admin/customer_list/customer_detail/${contactCode}`;
+      window.location.href = `http://localhost:8081/#/admin/customer_list/customer_detail/${contactCode}`;
     }
   }
 }
