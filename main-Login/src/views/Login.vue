@@ -9,21 +9,57 @@
       <label for="password">Password</label>
       <input type="password" id="password" name="password" v-model="input.password" placeholder="Password" />
     </div>
+
+    <button>비밀번호 : 영문 숫자 특수기호 조합 8자리 이상 16자리 이하</button><br>
+
     <button type="button" v-on:click="login">Login</button>
-    <button type="button" v-on:click="GoogleLogin()">GLogin</button>
-    <button type="button" v-on:click="getDatas()">data</button>
-    <button>비밀번호 : 영문 숫자 특수기호 조합 8자리 이상 16자리 이하</button>
+    <br>
+    <br>
+    구글 아이디가 있으신가요?<br>
+    <button type="button" v-on:click="GoogleLogin()">GLogin로 로그인하기</button>
+<br>
+
+    <button type="button" v-on:click="loginstatus = true">접속하기</button>
 
 
+    <!-- ------------------------------------------------------------------------------------------>
+    <div class = "Nblack-bg" v-if="loginstatus == true">
 
+      <div class = "Nwhite-bg">
 
-    <div class="form-inputs">
-      <label for="NickName">NickName</label>
-      <input type="text" id="NickName" name="NickName" v-model="input.NickName" placeholder="NickName" />
-      <button type="button" v-on:click="getDatas">제출</button>
+       <button type="button"  v-on:click="ismodalopen = true">처음 사용자</button>
+        <button type="button"  v-on:click="getDatas()">기존 사용자</button>
+
+      </div>
+
     </div>
-  </div>
 
+
+
+    <!-- ------------------------------------------------------------------------------------------>
+
+<div class = "black-bg" v-if="ismodalopen == true">
+
+  <div class = "white-bg">
+
+    <h4>사용하실 계정명을 입력해주세요.</h4>
+    <div class="form-inputs">
+      <label for="NickName">계정명</label>
+      <input type="NickName" id="NickName" name="NickName" v-model="input.NickName" placeholder="계정명을 입력해주세요." />
+      <p>중복확인</p>
+       <button v-on:click="[ismodalopen = false, refresh()]" >확인 및 돌아가기</button>
+    </div>
+
+  </div>
+</div>
+
+
+
+    <!-- ------------------------------------------------------------------------------------------>
+
+
+    <!-- ------------------------------------------------------------------------------------------>
+  </div>
 
 </template>
 <script>
@@ -35,16 +71,27 @@ let reg = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
 axios.defaults.withCredentials = true;
 
 
+
+
+
+
+// ---------------------------------------------------
+// 로그인 버튼
+
 // ---------------------------------------------------
 
 export default {
   name: 'Login',
+  components: {},
   data() {
     return {
       input: {
         username: "",
-        password: ""
+        password: "",
+        NickName: "",
       },
+      ismodalopen : false,
+      loginstatus : false,
     }
   },
   methods: {
@@ -58,11 +105,7 @@ export default {
         formData.append("username", this.input.username); // Add username to FormData
         formData.append("password", this.input.password); // Add password to FormData
 
-        const response = await axios.post("http://localhost:8080/login", formData/*,{ headers : {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json; charset = utf-8'
-          }
-        }*/)
+        const response = await axios.post("http://localhost:8080/login", formData)
 
         Swal.fire({
           title: 'Login Success!',
@@ -82,40 +125,46 @@ export default {
         console.log(response.data);
 
       } catch (error) {
+       await Swal.fire({
+          title: 'Login failed!',
+          text: '아이디 및 비밀번호를 확인해주세요.',
+          icon: 'error',
+          confirmButtonText: '확인'
+        })
         console.error("Login failed:", error.response.data);
+
+
+
         // Handle login failure (display error message, clear inputs, etc.)
       }
-    },GoogleLogin(){
-window.location.href ="https://accounts.google.com/o/oauth2/v2/auth?scope=profile&access_type=offline&include_granted_scopes=true&response_type=code&redirect_uri=http://localhost:8081/login/&client_id=1074874386105-qlcav64d5j58f07o9aep4snpko0elgs1.apps.googleusercontent.com"
+    },async GoogleLogin(){
+
+      window.location.href ="https://accounts.google.com/o/oauth2/v2/auth?scope=profile&access_type=offline&include_granted_scopes=true&response_type=code&redirect_uri=http://localhost:8081/login/&client_id=1074874386105-qlcav64d5j58f07o9aep4snpko0elgs1.apps.googleusercontent.com"
 
 
-          /*https://accounts.google.com/o/oauth2/v2/auth?scope=profile&access_type=offline&include_granted_scopes=true&response_type=code& redirect_uri=http://localhost:8081/login/&client_id=1074874386105-qlcav64d5j58f07o9aep4snpko0elgs1.apps.googleusercontent.com
-              https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&client_id=1074874386105-qlcav64d5j58f07o9aep4snpko0elgs1.apps.googleusercontent.com&redirect_uri=http://localhost:8081/login/*/
-
-      /*this.$router.replace({name: "Login"});*/
 },async getDatas(){
-      // const formData = new FormData();
+      //const formData = new FormData();
       const params = new URLSearchParams(window.location.search);
       const code = params.get("code");
-
-    // formData.append("Nickname", this.input.NickName);
-
-      // console.log(code+ "  /  "+formData)
+      const NickName = this.input.NickName;
 
 
-      await axios.post("http://localhost:8080/glogin/access", code)
-          .then(response => {console.log("spring에서온 응답"+ response.data);}
-          ).catch(error => {
-            console.error("access code 데이터 전송에 문제가 생겼습니다.", error);
-      });
-      /*await axios.post("http://localhost:8080/glogin/access", formData)
-          .then(response => {console.log("spring에서온 응답"+ response.data);}
-          ).catch(error => {
-            console.error("nickname 데이터 전송에 문제가 생겼습니다.", error);
-          });*/
+      const formData = new FormData();
+      formData.append("code", code);
+      formData.append("NickName", NickName);
+      console.log("code : "+code+ "  /  "+" NickName: "+NickName);
 
 
-      if(code===params.get("code"))
+
+    await axios.post("http://localhost:8080/glogin/access", formData)
+        .then(response => {
+              console.log("spring에서온 응답" + JSON.stringify(response.data));
+            }
+        ).catch(error => {
+          console.error("access code 데이터 전송에 문제가 생겼습니다.", error);
+        });
+
+      if(code==params.get("code"))
       {
         this.$emit("authenticated", true);
 
@@ -127,12 +176,56 @@ window.location.href ="https://accounts.google.com/o/oauth2/v2/auth?scope=profil
         })
         /*this.$router.replace({name: "Secure"});*/
       }
-}
+}, async refresh(){
+      this.$emit("authenticated", true);
+
+       Swal.fire({
+        title: 'Login Success!',
+        text: '로그인 되었습니다. 메인 페이지로 이동합니다.',
+        icon: 'success',
+        confirmButtonText: '확인'
+
+      })
+      await this.$router.replace({name: "Secure"});
+    }
 }
 }
 </script>
 
 <style>
+
+body{
+  margin : 0
+}
+
+div{
+  box-sizing: border-box;
+}
+
+.black-bg {
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  position: fixed; padding: 20px;
+}
+.white-bg {
+  width: 100%; background: white;
+  border-radius: 8px; padding: 20px;
+}
+
+.Nblack-bg {
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  position: fixed; padding: 20px;
+}
+.Nwhite-bg {
+  width: 100%; background: white;
+  border-radius: 8px; padding: 20px;
+}
+
+
+
+
+
 
 #login .form-inputs {
   padding-bottom: 10px;
@@ -141,5 +234,6 @@ window.location.href ="https://accounts.google.com/o/oauth2/v2/auth?scope=profil
 #login .form-inputs label {
   padding-right: 10px;
 }
+
 
 </style>
