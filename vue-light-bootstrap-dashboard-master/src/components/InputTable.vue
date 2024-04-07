@@ -6,22 +6,25 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(item, index) in data" :key="index">
+      <tr v-for="(item, index) in filteredAndVisibleData" :key="index">
         <td v-for="column in columns" :key="column">
-          <template v-if="column === '입력 필드'">
+          <template v-if="column === '주문 수량'">
             <!-- 입력 필드인 경우 input 태그를 렌더링합니다. -->
-            <input type="number" v-model="item[column]"  @input="updateAmount(item)" />
+            <input type="number" v-model="item[column]" @input="updateAmount(item)" />
           </template>
           <template v-else>
             <!-- 그 외의 경우는 일반 텍스트를 렌더링합니다. -->
             {{ item[column] }}
           </template>
         </td>
+        <td>
+          <button class="btn btn-info btn-fill" v-if="!item.visible" @click="handleAddRowClick(item)">+</button>
+        </td>
       </tr>
       <tr>
-    <td :colspan="columns.length - 1">Total Amount</td>
-    <td>{{ totalAmount }}</td>
-  </tr>
+        <td :colspan="columns.length - 1">Total Amount</td>
+        <td>{{ totalAmount }}</td>
+      </tr>
     </tbody>
   </table>
 </template>
@@ -31,11 +34,27 @@ export default {
   name: 'l-table',
   props: {
     columns: Array,
-    data: Array
+    data: Array,
+    searchQuery: String,
   },
   computed: {
+    filteredAndVisibleData() {
+      const searchLower = this.searchQuery.toLowerCase();
+
+      return this.data.filter(item => 
+        item.visible || item['상품명'].toLowerCase().includes(searchLower)
+      );
+    },
+    filteredData() {
+      return this.data.filter(item => 
+        item.visible || item['상품명'].toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    },
+    visibleData() {
+      return this.data.filter(item => item.visible || item['상품명'].toLowerCase().includes(this.searchQuery.toLowerCase()));
+    },
     totalAmount() {
-      return this.data.reduce((acc, item) => acc + (item['가격'] * item['입력 필드']), 0);
+      return this.data.reduce((acc, item) => acc + (item['가격(BOX)'] * item['주문 수량']), 0);
     }
   },
   watch: {
@@ -43,12 +62,12 @@ export default {
     'data': {
       handler: function (newData) {
         newData.forEach((item) => {
-          if (item['입력 필드'] < 0) {
-            item['입력 필드'] = 0; // 값이 0보다 작으면 0으로 설정
-          } else if (item['입력 필드'] > item['주문 가능 수량']) {
-            item['입력 필드'] = item['주문 가능 수량']; // 입력 값이 주문 가능 수량을 초과하면 주문 가능 수량으로 설정
+          if (item['주문 수량'] < 0) {
+            item['주문 수량'] = 0; // 값이 0보다 작으면 0으로 설정
+          } else if (item['주문 수량'] > item['주문 가능 수량']) {
+            item['주문 수량'] = item['주문 가능 수량']; // 입력 값이 주문 가능 수량을 초과하면 주문 가능 수량으로 설정
           }
-          item['금액'] = item['가격'] * item['입력 필드'];
+          item['금액(원)'] = item['가격(BOX)'] * item['주문 수량'];
         });
       },
       deep: true,
@@ -56,13 +75,22 @@ export default {
     }
   },
   methods: {
-  updateAmount(item) {
-    // 입력 필드 값에 따라 금액 계산
-    item['금액'] = item['가격'] * item['입력 필드'];
+    updateAmount(item) {
+      // 입력 필드 값에 따라 금액 계산
+      item['금액(원)'] = item['가격(BOX)'] * item['주문 수량'];
 
-    // 계산된 총합을 상위 컴포넌트로 전달
-    this.$emit('update-total', this.data.reduce((total, currentItem) => total + currentItem['금액'], 0));
+      // 계산된 총합을 상위 컴포넌트로 전달
+      this.$emit('update-total', this.data.reduce((total, currentItem) => total + currentItem['금액(원)'], 0));
+    },
+    handleAddRowClick(item) {
+      if (item['주문 수량'] <= 0) {
+        // If the order quantity is 0 or less, show an alert and don't emit the add-row event
+        window.alert("주문 수량이 0입니다. 다시 입력해 주세요.");
+        return; // Stop the method here
+      }
+      // If the order quantity is greater than 0, make the row permanently visible
+      this.$emit('add-row', item['상품 코드']);
+    }
   }
-}
 };
 </script>
