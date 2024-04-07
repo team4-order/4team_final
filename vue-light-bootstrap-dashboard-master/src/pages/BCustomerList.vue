@@ -42,7 +42,7 @@ export default {
         columns: ['거래처 이름', '주소', '정산현황'],
         data: [], // 연락처 데이터를 저장할 배열
         filteredData: [], // 검색 결과를 저장할 배열
-        contactNames: [] // 연락처 이름을 저장할 배열
+        contactNames: [] // 거래처 이름을 저장할 배열
       }
     }
   },

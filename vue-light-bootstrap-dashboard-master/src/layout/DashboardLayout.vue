@@ -38,6 +38,7 @@
         <i class="nc-icon nc-badge"></i>
         <p>거래처 관리</p>
       </sidebar-link>
+
       <sidebar-link to="/admin/delivery">
         <i class="nc-icon nc-spaceship"></i>
         <p>배송</p>

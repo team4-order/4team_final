@@ -55,7 +55,6 @@
   import LTable from 'src/components/Table.vue'
   import Card from 'src/components/Cards/Card.vue'
   import axios from 'axios'
-import Delivery from './Delivery'
   
   export default {
     components: {

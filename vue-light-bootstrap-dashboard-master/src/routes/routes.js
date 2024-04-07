@@ -18,6 +18,7 @@ import InputCustomer from 'src/pages/InputCustomer.vue'
 import Delivery from 'src/pages/Delivery.vue'
 import CustomerDetail from 'src/pages/CustomerDetail.vue'
 import CAdjustment from 'src/pages/CAdjustment.vue'
+// import DeliveryTest from 'src/pages/DeliveryTest.vue'
 
 const routes = [
   {
@@ -95,10 +96,19 @@ const routes = [
       {
         path: 'delivery',
         name: 'Delivery',
-        component: Delivery
+        component: Delivery,
       },
+
+// 테스트
+      // {
+      //   path: 'deliveryTest',
+      //   name: 'DeliveryTest',
+      //   component: DeliveryTest,
+      // },
+
+
       {
-        path: '/customer_list/customer_detail/:customerCode',
+        path: 'customer_list/customer_detail/:customerCode',
         name: 'Customer Detail',
         component: CustomerDetail,
         props: true
