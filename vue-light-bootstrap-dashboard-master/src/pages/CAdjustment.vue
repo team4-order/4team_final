@@ -18,6 +18,12 @@
               <button @click="resetFilter" class="btn btn-secondary">Reset</button>
             </div>
           </div>
+          <div class="adjustment-summary">
+              <p class="all" v-if="showTotalUnadjustedAmount">정산 요청 금액: {{ totalUnadjustedAmount }}원 </p>
+              <p class="all" v-if="showTotalUnadjustedAmount1">미정산된 금액: {{ totalUnadjustedAmount1 }}원 </p>
+              <p class="all">주문된 총 금액: {{ totalOrderedAmount }}원</p>
+              <button v-if="showAdjustButton" @click="adjustmentAction" class="btn btn-primary">정산 요청</button>
+          </div>
           <!-- 카드 컴포넌트로 정산 목록을 표시 -->
           <card class="striped-tabled-with-hover" body-classes="table-full-width table-responsive">
             <template slot="header">
@@ -38,10 +44,6 @@
                   <td v-for="column in Cadjustments.columns">{{ row[column] }}</td>
                 </template>
               </l-table>
-              <p class="all" v-if="showTotalUnadjustedAmount">정산 요청 금액: {{ totalUnadjustedAmount }}원 </p>
-              <p class="all" v-if="showTotalUnadjustedAmount1">미정산된 금액: {{ totalUnadjustedAmount1 }}원 </p>
-              <p class="all">주문된 총 금액: {{ totalOrderedAmount }}원</p>
-              <button v-if="showAdjustButton" @click="adjustmentAction" class="btn btn-primary">정산 요청</button>
             </div>
           </card>
         </div>
@@ -211,5 +213,19 @@ export default {
   font-style: inherit;
   text-align: center;
   margin-top: 25px;
+}
+.adjustment-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+.adjustment-summary .all {
+  margin: 0 10px;
+  font-size: larger;
+  text-align: center;
+}
+.adjustment-summary button {
+  margin-left: auto; /* 버튼을 오른쪽으로 정렬 */
 }
 </style>

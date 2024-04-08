@@ -130,12 +130,15 @@ export default {
       if (!this.isEditing) {
         // 완료 버튼 클릭 시 변경사항을 원본 데이터에 저장
         this.originalCustomerData = { ...this.customer };
+        this.updateProfile(); // updateProfile 함수 호출
       } else {
         // 수정하기 버튼 클릭 시 변경 전의 원본 데이터로 복원
         this.customer = { ...this.originalCustomerData };
       }
+      console.log('toggleEditing()');
     },
     async updateProfile() {
+      console.log('updateProfile()');
       try {
         const contactCode = this.customer.contactCode;
         const updatedData = {
@@ -149,7 +152,6 @@ export default {
         const response = await axios.put(`http://localhost:8080/api/contact/customer/${contactCode}`, updatedData);
 
         if (response.status === 200) {
-          console.log("Profile update successful");
           this.customer = { ...response.data };
           this.originalCustomerData = { ...response.data };
           this.isEditing = false;
@@ -166,7 +168,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 /* 사용자 정의 스타일 및 추가적인 스타일링 */
