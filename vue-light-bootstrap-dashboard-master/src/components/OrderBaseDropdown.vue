@@ -16,7 +16,7 @@
       </slot>
     </a>
     <div class="dropdown-menu show" v-show="isOpen">
-      <!--slot></!--slot-->
+      <slot></slot>
       <a class="dropdown-item" href="#" v-for="item in items" :key="item" @click.prevent="itemSelected(item)">
         {{ item }}
       </a>
@@ -37,10 +37,15 @@ export default {
   data() {
     return {
       isOpen: false,
-      title: 'Select Item' // 초기 타이틀 설정
+      title: this.initialTitle, // 초기 타이틀 설정
     }
   },
   methods: {
+    itemSelected(item) {
+  this.title = item; // 타이틀 업데이트
+  this.closeDropDown(); // 드롭다운 닫기
+  this.$emit('item-selected', item); // 부모 컴포넌트로 선택된 항목 알리기
+},
     toggleDropDown() {
       this.isOpen = !this.isOpen
       this.$emit('change', this.isOpen)
@@ -48,11 +53,6 @@ export default {
     closeDropDown() {
       this.isOpen = false
       this.$emit('change', this.isOpen)
-    }
-    ,
-    itemSelected(item) {
-      this.title = item; // 선택된 항목으로 타이틀 업데이트
-      this.closeDropDown(); // 드롭다운 닫기
     }
   }
 }

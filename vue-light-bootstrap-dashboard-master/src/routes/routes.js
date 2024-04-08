@@ -18,6 +18,7 @@ import CustomerOrderList from 'src/pages/TableList4.vue'
 import CustomerOrderDetail from 'src/pages/TableList5.vue'
 import OrderApply1 from 'src/pages/TableList2.vue'
 import OrderApply from 'src/pages/TableList7.vue'
+import Overview1 from 'src/pages/Overview1.vue'
 
 
 const routes = [
@@ -81,6 +82,11 @@ const routes = [
         name: 'OrderDetail',
         component: OrderDetail,
         props: true
+      },
+      {
+        path: 'overview1/:businessId',
+        name: 'Overview1',
+        component: Overview1
       }
     ]
   },
