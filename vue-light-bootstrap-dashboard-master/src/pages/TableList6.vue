@@ -54,7 +54,7 @@
 
 <script>
 import axios from 'axios';
-import LTable from 'src/components/Table.vue';
+import LTable from 'src/components/BusinessTable.vue';
 import Card from 'src/components/Cards/Card.vue';
 
 export default {
