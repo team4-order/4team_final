@@ -29,7 +29,7 @@
                 <h4 class="card-title">{{ weeklySales }} 원</h4>
               </div>
               <div slot="footer">
-                <i class="fa fa-calendar-o"></i>for a week
+                <i class="fa fa-calendar-o"></i>     for a week   
               </div>
             </stats-card>
           </div>
