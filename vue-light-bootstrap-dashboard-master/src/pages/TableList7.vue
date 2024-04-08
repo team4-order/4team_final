@@ -11,13 +11,13 @@
               <!-- <button @click="saveOrderChanges"></button> -->
             </template>
 
-            <base-dropdown :initial-title="dropdownTitle" ref="dropdown">
-              <template v-slot:default>
+            <base-dropdown :title="dropdownTitle" :items="storageCodes" @change="selectStorageCode" ref="dropdown"></base-dropdown>
+              <!-- <template v-slot:default>
                 <a v-for="code in storageCodes" :key="code" class="dropdown-item" @click="selectStorageCode(code)">
                   {{ code }}
                 </a>
-              </template>
-            </base-dropdown>
+              </template> -->
+            <!-- </base-dropdown> -->
 
             <input type="text" v-model="searchQuery" placeholder="상품명 검색" class="form-control"/>
             <l-table class="table-hover table-striped"
@@ -136,47 +136,6 @@ export default {
     const item = this.goodsList.data.find(item => item['상품 코드'] === goodsCode);
     if (item) item.visible = true;
   },
-  //   submitOrder() {
-  //     if (this.totalAmount <= 0) {
-  //   window.alert("총 금액이 0원입니다. 주문을 등록할 수 없습니다.");
-  //   return;
-  // }
-  //     //const customerCode = this.$route.params.customerCode;
-  //   const orderData = {
-  //     customerCode: "CON001", 
-  //     storageCode: this.selectedStorageCode,
-  //     orderPrice: this.totalAmount, 
-  //     adjustmentStatus: "미정산"
-  //   };
-  //   axios.post('/api/orders/post', orderData)
-  //     .then(response => {
-  //       console.log('Order created!', response.data);
-  //       const createdOrderNumber = response.data.orderNumber;
-  //       console.log(createdOrderNumber);
-
-  //       const nonZeroItems = this.goodsList.data.filter(item => item['주문 수량'] > 0);
-
-  //       nonZeroItems.forEach(item => {
-  //       const orderProductData = {
-  //         orderNumber: createdOrderNumber,
-  //         goodsCode: item['상품 코드'],
-  //         goodsGrade: item['상품 등급'],
-  //         orderQuantity: item['주문 수량'],
-  //         orderPrice: item['금액(원)'] 
-  //       };
-  //       axios.post('/api/order/detail/post', orderProductData)
-  //         .then(res => {
-  //           console.log('Item added with the order number', res.data);
-  //         })
-  //         .catch(err => {
-  //           console.error('Error posting item:', err);
-  //         });
-  //     });
-  //   })
-  //   .catch(error => {
-  //     console.error('Error creating order:', error);
-  //   });
-  // }
   submitOrder() {
   if (this.totalAmount <= 0) {
     window.alert("총 금액이 0원입니다. 주문을 등록할 수 없습니다.");

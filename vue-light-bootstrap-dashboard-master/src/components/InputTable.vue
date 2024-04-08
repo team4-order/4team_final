@@ -18,7 +18,10 @@
           </template>
         </td>
         <td>
+          <!-- "+" 버튼은 행이 비활성화 상태일 때만 표시 -->
           <button class="btn btn-info btn-fill" v-if="!item.visible" @click="handleAddRowClick(item)">+</button>
+          <!-- "-" 버튼은 행이 활성화(고정) 상태일 때만 표시 -->
+          <button class="btn btn-warning btn-fill" v-else @click="handleRemoveRowClick(item)">-</button>
         </td>
       </tr>
       <tr>
@@ -90,6 +93,13 @@ export default {
       }
       // If the order quantity is greater than 0, make the row permanently visible
       this.$emit('add-row', item['상품 코드']);
+    },
+    handleRemoveRowClick(item) {
+      // 수량을 0으로 설정하고, 행을 비활성화
+      item['주문 수량'] = 0;
+      item.visible = false;
+      // 금액을 업데이트하고, 총합을 재계산하여 상위 컴포넌트에 전달
+      this.updateAmount(item);
     }
   }
 };
