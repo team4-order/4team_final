@@ -25,11 +25,11 @@
                 <i class="nc-icon nc-light-3 text-success"></i>
               </div>
               <div slot="content">
-                <p class="card-category">Revenue</p>
-                <h4 class="card-title">$1,345</h4>
+                <p class="card-category">매출</p>
+                <h4 class="card-title">{{ weeklySales }} 원</h4>
               </div>
               <div slot="footer">
-                <i class="fa fa-calendar-o"></i>Last day
+                <i class="fa fa-calendar-o"></i>for a week
               </div>
             </stats-card>
           </div>
@@ -49,7 +49,7 @@
             </stats-card>
           </div>
 
-          <!-- <div class="col-xl-3 col-md-6">
+          <div class="col-xl-3 col-md-6">
             <stats-card>
               <div slot="header" class="icon-info">
                 <i class="nc-icon nc-favourite-28 text-primary"></i>
@@ -62,7 +62,7 @@
                 <i class="fa fa-refresh"></i>Updated now
               </div>
             </stats-card>
-          </div> -->
+          </div>
 
         </div>
       </Card>
@@ -185,6 +185,7 @@ export default {
   data() {
     return {
       weeklyCompletedOrders: 0,
+      weeklySales: 0,
       editTooltip: 'Edit Task',
       deleteTooltip: 'Remove',
       pieChart: {
@@ -283,14 +284,20 @@ export default {
           startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + (startOfWeek.getDay() === 0 ? -6 : 1)); // Adjust to the first day of the week (Monday)
           startOfWeek.setHours(0, 0, 0, 0);
 
-          this.weeklyCompletedOrders = data.filter(order => {
-            const orderDate = new Date(order.orderDate);
-            return orderDate >= startOfWeek && order.orderStatus === '주문 완료';
-          }).length;
-          console.log(data);
+          let totalSales = 0;
+        let completedOrders = 0;
 
-          // You might want to update other parts of your data with the fetched data
-        })
+        data.forEach(order => {
+          const orderDate = new Date(order.orderDate);
+          if (orderDate >= startOfWeek && order.orderStatus === '주문 완료') {
+            completedOrders++;
+            totalSales += order.orderPrice; // 주문 가격을 매출액에 더합니다.
+          }
+        });
+
+        this.weeklyCompletedOrders = completedOrders;
+        this.weeklySales = totalSales; // 매출액을 업데이트합니다.
+      })
         .catch(error => {
           console.error("Failed to fetch orders:", error);
         });
