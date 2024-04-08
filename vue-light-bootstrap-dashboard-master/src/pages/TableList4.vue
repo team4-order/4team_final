@@ -8,22 +8,23 @@
               <h4 class="card-title">Order List</h4>
               <p class="card-category">주문 현황</p>
 
+              <div class="row">
             <div class="date-and-filter-bar">
               <div class="filter-dates">
                 <input type="date" v-model="startDate" @change="filterOrders" class="form-control">
                 <input type="date" v-model="endDate" @change="filterOrders" class="form-control">
               </div>
             </div>
+          </div>
             </template>
+
             <l-table class="table-hover table-striped" :columns="orders.columns" :data="orders.filteredData"
               @row-click="handleRowClick">
             </l-table>
             <div class="pagination-controls">
-              <button class="btn btn-info btn-fill" @click="changePage(1)" :disabled="currentPage === 1">
-                <<</button>
+              <button class="btn btn-info btn-fill" @click="changePage(1)" :disabled="currentPage === 1"> << </button>
                   <button class="btn btn-info btn-fill" @click="changePage(currentPage - 1)"
-                    :disabled="currentPage <= 1">
-                    <</button>
+                    :disabled="currentPage <= 1"> < </button>
 
                       <span v-for="number in pageNumbers" :key="number" class="page-number" @click="changePage(number)"
                         :class="{ 'active': currentPage === number }">
