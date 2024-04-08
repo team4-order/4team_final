@@ -16,11 +16,11 @@
     <br>
     <br>
     구글 아이디가 있으신가요?<br>
-    <button type="button" v-on:click="GoogleLogin()">GLogin로 로그인하기</button>
+    <button type="button" v-on:click="GoogleLogin">Google 로그인</button>
 <br>
 
+    <button type="button" v-on:click=" checkUsernameExistence">접속하기</button>
     <button type="button" v-on:click="loginstatus = true">접속하기</button>
-
 
     <!-- ------------------------------------------------------------------------------------------>
     <div class = "Nblack-bg" v-if="loginstatus == true">
@@ -28,7 +28,7 @@
       <div class = "Nwhite-bg">
 
        <button type="button"  v-on:click="ismodalopen = true">처음 사용자</button>
-        <button type="button"  v-on:click="getDatas()">기존 사용자</button>
+        <button type="button"  v-on:click="[getDatas(), refresh()]">기존 사용자</button>
 
       </div>
 
@@ -47,7 +47,7 @@
       <label for="NickName">계정명</label>
       <input type="NickName" id="NickName" name="NickName" v-model="input.NickName" placeholder="계정명을 입력해주세요." />
       <p>중복확인</p>
-       <button v-on:click="[ismodalopen = false, refresh()]" >확인 및 돌아가기</button>
+       <button v-on:click="[ismodalopen = false]" >확인 및 돌아가기</button>
     </div>
 
   </div>
@@ -77,7 +77,14 @@ axios.defaults.withCredentials = true;
 
 // ---------------------------------------------------
 // 로그인 버튼
+window.onload = function() {
+  var urlParams = new URLSearchParams(window.location.search);
+  var code = urlParams.get('code');
 
+  if (code) {
+    localStorage.setItem('code', code);
+  }
+}
 // ---------------------------------------------------
 
 export default {
@@ -88,18 +95,16 @@ export default {
       input: {
         username: "",
         password: "",
-        NickName: "",
       },
       ismodalopen : false,
       loginstatus : false,
+      usernameExists: false,
     }
   },
   methods: {
     async login() {
       try {
         const formData = new FormData();
-
-
 
 
         formData.append("username", this.input.username); // Add username to FormData
@@ -125,7 +130,7 @@ export default {
         console.log(response.data);
 
       } catch (error) {
-       await Swal.fire({
+        await Swal.fire({
           title: 'Login failed!',
           text: '아이디 및 비밀번호를 확인해주세요.',
           icon: 'error',
@@ -134,61 +139,47 @@ export default {
         console.error("Login failed:", error.response.data);
 
 
-
         // Handle login failure (display error message, clear inputs, etc.)
       }
-    },async GoogleLogin(){
-
-      window.location.href ="https://accounts.google.com/o/oauth2/v2/auth?scope=profile&access_type=offline&include_granted_scopes=true&response_type=code&redirect_uri=http://localhost:8081/login/&client_id=1074874386105-qlcav64d5j58f07o9aep4snpko0elgs1.apps.googleusercontent.com"
-
-
-},async getDatas(){
-      //const formData = new FormData();
-      const params = new URLSearchParams(window.location.search);
-      const code = params.get("code");
-      const NickName = this.input.NickName;
-
-
-      const formData = new FormData();
-      formData.append("code", code);
-      formData.append("NickName", NickName);
-      console.log("code : "+code+ "  /  "+" NickName: "+NickName);
-
-
-
-    await axios.post("http://localhost:8080/glogin/access", formData)
-        .then(response => {
-              console.log("spring에서온 응답" + JSON.stringify(response.data));
-            }
-        ).catch(error => {
-          console.error("access code 데이터 전송에 문제가 생겼습니다.", error);
-        });
-
-      if(code==params.get("code"))
-      {
-        this.$emit("authenticated", true);
-
-        Swal.fire({
-          title: 'Login Success!',
-          text: '로그인 되었습니다. 메인 페이지로 이동합니다.',
-          icon: 'success',
-          confirmButtonText: '확인'
-        })
-        /*this.$router.replace({name: "Secure"});*/
-      }
-}, async refresh(){
-      this.$emit("authenticated", true);
-
-       Swal.fire({
-        title: 'Login Success!',
-        text: '로그인 되었습니다. 메인 페이지로 이동합니다.',
-        icon: 'success',
+    }, async GoogleLogin() {
+      await Swal.fire({
+        title: '구글 로그인 후',
+        text: '접속하기를 눌러주세요!',
+        icon: 'info',
         confirmButtonText: '확인'
-
       })
-      await this.$router.replace({name: "Secure"});
+
+      window.location.href = "https://accounts.google.com/o/oauth2/v2/auth?client_id=1074874386105-qlcav64d5j58f07o9aep4snpko0elgs1.apps.googleusercontent.com&redirect_uri=http://localhost:8080/api/v1/oauth2/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
+
+
+
+
+    }, async checkUsernameExistence() {
+      try {
+        const code = localStorage.getItem('code');
+        if (code) {
+          const response = await axios.post('http://localhost:8080/api/users/findallusername', { code });
+          this.usernameExists = response.data.usernameExists;
+          if(this.usernameExists ==true)
+          {this.$emit("authenticated", true);
+            this.$router.replace({name: "Secure"});
+
+          }
+
+        } else {
+          await Swal.fire({
+            title: 'Login failed!',
+            text: '구글 로그인을 먼저 진행해주세요.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          })
+          console.error('Code is not available in the localStorage.');
+        }
+      } catch (error) {
+        console.error('Error checking username existence:', error);
+      }
     }
-}
+  }
 }
 </script>
 

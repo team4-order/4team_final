@@ -39,6 +39,7 @@ import Swal from "sweetalert2";
 
               })
                 localStorage.removeItem('token');
+              localStorage.removeItem('code');
                 this.authenticated = false;
             }
 
