@@ -149,7 +149,7 @@ export default {
           aboutMe: this.customer.aboutMe,
         };
 
-        const response = await axios.put(`http://localhost:8080/api/contact/customer/${contactCode}`, updatedData);
+        const response = await axios.put(`http://localhost:8080/api/contact/customers/${contactCode}`, updatedData);
 
         if (response.status === 200) {
           this.customer = { ...response.data };
