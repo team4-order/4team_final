@@ -10,7 +10,7 @@
     <tbody>
       <tr v-for="(item, index) in data" :key="index" @click="handleRowClick(item)">
         <slot :row="item">
-          <td v-for="column in columns" :key="column" v-if="hasValue(item, column)">{{ itemValue(item, column) }}</td>
+          <td v-for="column in columns" :key="column" v-if="hasValue(item, column)">{{itemValue(item, column)}}</td>
         </slot>
       </tr>
     </tbody>
@@ -26,13 +26,13 @@ export default {
   },
   methods: {
     hasValue(item, column) {
-      return item[column.toLowerCase()] !== 'undefined';
+      return item[column.toLowerCase()] !== undefined; // 수정된 부분
     },
     itemValue(item, column) {
       return item[column.toLowerCase()];
     },
     handleRowClick(item) {
-      this.$emit('row-click', item); // Emitting the row-click event with the clicked item as payload
+      this.$emit('row-click', item);
     }
   }
 };

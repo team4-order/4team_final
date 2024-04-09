@@ -1,6 +1,6 @@
-import DashboardLayout from '../layout/DashboardLayout.vue'// 대시보드 레이아웃 컴포넌트
+import DashboardLayout from '../layout/DashboardLayout.vue'
 // GeneralViews
-import NotFound from '../pages/NotFoundPage.vue'// 404 에러 페이지 컴포넌트
+import NotFound from '../pages/NotFoundPage.vue'
 
 // Admin pages
 import Overview from 'src/pages/Overview.vue'
@@ -11,19 +11,25 @@ import Icons from 'src/pages/Icons.vue'
 import Maps from 'src/pages/Maps.vue'
 import Notifications from 'src/pages/Notifications.vue'
 import Upgrade from 'src/pages/Upgrade.vue'
-import CustomerList from 'src/components/CustomerList.vue'
+import BCustomerList from 'src/pages/BCustomerList.vue'
+import BAdjustment from 'src/pages/BAdjustment.vue' // 경로 수정
+import CustomerList from 'src/pages/CustomerList.vue'
+import InputCustomer from 'src/pages/InputCustomer.vue'
+import Delivery from 'src/pages/Delivery.vue'
+import CustomerDetail from 'src/pages/CustomerDetail.vue'
+import CAdjustment from 'src/pages/CAdjustment.vue'
+// import DeliveryTest from 'src/pages/DeliveryTest.vue'
 
-// 라우트 설정
 const routes = [
   {
     path: '/',
     component: DashboardLayout,
-    redirect: '/admin/overview'// 루트 경로 접근 시 '/admin/overview'로 리다이렉트
+    redirect: '/admin/overview'
   },
   {
     path: '/admin',
-    component: DashboardLayout,// '/admin' 경로에 대한 컴포넌트
-    redirect: '/admin/overview',// '/admin' 경로 접근 시 자동으로 '/admin/overview'로 리다이렉트
+    component: DashboardLayout,
+    redirect: '/admin/overview',
     children: [
       {
         path: 'overview',
@@ -66,22 +72,72 @@ const routes = [
         component: Upgrade
       },
       {
-        path: 'customer-list',// 루트 경로에 대한 컴포넌트
-        name: 'customer List',
+        path: 'bcustomer_list',
+        name: 'B Customer List',
+        component: BCustomerList
+      },
+      {
+        path: '/bcustomer_list/b_adjustment/:customerCode',
+        name: 'B Adjustment List',
+        component: BAdjustment,
+        props: true
+      },
+      {
+        path: 'customer_list',
+        name: 'Customer List',
         component: CustomerList
+      },
+      {
+        path: 'input_customer',
+        name: 'Input Customer',
+        component: InputCustomer,
+        props: true
+      },
+      {
+        path: 'delivery',
+        name: 'Delivery',
+        component: Delivery,
+      },
+
+// 테스트
+      // {
+      //   path: 'deliveryTest',
+      //   name: 'DeliveryTest',
+      //   component: DeliveryTest,
+      // },
+
+
+      {
+        path: 'customer_list/customer_detail/:customerCode',
+        name: 'Customer Detail',
+        component: CustomerDetail,
+        props: true
       }
     ]
   },
-  { path: '*', component: NotFound }// 정의되지 않은 모든 경로에 대해 NotFound 컴포넌트를 사용
+  {
+  path: '/customer',
+  component: DashboardLayout,
+  redirect: '/customer/:customerCode',
+  children: [
+    {
+      path: '/customer/overview',
+      name: 'Overview',
+      component: Overview
+    },
+    {
+      path: '/customer/icons',
+      name: 'Icons',
+      component: Icons
+    },
+    {
+      path: ':customerCode',
+      name: 'customer Adjustment',
+      component: CAdjustment
+    }
+  ]
+},
+  { path: '*', component: NotFound }
 ]
 
-/**
- * Asynchronously load view (Webpack Lazy loading compatible)
- * The specified component must be inside the Views folder
- * @param  {string} name  the filename (basename) of the view to load.
-function view(name) {
-   var res= require('../components/Dashboard/Views/' + name + '.vue');
-   return res;
-};**/
-
-export default routes// 설정된 라우트들을 내보냄
+export default routes;
