@@ -126,6 +126,12 @@ export default {
         });
     },
     fetchGoodsList(storageCode) {
+      axios.get(`http://localhost:8080/api/total/storage/${storageCode}`)
+      .then(response => {
+
+      })
+
+      
     axios.get(`http://localhost:8080/api/total/storage/${storageCode}`)
       .then(response => {
         const filteredData = response.data.filter(goods => goods.goodsName.toLowerCase().includes(this.searchQuery.toLowerCase()));

@@ -2,27 +2,13 @@
   <div class="content">
     <div class="container-fluid">
       <Card>
-        <h3>주간 데이터</h3>
+        <h5>주간 데이터</h5>
         <div class="row">
-          <div class="col-xl-3 col-md-6">
-            <stats-card>
-              <div slot="header" class="icon-warning">
-                <i class="nc-icon nc-cart-simple text-warning"></i>
-              </div>
-              <div slot="content">
-                <p class="card-category">주문 완료</p>
-                <h4 class="card-title">{{ weeklyCompletedOrders }} 건</h4>
-              </div>
-              <div slot="footer">
-              <i class="fa fa-refresh"></i>Updated now
-            </div>
-            </stats-card>
-          </div>
 
           <div class="col-xl-3 col-md-6">
             <stats-card>
               <div slot="header" class="icon-success">
-                <i class="nc-icon nc-light-3 text-success"></i>
+                <i class="nc-icon nc-money-coins text-success"></i>
               </div>
               <div slot="content">
                 <p class="card-category">매출</p>
@@ -36,12 +22,29 @@
 
           <div class="col-xl-3 col-md-6">
             <stats-card>
+              <div slot="header" class="icon-warning">
+                <i class="nc-icon nc-cart-simple text-warning"></i>
+              </div>
+              <div slot="content">
+                <p class="card-category">출고 준비 중</p>
+                <h4 class="card-title">{{ weeklyReadyOrders }} 건</h4>
+              </div>
+              <div slot="footer">
+              <i class="fa fa-refresh"></i>Updated now
+            </div>
+            </stats-card>
+          </div>
+
+          
+
+          <div class="col-xl-3 col-md-6">
+            <stats-card>
               <div slot="header" class="icon-danger">
                 <i class="nc-icon nc-vector text-danger"></i>
               </div>
               <div slot="content">
-                <p class="card-category">Errors</p>
-                <h4 class="card-title">23</h4>
+                <p class="card-category">배송 중</p>
+                <h4 class="card-title">{{ weeklydeliveryOrders }} 건</h4>
               </div>
               <div slot="footer">
                 <i class="fa fa-clock-o"></i>Last day
@@ -55,8 +58,8 @@
                 <i class="nc-icon nc-favourite-28 text-primary"></i>
               </div>
               <div slot="content">
-                <p class="card-category">Followers</p>
-                <h4 class="card-title">+45</h4>
+                <p class="card-category">배송 완료</p>
+                <h4 class="card-title">{{ weeklyCompletedOrders }} 건</h4>
               </div>
               <div slot="footer">
                 <i class="fa fa-refresh"></i>Updated now
@@ -134,26 +137,10 @@
         <div class="col-md-6">
           <card>
             <template slot="header">
-              <h5 class="title">Tasks</h5>
-              <p class="category">Backend development</p>
+              <h5 class="title">정산 요청 리스트</h5>
+              <p class="category"></p>
             </template>
             <l-table :data="tableData.data" :columns="tableData.columns">
-              <template slot="columns"></template>
-
-              <template slot-scope="{row}">
-                <td>
-                  <base-checkbox v-model="row.checked"></base-checkbox>
-                </td>
-                <td>{{ row.title }}</td>
-                <td class="td-actions text-right">
-                  <button type="button" class="btn-simple btn btn-xs btn-info" v-tooltip.top-center="editTooltip">
-                    <i class="fa fa-edit"></i>
-                  </button>
-                  <button type="button" class="btn-simple btn btn-xs btn-danger" v-tooltip.top-center="deleteTooltip">
-                    <i class="fa fa-times"></i>
-                  </button>
-                </td>
-              </template>
             </l-table>
             <div class="footer">
               <hr>
@@ -184,6 +171,8 @@ export default {
   },
   data() {
     return {
+      weeklyReadyOrders: 0,
+      weeklydeliveryOrders: 0,
       weeklyCompletedOrders: 0,
       weeklySales: 0,
       editTooltip: 'Edit Task',
@@ -256,52 +245,71 @@ export default {
         ]
       },
       tableData: {
-        data: [
-          { title: 'Sign contract for "What are conference organizers afraid of?"', checked: false },
-          { title: 'Lines From Great Russian Literature? Or E-mails From My Boss?', checked: true },
-          {
-            title: 'Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit',
-            checked: true
-          },
-          { title: 'Create 4 Invisible User Experiences you Never Knew About', checked: false },
-          { title: 'Read "Following makes Medium better"', checked: false },
-          { title: 'Unfollow 5 enemies from twitter', checked: false }
-        ]
+        columns: ['고객명', '정산 요청 금액'],
+        data: [] 
       }
     }
   },
   mounted() {
   this.fetchOrderList();
+  this.fetchAdjustmentReqList();
   },
   methods: {
     // other methods...
     fetchOrderList() {
-      const businessId = this.$route.params.businessId;
-      axios.get(`http://localhost:8080/api/orders/id/${businessId}`)
-        .then(response => {
-          const data = response.data;
-          const startOfWeek = new Date();
-          startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + (startOfWeek.getDay() === 0 ? -6 : 1)); // Adjust to the first day of the week (Monday)
-          startOfWeek.setHours(0, 0, 0, 0);
+  const businessId = this.$route.params.businessId;
+  axios.get(`http://localhost:8080/api/orders/id/${businessId}`)
+    .then(response => {
+      const data = response.data;
+      const startOfWeek = new Date();
+      startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + (startOfWeek.getDay() === 0 ? -6 : 1));
+      startOfWeek.setHours(0, 0, 0, 0);
 
-          let totalSales = 0;
-        let completedOrders = 0;
+      let totalSales = 0;
+      let completedOrders = 0;
+      let deliveryOrders = 0;
+      let readyOrders = 0;
 
-        data.forEach(order => {
-          const orderDate = new Date(order.orderDate);
-          if (orderDate >= startOfWeek && order.orderStatus === '주문 완료') {
-            completedOrders++;
-            totalSales += order.orderPrice; // 주문 가격을 매출액에 더합니다.
+      data.forEach(order => {
+        const orderDate = new Date(order.orderDate);
+        if (orderDate >= startOfWeek) {
+          switch (order.orderStatus) {
+            case '배송 완료':
+              completedOrders++;
+              totalSales += order.orderPrice; // 주문 상태가 '배송 완료'인 경우에 매출액을 더합니다.
+              break;
+            case '배송 중':
+              deliveryOrders++;
+              break;
+            case '출고 준비 중':
+              readyOrders++;
+              break;
           }
-        });
+        }
+      });
 
-        this.weeklyCompletedOrders = completedOrders;
-        this.weeklySales = totalSales; // 매출액을 업데이트합니다.
-      })
-        .catch(error => {
-          console.error("Failed to fetch orders:", error);
-        });
-    },
+      this.weeklyCompletedOrders = completedOrders;
+      this.weeklyReadyOrders = readyOrders;
+      this.weeklydeliveryOrders = deliveryOrders;
+      this.weeklySales = totalSales;
+    })
+    .catch(error => {
+      console.error("Failed to fetch orders:", error);
+    });
+},
+    fetchAdjustmentReqList() {
+      const businessId = this.$route.params.businessId;
+      axios.get(`http://localhost:8080/api/orders/req/${businessId}`)
+        .then(response => {
+          this.tableData.data = response.data.map(item => ({
+            '고객명': item.contactName,
+            '고객코드': item.contactCode
+          }));
+    })
+    .catch(error => {
+      console.error("Failed to fetch adjustment requests:", error);
+    });
+}
     // continue with other methods...
   }
 }
