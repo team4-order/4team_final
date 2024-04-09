@@ -1,6 +1,6 @@
 <template>
   <div id="login">
-    <h1 id="logo">OMS Login Page</h1>
+    <h1 id="logo">OMS    Login Page</h1>
     <div class="form-inputs">
       <label for="username" >Username</label>
       <input type="text" id="username" name="username" v-model="input.username" placeholder="Username" />
@@ -31,7 +31,7 @@
 
     <img v-if=" this.loginstatus" src="../assets/check.png" alt="Authenticated Image" height="23" width="23" align="right">
 
-<br><br><br><br>
+<br><br><br><br><br>
 
     <button type="button" class = "GLoginButton" v-on:click="checkUsernameExistence">접속하기</button>
 
