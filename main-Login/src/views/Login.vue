@@ -30,12 +30,10 @@
       <button type="button" class = "GLoginButton" v-on:click="GoogleLogin" >Google 로그인</button>
 
     <img v-if=" this.loginstatus" src="../assets/check.png" alt="Authenticated Image" height="23" width="23" align="right">
-<!--    <div>
-      <br><br>
-    <button type="button" class = "buttonCenter" v-on:click="checkUsernameExistence">접속하기</button>
-    </div>-->
+
 <br><br><br><br>
-    <button type="button" class = "GLoginButton:" v-on:click="checkUsernameExistence">접속하기</button>
+
+    <button type="button" class = "GLoginButton" v-on:click="checkUsernameExistence">접속하기</button>
 
 
 
