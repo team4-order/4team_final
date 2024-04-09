@@ -35,7 +35,7 @@
     <button type="button" class = "buttonCenter" v-on:click="checkUsernameExistence">접속하기</button>
     </div>-->
 <br><br><br><br>
-    <button type="button" class = "GLoginButton" v-on:click="checkUsernameExistence">접속하기</button>
+    <button type="button" class = "GLoginButton:" v-on:click="checkUsernameExistence">접속하기</button>
 
 
 
