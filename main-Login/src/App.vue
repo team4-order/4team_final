@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link>
-      <router-link to="/about">About</router-link>
+<!--      <router-link to="/">Home</router-link>
+      <router-link to="/about">About</router-link>-->
       <router-link v-if="authenticated" to="/secure">Secure</router-link>
       <router-link v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Logout</router-link>
       <router-link v-else to="/login">Login</router-link>
@@ -58,12 +58,14 @@ import Swal from "sweetalert2";
 
 #nav {
   padding: 30px;
+  padding-left: 57px;
 }
 
 #nav a {
   font-weight: bold;
   color: #2c3e50;
   padding-right: 10px;
+  font-size: 40px;
 }
 
 #nav a:not(:first-child) {
@@ -72,6 +74,6 @@ import Swal from "sweetalert2";
 }
 
 #nav a.router-link-exact-active {
-  color: #42b983;
+  color: #efe1a5;
 }
 </style>
