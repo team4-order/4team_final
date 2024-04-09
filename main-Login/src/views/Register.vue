@@ -88,7 +88,7 @@ export default {
           formData.append("username", this.input.username); // Add username to FormData
           formData.append("password", this.input.password); // Add password to FormData
         }
-        else{
+        /*else{
           Swal.fire({
             title: 'Password Error!',
             text: '비밀번호가 너무 짧습니다.',
@@ -96,7 +96,7 @@ export default {
             confirmButtonText: '확인'
           })
           console.log("비밀번호가 너무 단순합니다.")
-        }
+        }*/
         const response = await axios.post('http://localhost:8080/join', formData);
         // Assuming your backend returns some data upon successful registration
         console.log("Registered successfully!");
@@ -111,12 +111,24 @@ export default {
         this.$router.replace({ name: "Login" });
 
       } catch (error) {
-        Swal.fire({
-          title: 'Username Exist!',
-          text: '이미 존재하는 username입니다.',
-          icon: 'error',
-          confirmButtonText: '확인'
-        })
+        if(!reg.test(this.input.password)){
+
+          Swal.fire({
+            title: 'Password Error!',
+            text: '비밀번호를 확인해주세요.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          })
+          console.log("비밀번호가 너무 단순합니다.")
+        }
+        else {
+          Swal.fire({
+            title: 'Username Exist!',
+            text: '이미 존재하는 username입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          })
+        }
         console.error("Registration failed:", error.response.data);
         // Handle registration failure (display error message, clear inputs, etc.)
       }
