@@ -5,7 +5,7 @@
 
 
   <div id="login">
-    <h1 id="logo">Register</h1>
+    <h2 id="logo">Register</h2>
     <div class="form-inputs">
       <label for="username" >Username</label>
       <input type="text" id="username" name="username" v-model="input.username" placeholder="Username" />
@@ -138,25 +138,11 @@ export default {
 </script>
 
 <style>
-.left-align {
-  display: inline-block;
-  width: 400px;
-  text-align: center;
-}
-.buttonG{
-  /*display: inline-block;*/
-  text-align: center;
-  /* text-align: center;*/
 
-}
-.buttonCenter{
-  /*display: inline-block;*/
-  text-align: center;
-}
 body {
   margin: 70px;
   font-family: Arial, Tahoma, sans-serif;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: bold;
   direction: ltr;
   background: #b6b5a7;
@@ -174,11 +160,11 @@ body {
   opacity: 0.78;
 }
 
-#login h1 {
+#login h2 {
   margin: 0 auto;
   width: 200px;
   font-family: 'Lily Script One', cursive;
-  font-size: 60px;
+  font-size: 40px;
   font-weight: bold;
   text-align: center;
   color: #ecce87;
@@ -193,7 +179,7 @@ body {
   font-weight: bold;
   text-align: center;
 }
-#login h1:hover {
+#login h2:hover {
   color: #e3e29e;
 }
 
