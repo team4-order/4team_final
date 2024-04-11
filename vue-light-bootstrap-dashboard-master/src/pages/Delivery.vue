@@ -2,37 +2,54 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-12">
+                <!-- 출고되는 창고 주소 -->
+                <div class="col-6">
                     <card class="card-plain">
                         <template slot="header">
-                            <h4 class="card-title">출고되는 창고 주소</h4>
-                            <p class="card-category">{{ warehouseName }}</p> <!-- 창고 코드를 표시합니다 -->
+                            <h4 class="card-title">출고지</h4>
+                            <p class="card-category">{{ warehouseName }}</p>
                         </template>
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <tbody>
-                                    <tr v-for="(item, index) in Deliveries.data" :key="index">
-                                        <th scope="row">{{ item.label }}</th>
-                                        <td>{{ item.value }}</td>
+                                    <tr>
+                                        <th scope="row">창고 이름</th>
+                                        <td>{{ warehouseName }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">창고 연락처</th>
+                                        <td>{{ warehousePhone }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">창고 주소</th>
+                                        <td>{{ warehouseAddress }}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </card>
                 </div>
-
-                <div class="col-12">
+                <!-- 도착하는 판매처 주소 -->
+                <div class="col-6">
                     <card class="card-plain">
                         <template slot="header">
-                            <h4 class="card-title">도착하는 판매처 주소</h4>
+                            <h4 class="card-title">도착지</h4>
                             <p class="card-category">{{ customerName }}</p>
                         </template>
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <tbody>
-                                    <tr v-for="(item, index) in Customers.data" :key="index">
-                                        <th scope="row">{{ item.label }}</th>
-                                        <td>{{ item.value }}</td>
+                                    <tr>
+                                        <th scope="row">고객 이름</th>
+                                        <td>{{ customerName }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">고객 연락처</th>
+                                        <td>{{ customerPhone }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">고객 주소</th>
+                                        <td>{{ customerAddress }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -54,64 +71,38 @@ export default {
     },
     data() {
         return {
-            warehouseName: '', // 창고 코드를 저장할 변수
-            customerName: '',
-            warehouseA: '',
-            customerA: '',
-            Deliveries: {
-                data: []
-            },
-            Customers:{
-                data: []
-            }
+            warehouseName: '', // 출고되는 창고 이름을 저장할 변수
+            warehousePhone: '', // 출고되는 창고 연락처를 저장할 변수
+            warehouseAddress: '', // 출고되는 창고 주소를 저장할 변수
+            customerName: '', // 도착하는 판매처 이름을 저장할 변수
+            customerPhone: '', // 도착하는 판매처 연락처를 저장할 변수
+            customerAddress: '', // 도착하는 판매처 주소를 저장할 변수
         }
     },
     mounted() {
-        this.fetchSContacts();
-        this.fetchContacts();
+        this.fetchData();
     },
     methods: {
-        async fetchSContacts() {
-            const orderNumber = '2'; // 주문 번호를 설정합니다
+        async fetchData() {
+            const orderNumber = '2'; // 주문 번호를 설정
 
             try {
                 const response = await axios.get(`http://localhost:8080/api/orders/id/BUS002/${orderNumber}`);
                 const storageContact = response.data.storageContact;
-                if (storageContact) {
-                    this.warehouseName = storageContact.contactName;
-                    this.warehouseA = storageContact.contactAddress;
-                    this.Deliveries.data = [
-                        { label: '창고 이름', value: storageContact.contactName },
-                        { label: '창고 연락처', value: storageContact.customerPhone },
-                        { label: '창고 주소', value: storageContact.contactAddress }
-                    ];
-                    this.fetchCoordinates(); // 올바르게 주소가 설정되었을 때 좌표를 가져옵니다.
-                } else {
-                    console.error("창고 정보를 가져오는 데 실패했습니다.");
-                }
-            } catch (error) {
-                console.error("거래처 목록을 가져오는 데 실패했습니다.", error);
-            }
-        },
-        async fetchContacts() {
-            const orderNumber = '2'; // 주문 번호를 설정합니다
-
-            try {
-                const response = await axios.get(`http://localhost:8080/api/orders/id/BUS002/${orderNumber}`);
                 const customerContact = response.data.customerContact;
-                if (customerContact) {
+                
+                if (storageContact && customerContact) {
+                    this.warehouseName = storageContact.contactName;
+                    this.warehousePhone = storageContact.customerPhone;
+                    this.warehouseAddress = storageContact.contactAddress;
                     this.customerName = customerContact.contactName;
-                    this.customerA = customerContact.contactAddress;
-                    this.Customers.data = [
-                        { label: '고객 이름', value: customerContact.contactName },
-                        { label: '고객 연락처', value: customerContact.customerPhone },
-                        { label: '고객 주소', value: customerContact.contactAddress }
-                    ];
+                    this.customerPhone = customerContact.customerPhone;
+                    this.customerAddress = customerContact.contactAddress;
                 } else {
-                    console.error("판매처 정보를 가져오는 데 실패했습니다.");
+                    console.error("데이터를 가져오는 데 실패했습니다.");
                 }
             } catch (error) {
-                console.error("판매처 목록을 가져오는 데 실패했습니다.", error);
+                console.error("데이터를 가져오는 데 실패했습니다.", error);
             }
         },
         async fetchCoordinates() {

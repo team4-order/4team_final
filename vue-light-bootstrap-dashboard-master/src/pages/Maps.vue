@@ -13,10 +13,13 @@
 
 <template>
   <div>
-    <!-- Delivery 컴포넌트 추가 -->
-    <delivery></delivery>
+    <div style="margin-top: 30px; margin-bottom: -90px;" >
+      <!-- Delivery 컴포넌트 추가 -->
+      <delivery></delivery>
+    </div>
     <div class="content-container">
       <div class="map-container">
+        <h3>배송 경로</h3>
         <div id="map" class="map"></div>
       </div>
       <button type="submit" class="btn btn-info btn-fill" @click="$router.push('/admin/input_customer')">
@@ -25,6 +28,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import Delivery from 'src/pages/Delivery.vue'
@@ -183,7 +187,7 @@ export default {
 .btn-info {
   /* 필요한 버튼 스타일을 여기에 추가합니다. */
   margin-left: 60px; /* 버튼과 지도 사이의 간격을 조정합니다. */
-  margin-top: 445px;
+  margin-top: 583px;
   width: 150px;
 }
 </style>

@@ -67,8 +67,8 @@ export default {
     return {
       selectedStatus: '', // 선택된 정산 상태
       statuses: ['정산 요청', '미정산', '정산 완료'], // 정산 상태 카테고리
-      startDate: '', // 시작일
-      endDate: '', // 종료일
+      startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 2).toISOString().substr(0, 10), // 시작일 - 현재 달의 첫 번째 날짜로 설정
+      endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1).toISOString().substr(0, 10), // 종료일 - 현재 달의 마지막 날짜로 설정
       Cadjustments: {
         columns: ['주문번호', '주문일자', '금액', '정산상태', '배송일자'], // 테이블 컬럼
         data: [], // 전체 데이터
@@ -129,16 +129,39 @@ export default {
     },
     resetFilter() {
       this.selectedStatus = ''; // 선택된 정산 상태 초기화
-      this.startDate = ''; // 시작일 초기화
-      this.endDate = ''; // 종료일 초기화
+      this.startDate = new Date(new Date().getFullYear(), new Date().getMonth(), 2).toISOString().substr(0, 10); // 시작일 - 현재 달의 첫 번째 날짜로 설정
+      this.endDate = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1).toISOString().substr(0, 10); // 종료일 - 현재 달의 마지막 날짜로 설정
       this.filterByDate(); // 필터 초기화
     },
     showAdjustButton() {
       return this.filteredData.some(order => order.정산상태 === '미정산');
     },
     adjustmentAction() {
-      const adjustedOrders = this.filteredData.filter(order => order.selected && order.정산상태 === '정산 요청');
-      const promises = adjustedOrders.map(order => {
+      const selectedOrders = this.filteredData.filter(order => order.selected);
+      const invalidCompletedOrders = selectedOrders.filter(order => order.정산상태 === '정산 완료');
+      const invalidUnadjustedOrders = selectedOrders.filter(order => order.정산상태 !== '미정산');
+      const invalidcancelOrders = selectedOrders.filter(order => order.정산상태 === '주문 취소');
+
+      if (invalidCompletedOrders.length > 0) {
+        alert('정산 완료건이 선택되어 있습니다.\n정산 요청건만 선택해주세요.');
+        return;
+      }
+
+      if (invalidUnadjustedOrders.length > 0) {
+        alert('미정산건이 선택되어 있습니다. 정산 요청건만 선택해주세요.');
+        return;
+      }
+      
+      if(invalidcancelOrders.length > 0){
+        alert('주문취소건이 선택되어 있습니다. \n미정산건만 선택해주세요.');
+        return;
+      }
+
+      else{
+        alert('정산이 완료되었습니다.')
+      }
+      
+      const promises = selectedOrders.map(order => {
         order.정산상태 = '정산 완료';
         // API를 통해 서버에 상태 업데이트 요청을 보냅니다.
         return axios.put(`http://localhost:8080/api/orders/adjustment/${order.주문번호}`, { adjustmentStatus: '정산 완료' });
@@ -155,6 +178,7 @@ export default {
           console.error('정산 처리 중 오류 발생: ', error);
         });
     },
+
     getTotalUnadjustedAmount() {
       return this.filteredData.filter(order => order.정산상태 === '미정산').reduce((total, order) => total + order.금액, 0);
     },
@@ -188,7 +212,7 @@ export default {
     }
   }
 }
-</script>
+</script>ㅂ
 
 <style scoped>
 .date-and-filter-bar {

@@ -55,6 +55,7 @@
   </div>
 </template>
 
+
 <script>
 import LTable from 'src/components/Table.vue'
 import Card from 'src/components/Cards/Card.vue'
@@ -99,6 +100,7 @@ export default {
             '판매처 코드': Badjustment.customerCode
           }));
           this.createStatusCategories(); // 정산 상태 카테고리 생성
+          this.setDefaultDateRange(); // 시작일과 종료일을 현재 달로 설정
           this.filterByStatus(); // 초기 필터링을 위한 호출
         })
         .catch(error => {
@@ -109,6 +111,13 @@ export default {
       // 데이터에서 정산 상태 추출하여 중복 제거 후 정렬
       const statuses = [...new Set(this.Cadjustments.data.map(item => item['정산상태']))].sort();
       this.statuses = statuses;
+    },
+    setDefaultDateRange() {
+      const currentDate = new Date();
+      const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 2);
+      const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+      this.startDate = firstDayOfMonth.toISOString().substr(0, 10); // 현재 달의 첫 번째 날짜로 설정
+      this.endDate = lastDayOfMonth.toISOString().substr(0, 10); // 현재 달의 마지막 날짜로 설정
     },
     filterByStatus() {
       let filteredData = this.Cadjustments.data;
@@ -135,8 +144,7 @@ export default {
     },
     resetFilter() {
       this.selectedStatus = ''; // 선택된 정산 상태 초기화
-      this.startDate = ''; // 선택된 시작 날짜 초기화
-      this.endDate = ''; // 선택된 종료 날짜 초기화
+      this.setDefaultDateRange(); // 시작일과 종료일을 현재 달로 설정
       this.filterByStatus(); // 필터링된 데이터 초기화
     },
     getUnadjustedOrders() {
@@ -146,8 +154,30 @@ export default {
       return this.getUnadjustedOrders().length > 0;
     },
     adjustmentAction() {
-      const unadjustedOrders = this.getUnadjustedOrders();
-      const promises = unadjustedOrders.map(order => {
+      const selectedOrders = this.Cadjustments.filteredData.filter(order => order.selected);
+      const invalidCompletedOrders = selectedOrders.filter(order => order.정산상태 === '정산 완료');
+      const invalidUnadjustedOrders = selectedOrders.filter(order => order.정산상태 !== '미정산');
+      const invalidCancelOrders = selectedOrders.filter(order => order.정산상태 === '주문 취소'); // 주문 취소 상태 필터링
+
+      if (invalidCompletedOrders.length > 0) {
+        alert('정산 완료건이 선택되어 있습니다. \n미정산건만 선택해주세요.');
+        return;
+      }
+
+      if (invalidUnadjustedOrders.length > 0) {
+        alert('미정산건이 선택되어 있습니다. \n미정산건만 선택해주세요.');
+        return;
+      }
+
+      if (invalidCancelOrders.length > 0) {
+        alert('주문 취소건이 선택되어 있습니다. \n미정산건만 선택해주세요.'); // 주문 취소 상태 경고
+        return;
+      }
+      else{
+        alert('정산요청이 완료되었습니다.')
+      }
+      
+      const promises = selectedOrders.map(order => {
         order.정산상태 = '정산 요청';
         // API를 통해 서버에 상태 업데이트 요청을 보냅니다.
         return axios.put(`http://localhost:8080/api/orders/adjustment/${order.주문번호}`, { adjustmentStatus: '정산 요청' });
