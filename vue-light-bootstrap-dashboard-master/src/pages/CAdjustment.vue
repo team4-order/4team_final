@@ -34,7 +34,10 @@
             <div class="adjustment">
               <l-table class="table-hover table-striped" :columns="Cadjustments.columns" :data="Cadjustments.filteredData">
                 <template slot="columns">
-                  <th>선택</th>
+                  <th>
+                    <!-- Bind the select all checkbox to allSelected -->
+                    <base-checkbox v-model="allSelected" @change="selectAll($event)"/>
+                  </th>
                   <th v-for="column in Cadjustments.columns">{{ column }}</th>
                 </template>
                 <template slot-scope="{ row }">
@@ -55,6 +58,7 @@
 <script>
 import LTable from 'src/components/Table.vue'
 import Card from 'src/components/Cards/Card.vue'
+import BaseCheckbox from 'src/components/Inputs/BaseCheckbox.vue' // 가정: BaseCheckbox 컴포넌트 경로
 import axios from 'axios'
 
 export default {
@@ -66,6 +70,7 @@ export default {
     return {
       selectedStatus: '', // 선택된 정산 상태
       statuses: [], // 정산 상태 카테고리
+      allSelected: false, // 추가: 모든 항목이 선택되었는지 여부를 나타냄
       Cadjustments: {
         columns: ['주문번호', '주문일자', '금액', '정산상태', '배송일자'], // 테이블 컬럼
         data: [], // 전체 데이터
@@ -122,6 +127,12 @@ export default {
       }
       this.Cadjustments.filteredData = filteredData;
     },
+    selectAll(checked) {
+      // Set the selection status of all checkboxes to the value of 'checked'
+      this.Cadjustments.filteredData.forEach(row => {
+        row.selected = checked;
+      });
+    },
     resetFilter() {
       this.selectedStatus = ''; // 선택된 정산 상태 초기화
       this.startDate = ''; // 선택된 시작 날짜 초기화
@@ -148,7 +159,7 @@ export default {
           // 모든 요청이 성공적으로 완료되었을 때 실행됩니다.
           console.log('정산 요청 완료: ', responses);
           // 페이지 새로고침
-          window.location.reload();
+          // window.location.reload();
         })
         .catch(error => {
           // 요청 중 오류가 발생했을 때 실행됩니다.
@@ -164,7 +175,7 @@ export default {
     },
     getTotalUnadjustedAmount1(){
       return this.Cadjustments.filteredData.filter(order => order.정산상태 === '미정산').reduce((total, order) => total + order.금액, 0);
-    }
+    },
   },
   computed: {
     showTotalUnadjustedAmount() {
@@ -182,7 +193,20 @@ export default {
     totalOrderedAmount() {
       return this.getTotalOrderedAmount();
     }
-  }
+  },
+  watch: {
+    // 'allSelected' data property changes
+    allSelected: {
+      handler(newVal) {
+        // Set the selection status of all checkboxes based on 'allSelected'
+        this.Cadjustments.filteredData.forEach(row => {
+          row.selected = newVal;
+        });
+      },
+      // Immediately execute the handler when the component is mounted
+      immediate: true,
+    },
+  },
 }
 </script>
 

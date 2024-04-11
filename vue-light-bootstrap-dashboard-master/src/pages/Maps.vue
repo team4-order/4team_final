@@ -15,8 +15,13 @@
   <div>
     <!-- Delivery 컴포넌트 추가 -->
     <delivery></delivery>
-    <div class="map-container">
-      <div id="map" class="map"></div>
+    <div class="content-container">
+      <div class="map-container">
+        <div id="map" class="map"></div>
+      </div>
+      <button type="submit" class="btn btn-info btn-fill" @click="$router.push('/admin/input_customer')">
+        출고 등록
+      </button>
     </div>
   </div>
 </template>
@@ -156,19 +161,29 @@ export default {
 </script>
 
 <style scoped>
-.map-container {
-  margin-left: 3%;
+.content-container {
   display: flex;
-  justify-content: flex-start; /* 왼쪽으로 정렬 */
-  flex-wrap: nowrap;
-  width: 66.666%; /* 전체 너비의 2/3을 차지 */
-  height: 500px; /* 높이를 500px로 설정 */
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 3%; /* 여백 조정 */
+  margin-bottom: 30px;
+}
+
+.map-container {
+  flex-grow: 1;
+  height: 500px; /* 지도의 높이를 설정합니다. */
 }
 
 .map {
   width: 100%;
   height: 100%;
-  margin: 5px;
-  border: 1px solid #ccc; /* optional: adds a border around each map */
+  border: 1px solid #ccc; /* 지도의 테두리 스타일을 정의합니다. */
+}
+
+.btn-info {
+  /* 필요한 버튼 스타일을 여기에 추가합니다. */
+  margin-left: 60px; /* 버튼과 지도 사이의 간격을 조정합니다. */
+  margin-top: 445px;
+  width: 150px;
 }
 </style>
