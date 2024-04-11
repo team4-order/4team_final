@@ -66,7 +66,7 @@
       </div>
       <div class="table-responsive">
         <table class="inventory-table">
-          <thead class="thead-dark">
+          <thead class="thead-sticky">
           <tr>
             <th>상품 이름</th>
             <th>상품 코드</th>
@@ -266,5 +266,13 @@ export default {
     flex-basis: 48%;
     margin-bottom: 20px;
   }
+}
+
+.thead-sticky th {
+  position: sticky;
+  top: 0;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  z-index: 1;
 }
 </style>
