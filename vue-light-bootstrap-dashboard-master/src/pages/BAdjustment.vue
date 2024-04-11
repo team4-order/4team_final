@@ -30,7 +30,20 @@
             </template>
             <!-- 테이블 컴포넌트로 데이터 표시 -->
             <div class="adjustment">
-              <l-table v-if="filteredData.length > 0" class="table-hover table-striped" :columns="Cadjustments.columns" :data="filteredData"></l-table>
+              <l-table v-if="filteredData.length > 0" class="table-hover table-striped" :columns="Cadjustments.columns" :data="filteredData">
+                <template slot="columns">
+                  <th>
+                    <base-checkbox type="checkbox" v-model="allSelected" @change="selectAll($event)"/>
+                  </th>
+                  <th v-for="column in Cadjustments.columns">{{ column }}</th>
+                </template>
+                <template slot-scope="{ row }">
+                  <td>
+                    <base-checkbox type="checkbox" v-model="row.selected"/>
+                  </td>
+                  <td v-for="column in Cadjustments.columns">{{ row[column] }}</td>
+                </template>
+              </l-table>
               <p class="all" v-else>해당 기간에 선택한 정산 상태의 데이터가 없습니다.</p>
             </div>
           </card>
@@ -60,7 +73,8 @@ export default {
         columns: ['주문번호', '주문일자', '금액', '정산상태', '배송일자'], // 테이블 컬럼
         data: [], // 전체 데이터
       },
-      filteredData: [] // 필터링된 데이터
+      filteredData: [], // 필터링된 데이터
+      allSelected: false // 전체 선택 여부
     }
   },
   mounted() {
@@ -77,7 +91,7 @@ export default {
             '주문일자': Badjustment.orderDate,
             '금액': Badjustment.orderPrice,
             '정산상태': Badjustment.adjustmentStatus,
-            '판매처 코드': Badjustment.customerCode
+            '배송일자': Badjustment.deliveryDate
           }));
           this.filterByDate(); // 날짜로 데이터 필터링
         })
@@ -123,7 +137,7 @@ export default {
       return this.filteredData.some(order => order.정산상태 === '미정산');
     },
     adjustmentAction() {
-      const adjustedOrders = this.filteredData.filter(order => order.정산상태 === '정산 요청');
+      const adjustedOrders = this.filteredData.filter(order => order.selected && order.정산상태 === '정산 요청');
       const promises = adjustedOrders.map(order => {
         order.정산상태 = '정산 완료';
         // API를 통해 서버에 상태 업데이트 요청을 보냅니다.
@@ -149,6 +163,11 @@ export default {
     },
     getTotalOrderedAmount() {
       return this.filteredData.reduce((total, order) => total + order.금액, 0);
+    },
+    selectAll(event) {
+      this.filteredData.forEach(row => {
+        row.selected = event.target.checked;
+      });
     }
   },
   computed: {
