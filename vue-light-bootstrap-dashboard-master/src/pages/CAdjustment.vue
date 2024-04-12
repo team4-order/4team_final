@@ -156,7 +156,7 @@ export default {
     adjustmentAction() {
       const selectedOrders = this.Cadjustments.filteredData.filter(order => order.selected);
       const invalidCompletedOrders = selectedOrders.filter(order => order.정산상태 === '정산 완료');
-      const invalidUnadjustedOrders = selectedOrders.filter(order => order.정산상태 !== '미정산');
+      const invalidUnadjustedOrders = selectedOrders.filter(order => order.정산상태 === '미정산');
       const invalidCancelOrders = selectedOrders.filter(order => order.정산상태 === '주문 취소'); // 주문 취소 상태 필터링
 
       if (invalidCompletedOrders.length > 0) {
