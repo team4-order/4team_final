@@ -357,12 +357,11 @@ export default {
         this.$refs.salesChart.update();  // Call update if it is a function provided by the chart lib
       }
 
-      // Update the chart options for y-axis
       this.lineChart.options.axisY = {
         low: minPrice,
         high: maxChartValue,
-        onlyInteger: true, // if you want to display only integer values
-        scaleMinSpace: 20 // minimum space between scale steps
+        onlyInteger: true, 
+        scaleMinSpace: 20 
       };
 
       this.lineChart.options.scales.yAxes[0].scaleLabel.labelString = "단위: 만 원";
