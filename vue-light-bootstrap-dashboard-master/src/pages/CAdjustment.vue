@@ -156,27 +156,38 @@ export default {
     adjustmentAction() {
       const selectedOrders = this.Cadjustments.filteredData.filter(order => order.selected);
       const invalidCompletedOrders = selectedOrders.filter(order => order.정산상태 === '정산 완료');
-      const invalidUnadjustedOrders = selectedOrders.filter(order => order.정산상태 === '미정산');
+      const invalidUnadjustedOrders = selectedOrders.filter(order => order.정산상태 === '정산 요청');
       const invalidCancelOrders = selectedOrders.filter(order => order.정산상태 === '주문 취소'); // 주문 취소 상태 필터링
+      const invalidUnsettledOrders = selectedOrders.filter(order => order.정산상태 === '미정산');
 
       if (invalidCompletedOrders.length > 0) {
         alert('정산 완료건이 선택되어 있습니다. \n미정산건만 선택해주세요.');
+        this.Cadjustments.data.forEach(item => item.selected = false);
+        this.allSelected = false; // Also reset the 'selectAll' checkbox);
         return;
       }
 
       if (invalidUnadjustedOrders.length > 0) {
-        alert('미정산건이 선택되어 있습니다. \n미정산건만 선택해주세요.');
+        alert('정산 요청건이 선택되어 있습니다. \n미정산건만 선택해주세요.');
+        this.Cadjustments.data.forEach(item => item.selected = false);
+        this.allSelected = false; // Also reset the 'selectAll' checkbox);
         return;
       }
 
       if (invalidCancelOrders.length > 0) {
         alert('주문 취소건이 선택되어 있습니다. \n미정산건만 선택해주세요.'); // 주문 취소 상태 경고
+        this.Cadjustments.data.forEach(item => item.selected = false);
+        this.allSelected = false; // Also reset the 'selectAll' checkbox);
         return;
       }
-      else{
-        alert('정산요청이 완료되었습니다.')
-      }
       
+      if(selectedOrders.length === 0) {
+        alert('선택된 요청 건이 없습니다.\n다시 확인해주세요.');
+        return;
+      }
+
+      alert('정산 요청 완료');
+
       const promises = selectedOrders.map(order => {
         order.정산상태 = '정산 요청';
         // API를 통해 서버에 상태 업데이트 요청을 보냅니다.
@@ -190,6 +201,9 @@ export default {
           console.log('정산 요청 완료: ', responses);
           // 페이지 새로고침
           // window.location.reload();
+          //선택된 체크박스 제거
+          this.Cadjustments.data.forEach(item => item.selected = false);
+          this.allSelected = false; // Also reset the 'selectAll' checkbox
         })
         .catch(error => {
           // 요청 중 오류가 발생했을 때 실행됩니다.

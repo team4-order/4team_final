@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       selectedStatus: '', // 선택된 정산 상태
-      statuses: ['정산 요청', '미정산', '정산 완료'], // 정산 상태 카테고리
+      statuses: [], // 정산 상태 카테고리
       startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 2).toISOString().substr(0, 10), // 시작일 - 현재 달의 첫 번째 날짜로 설정
       endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1).toISOString().substr(0, 10), // 종료일 - 현재 달의 마지막 날짜로 설정
       Cadjustments: {
@@ -93,6 +93,7 @@ export default {
             '정산상태': Badjustment.adjustmentStatus,
             '배송일자': Badjustment.deliveryDate
           }));
+          this.statuses = [...new Set(this.Cadjustments.data.map(item => item.정산상태))]; // 중복 제거하여 상태 설정
           this.filterByDate(); // 날짜로 데이터 필터링
         })
         .catch(error => {
@@ -140,27 +141,38 @@ export default {
       const selectedOrders = this.filteredData.filter(order => order.selected);
       const invalidCompletedOrders = selectedOrders.filter(order => order.정산상태 === '정산 완료');
       const invalidUnadjustedOrders = selectedOrders.filter(order => order.정산상태 === '미정산');
-      const invalidcancelOrders = selectedOrders.filter(order => order.정산상태 === '주문 취소');
+      const invalidCancelOrders = selectedOrders.filter(order => order.정산상태 === '주문 취소');
+      const invalidUnsettledOrders = selectedOrders.filter(order => order.정산상태 === '정산 요청');
 
       if (invalidCompletedOrders.length > 0) {
         alert('정산 완료건이 선택되어 있습니다.\n정산 요청건만 선택해주세요.');
+        this.filteredData.forEach(item => item.selected = false);
+        this.allSelected = false; // Also reset the 'selectAll' checkbox
+
         return;
       }
 
       if (invalidUnadjustedOrders.length > 0) {
-        alert('미정산건이 선택되어 있습니다. 정산 요청건만 선택해주세요.');
-        return;
-      }
-      
-      if(invalidcancelOrders.length > 0){
-        alert('주문취소건이 선택되어 있습니다. \n미정산건만 선택해주세요.');
+        alert('미정산건이 선택되어 있습니다. \n정산 요청건만 선택해주세요.');
+        this.filteredData.forEach(item => item.selected = false);
+        this.allSelected = false; // Also reset the 'selectAll' checkbox
         return;
       }
 
-      else{
-        alert('정산이 완료되었습니다.')
+      if(invalidCancelOrders.length > 0) {
+        alert('주문취소건이 선택되어 있습니다. \n정산 요청건만 선택해주세요.');
+        this.filteredData.forEach(item => item.selected = false);
+        this.allSelected = false;
+        return;
       }
-      
+
+      if(selectedOrders.length === 0) {
+        alert('선택된 요청 건이 없습니다.\n다시 확인해주세요.');
+        return;
+      }
+
+      alert('정산이 완료되었습니다.');
+     
       const promises = selectedOrders.map(order => {
         order.정산상태 = '정산 완료';
         // API를 통해 서버에 상태 업데이트 요청을 보냅니다.
@@ -172,6 +184,11 @@ export default {
         .then(responses => {
           // 모든 요청이 성공적으로 완료되었을 때 실행됩니다.
           console.log('정산 완료: ', responses);
+          //선택된 체크박스 제거
+          this.filteredData.forEach(item => item.selected = false); // Reset the selection state of all rows
+          
+          this.Cadjustments.data.forEach(item => item.selected = false);
+          this.allSelected = false; // Also reset the 'selectAll' checkbox
         })
         .catch(error => {
           // 요청 중 오류가 발생했을 때 실행됩니다.
@@ -213,7 +230,7 @@ export default {
     }
   }
 }
-</script>ㅂ
+</script>
 
 <style scoped>
 .date-and-filter-bar {
