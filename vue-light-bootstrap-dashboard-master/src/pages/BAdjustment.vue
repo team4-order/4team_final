@@ -33,7 +33,7 @@
               <l-table v-if="filteredData.length > 0" class="table-hover table-striped" :columns="Cadjustments.columns" :data="filteredData">
                 <template slot="columns">
                   <th>
-                    <base-checkbox type="checkbox" v-model="allSelected" @change="selectAll($event)"/>
+                    <base-checkbox :value="allSelected" @input="selectAll"/>
                   </th>
                   <th v-for="column in Cadjustments.columns">{{ column }}</th>
                 </template>
@@ -139,7 +139,7 @@ export default {
     adjustmentAction() {
       const selectedOrders = this.filteredData.filter(order => order.selected);
       const invalidCompletedOrders = selectedOrders.filter(order => order.정산상태 === '정산 완료');
-      const invalidUnadjustedOrders = selectedOrders.filter(order => order.정산상태 !== '미정산');
+      const invalidUnadjustedOrders = selectedOrders.filter(order => order.정산상태 === '미정산');
       const invalidcancelOrders = selectedOrders.filter(order => order.정산상태 === '주문 취소');
 
       if (invalidCompletedOrders.length > 0) {
@@ -188,9 +188,10 @@ export default {
     getTotalOrderedAmount() {
       return this.filteredData.reduce((total, order) => total + order.금액, 0);
     },
-    selectAll(event) {
+    selectAll(value) {
+      this.allSelected = value;
       this.filteredData.forEach(row => {
-        row.selected = event.target.checked;
+        row.selected = this.allSelected;
       });
     }
   },
