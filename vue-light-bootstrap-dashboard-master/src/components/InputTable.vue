@@ -1,10 +1,16 @@
 <template>
   <table class="table">
     <thead>
-      <tr>
-        <th v-for="column in columns" :key="column">{{ column }}</th>
-      </tr>
-    </thead>
+  <tr>
+    <th v-for="column in columns" :key="column" @click="sortColumn(column)">
+      {{ column }}
+      <span v-if="currentSortColumn === column">
+        <span v-if="currentSortOrder === 'ascending'">▲</span>
+        <span v-else-if="currentSortOrder === 'descending'">▼</span>
+      </span>
+    </th>
+  </tr>
+</thead>
     <tbody>
       <tr v-for="(item, index) in filteredAndVisibleData" :key="index">
         <td v-for="column in columns" :key="column">
@@ -25,7 +31,7 @@
         </td>
       </tr>
       <tr>
-        <td :colspan="columns.length">총액 : {{ totalAmount }} 원</td>
+        <td :colspan="columns.length + 1">총액 : {{ totalAmount }} 원</td>
       </tr>
     </tbody>
   </table>
@@ -39,6 +45,13 @@ export default {
     data: Array,
     searchQuery: String,
   },
+  data() {
+  return {
+    // 기존 데이터...
+    currentSortColumn: null,
+    currentSortOrder: 'none', // 'ascending', 'descending', 'none'
+  };
+},
   computed: {
     filteredAndVisibleData() {
       const searchLower = this.searchQuery.toLowerCase();
@@ -79,6 +92,29 @@ export default {
   }
   },
   methods: {
+    sortColumn(columnName) {
+    if (this.currentSortColumn === columnName) {
+      // 현재 정렬 중인 열을 다시 클릭한 경우, 정렬 순서를 변경합니다.
+      this.currentSortOrder = this.currentSortOrder === 'ascending' ? 'descending' : 'ascending';
+    } else {
+      this.currentSortColumn = columnName;
+      this.currentSortOrder = 'ascending'; // 새 열을 클릭한 경우, 오름차순으로 설정합니다.
+    }
+
+    const sortedData = this.goodsList.data
+      .filter(item => !item.visible) // 고정되지 않은 행들만 필터링합니다.
+      .sort((a, b) => {
+        if (a[columnName] < b[columnName]) return this.currentSortOrder === 'ascending' ? -1 : 1;
+        if (a[columnName] > b[columnName]) return this.currentSortOrder === 'ascending' ? 1 : -1;
+        return 0;
+      });
+
+    // 고정된 행들을 가져옵니다.
+    const fixedRows = this.goodsList.data.filter(item => item.visible);
+
+    // 정렬된 데이터와 고정된 행들을 합칩니다.
+    this.goodsList.data = [...fixedRows, ...sortedData];
+  },
     updateAmount(item) {
       // 입력 필드 값에 따라 금액 계산
       item['금액(원)'] = item['가격(BOX)'] * item['주문 수량'];
