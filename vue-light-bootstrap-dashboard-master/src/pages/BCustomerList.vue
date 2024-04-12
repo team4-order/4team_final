@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-12">
           <div class="search-bar">
-            <input v-model="searchQuery" type="text" placeholder="거래처 이름, 정산현황으로 검색하세요" @input="filterContacts" class="form-control" />
+            <input v-model="searchQuery" type="text" placeholder="거래처 이름, 정산 상태 검색하세요" @input="filterContacts" class="form-control" />
           </div>
           <!-- Card 컴포넌트로 연락처 목록을 표시합니다. -->
           <card class="striped-tabled-with-hover" body-classes="table-full-width table-responsive">
@@ -101,7 +101,7 @@ export default {
       if (this.searchQuery) {
         this.Bcontacts.filteredData = this.Bcontacts.data.filter(contact =>
           contact['거래처 이름'].toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          contact['주소'].toLowerCase().includes(this.searchQuery.toLowerCase())
+          contact['정산 상태'].toLowerCase().includes(this.searchQuery.toLowerCase())
         );
       } else {
         this.Bcontacts.filteredData = this.Bcontacts.data;
