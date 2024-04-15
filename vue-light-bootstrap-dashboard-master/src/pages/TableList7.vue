@@ -23,10 +23,6 @@
               :search-query="searchQuery" :editable="true" @update-total="updateTotalAmount"
               @add-row="makeRowPermanent">
             </l-table>
-
-
-
-
           </card>
         </div>
       </div>
