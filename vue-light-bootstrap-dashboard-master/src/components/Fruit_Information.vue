@@ -35,7 +35,7 @@
 
 
 <script>
-import ChartCard from '@/components/Cards/ChartCard.vue'
+import ChartCard from '@/components/Cards/ChartCard1.vue'
 import axios from 'axios';
 
 export default {

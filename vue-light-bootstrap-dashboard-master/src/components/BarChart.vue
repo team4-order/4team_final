@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import ChartCard from 'src/components/Cards/ChartCard.vue' // ChartCard 컴포넌트의 경로에 따라 수정
+import ChartCard from 'src/components/Cards/ChartCard1.vue' // ChartCard 컴포넌트의 경로에 따라 수정
 
 export default {
   components: {

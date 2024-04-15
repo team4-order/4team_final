@@ -99,7 +99,7 @@
   </card>
 </template>
 <script>
-  import Card from 'src/components/Cards/Card.vue'
+  import Card from 'src/components/Cards/Card1.vue'
 
   export default {
     components: {

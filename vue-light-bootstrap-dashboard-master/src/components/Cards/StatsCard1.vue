@@ -18,7 +18,7 @@
 <!--  </card>-->
 <!--</template>-->
 <!--<script>-->
-<!--  import Card from './Card.vue'-->
+<!--  import Card from './Card1.vue'-->
 <!--  export default {-->
 <!--    name: 'stats-card',-->
 <!--    components: {-->
