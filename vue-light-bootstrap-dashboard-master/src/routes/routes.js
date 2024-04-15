@@ -1,7 +1,6 @@
 import DashboardLayout from '../layout/DashboardLayout.vue'
 import CustomerDashboardLayout from '../layout/CustomerDashboardLayout.vue'
-// GeneralViews
-import NotFound from '../pages/NotFoundPage.vue'
+import DashboardLayout from '../layout/DashboardLayout.vue'// 대시보드 레이아웃 컴포넌트
 
 // Admin pages
 import Overview from 'src/pages/Overview.vue'
@@ -21,18 +20,19 @@ import OrderApply from 'src/pages/TableList7.vue'
 import Overview1 from 'src/pages/Overview1.vue'
 import OpenAI from 'src/pages/OpenAI.vue'
 import { component } from 'vue/types/umd.js'
+import CustomerList from 'src/components/CustomerList.vue'
 
-
+// 라우트 설정
 const routes = [
   {
     path: '/',
     component: DashboardLayout,
-    redirect: '/admin/overview'
+    redirect: '/admin/overview'// 루트 경로 접근 시 '/admin/overview'로 리다이렉트
   },
   {
     path: '/admin',
-    component: DashboardLayout,
-    redirect: '/admin/overview',
+    component: DashboardLayout,// '/admin' 경로에 대한 컴포넌트
+    redirect: '/admin/overview',// '/admin' 경로 접근 시 자동으로 '/admin/overview'로 리다이렉트
     children: [
       {
         path: 'overview',
@@ -150,4 +150,4 @@ var res= require('../components/Dashboard/Views/' + name + '.vue');
 return res;
 };**/
 
-export default routes
+export default routes// 설정된 라우트들을 내보냄
