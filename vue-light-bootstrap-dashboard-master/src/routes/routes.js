@@ -1,5 +1,6 @@
 import CustomerDashboardLayout from '../layout/CustomerDashboardLayout.vue'
-import DashboardLayout from '../layout/DashboardLayout.vue'// 대시보드 레이아웃 컴포넌트
+// GeneralViews
+import NotFound from '../pages/NotFoundPage.vue'
 
 // Admin pages
 import Overview from 'src/pages/Overview.vue'
@@ -18,6 +19,7 @@ import OrderApply1 from 'src/pages/TableList2.vue'
 import OrderApply from 'src/pages/TableList7.vue'
 import Overview1 from 'src/pages/Overview1.vue'
 import OpenAI from 'src/pages/OpenAI.vue'
+<<<<<<< HEAD
 import { component } from 'vue/types/umd.js'
 import CustomerList from 'src/components/CustomerList.vue'
 import BCustomerList from 'src/pages/BCustomerList.vue'
@@ -28,6 +30,10 @@ import Delivery from 'src/pages/Delivery.vue'
 import CustomerDetail from 'src/pages/CustomerDetail.vue'
 import CAdjustment from 'src/pages/CAdjustment.vue'
 
+=======
+
+
+>>>>>>> origin/dev/0.2.1
 const routes = [
   {
     path: '/',
@@ -187,4 +193,17 @@ const routes = [
   { path: '*', component: NotFound }
 ]
 
+<<<<<<< HEAD
 export default routes;
+=======
+/**
+ * Asynchronously load view (Webpack Lazy loading compatible)
+ * The specified component must be inside the Views folder
+ * @param  {string} name  the filename (basename) of the view to load.
+function view(name) {
+var res= require('../components/Dashboard/Views/' + name + '.vue');
+return res;
+};**/
+
+export default routes
+>>>>>>> origin/dev/0.2.1

@@ -1,17 +1,15 @@
-/*!
+import Vue from 'vue'
+import App from './App.vue'
+import router from './router'
+import VModal from 'vue-js-modal'
 
- =========================================================
- * Vue Light Bootstrap Dashboard - v2.1.0 (Bootstrap 4)
- =========================================================
 
- * Product Page: http://www.creative-tim.com/product/light-bootstrap-dashboard
- * Copyright 2023 Creative Tim (http://www.creative-tim.com)
- * Licensed under MIT (https://github.com/creativetimofficial/light-bootstrap-dashboard/blob/master/LICENSE.md)
 
- =========================================================
+Vue.config.productionTip = false
+Vue.use(VModal, { dynamic: true })
 
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
+<<<<<<< HEAD
  */
  import Vue from "vue";
  import VueRouter from "vue-router";
@@ -44,3 +42,9 @@
    router,
  });
  
+=======
+new Vue({
+  router,
+  render: function (h) { return h(App) }
+}).$mount('#app')
+>>>>>>> origin/dev/0.2.1
