@@ -1,16 +1,5 @@
-# 4team front Repo
- front 메인 레포!
-
-
-### 다들 규칙 확인하시고 시작하세요!!!
->>>>>>> 24683054d0441024ec795b71ccfae9e130eee2a0
-
-| git 컨벤션 규칙 |
-|----------------|
-|[WIKI](https://github.com/team4-order/team4-main/wiki/%EC%BB%A8%EB%B2%A4%EC%85%98-%EA%B7%9C%EC%B9%99)|
-
-
 # [Vue Light Bootstrap Dashboard](http://vuejs.creative-tim.com/vue-light-bootstrap-dashboard) [![version][version-badge]][changelog] [![license][license-badge]][license]
+
 
 > Admin dashboard based on light bootstrap dashboard UI template + vue-router
 
@@ -62,7 +51,7 @@ The repo uses [vue-cli](https://github.com/vuejs/vue-cli) scaffolding which take
 - Please don't use jQuery or jQuery based plugins since there are many pure Vue alternatives
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
- 
+
 [changelog]: ./CHANGELOG.md
 [license]: ./LICENSE.md
 [version-badge]: https://img.shields.io/badge/version-2.1.0-blue.svg
