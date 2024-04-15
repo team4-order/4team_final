@@ -1,17 +1,19 @@
 <template>
   <table class="table">
     <thead>
-      <slot name="columns">
-        <tr>
-          <th v-for="column in columns" :key="column">{{ column }}</th>
-        </tr>
-      </slot>
+      <tr>
+        <th v-for="column in columns" :key="column">{{ column }}</th>
+      </tr>
     </thead>
     <tbody>
       <tr v-for="(item, index) in data" :key="index" @click="handleRowClick(item)">
-        <slot :row="item">
-          <td v-for="column in columns" :key="column" v-if="hasValue(item, column)">{{ itemValue(item, column) }}</td>
-        </slot>
+        <td v-for="column in columns" :key="column">
+          {{ itemValue(item, column) }}
+        </td>
+        <td v-if="itemValue(item, '주문 상태').toLowerCase() === '주문 완료'">
+          <button class="btn btn-info btn-fill">배송 신청</button>
+        </td>
+        <td v-else></td>
       </tr>
     </tbody>
   </table>
@@ -26,7 +28,7 @@ export default {
   },
   methods: {
     hasValue(item, column) {
-      return item[column.toLowerCase()] !== 'undefined';
+      return item[column.toLowerCase()] !== undefined;
     },
     itemValue(item, column) {
       return item[column.toLowerCase()];
@@ -37,6 +39,3 @@ export default {
   }
 };
 </script>
-
-<style>
-</style>
