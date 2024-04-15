@@ -1,6 +1,6 @@
-import DashboardLayout from '../layout/DashboardLayout.vue'// 대시보드 레이아웃 컴포넌트
+import CustomerDashboardLayout from '../layout/CustomerDashboardLayout.vue'
 // GeneralViews
-import NotFound from '../pages/NotFoundPage.vue'// 404 에러 페이지 컴포넌트
+import NotFound from '../pages/NotFoundPage.vue'
 
 // Admin pages
 import Overview from 'src/pages/Overview.vue'
@@ -11,19 +11,34 @@ import Icons from 'src/pages/Icons.vue'
 import Maps from 'src/pages/Maps.vue'
 import Notifications from 'src/pages/Notifications.vue'
 import Upgrade from 'src/pages/Upgrade.vue'
+import OrderList from 'src/pages/TableList6.vue'
+import OrderDetail from 'src/pages/TableList3.vue'
+import CustomerOrderList from 'src/pages/TableList4.vue'
+import CustomerOrderDetail from 'src/pages/TableList5.vue'
+import OrderApply1 from 'src/pages/TableList2.vue'
+import OrderApply from 'src/pages/TableList7.vue'
+import Overview1 from 'src/pages/Overview1.vue'
+import OpenAI from 'src/pages/OpenAI.vue'
+import { component } from 'vue/types/umd.js'
 import CustomerList from 'src/components/CustomerList.vue'
+import BCustomerList from 'src/pages/BCustomerList.vue'
+import BAdjustment from 'src/pages/BAdjustment.vue' // 경로 수정
+import CustomerList from 'src/pages/CustomerList.vue'
+import InputCustomer from 'src/pages/InputCustomer.vue'
+import Delivery from 'src/pages/Delivery.vue'
+import CustomerDetail from 'src/pages/CustomerDetail.vue'
+import CAdjustment from 'src/pages/CAdjustment.vue'
 
-// 라우트 설정
 const routes = [
   {
     path: '/',
     component: DashboardLayout,
-    redirect: '/admin/overview'// 루트 경로 접근 시 '/admin/overview'로 리다이렉트
+    redirect: '/admin/overview'
   },
   {
     path: '/admin',
-    component: DashboardLayout,// '/admin' 경로에 대한 컴포넌트
-    redirect: '/admin/overview',// '/admin' 경로 접근 시 자동으로 '/admin/overview'로 리다이렉트
+    component: DashboardLayout,
+    redirect: '/admin/overview',
     children: [
       {
         path: 'overview',
@@ -66,13 +81,111 @@ const routes = [
         component: Upgrade
       },
       {
-        path: 'customer-list',// 루트 경로에 대한 컴포넌트
-        name: 'customer List',
+        path: 'orders/:businessId',
+        name: 'OrderList',
+        component: OrderList
+      },
+      {
+        path: '/orders/detail/:orderNumber', 
+        name: 'OrderDetail',
+        component: OrderDetail,
+        props: true
+      },
+      {
+        path: 'overview1/:businessId',
+        name: 'Overview1',
+        component: Overview1
+      },
+      {
+        path: 'ask',
+        name: 'OpenAI',
+        component: OpenAI
+      },
+        path: 'bcustomer_list',
+        name: 'B Customer List',
+        component: BCustomerList
+      },
+      {
+        path: '/bcustomer_list/b_adjustment/:customerCode',
+        name: 'B Adjustment List',
+        component: BAdjustment,
+        props: true
+      },
+      {
+        path: 'customer_list',
+        name: 'Customer List',
         component: CustomerList
+      },
+      {
+        path: 'input_customer',
+        name: 'Input Customer',
+        component: InputCustomer,
+        props: true
+      },
+      {
+        path: 'delivery',
+        name: 'Delivery',
+        component: Delivery,
+      },
+      {
+        path: 'customer_list/customer_detail/:customerCode',
+        name: 'Customer Detail',
+        component: CustomerDetail,
+        props: true
       }
     ]
   },
-  { path: '*', component: NotFound }// 정의되지 않은 모든 경로에 대해 NotFound 컴포넌트를 사용
+  {
+    // 판매처
+    path: '/buyer',
+    component: CustomerDashboardLayout,
+    redirect: '/buyer/:customerCode',
+    children: [
+      {
+        //주문 목록(판매처)
+        path: ':customerCode',
+        name: 'CustomerOrderList',
+        component: CustomerOrderList
+      },
+      {
+        //주문 상세(판매처)
+        path: 'detail/:orderNumber', 
+        name: 'CustomerOrderDetail',
+        component: CustomerOrderDetail,
+        props: true
+      }
+      ,
+      {
+        //주문 등록 - temp (판매처)
+        path: 'apply1/:customerCode',
+        name: 'OrderApply1',
+        component: OrderApply1
+      }
+      ,
+      {
+        //주문 등록(판매처)
+        path: 'apply/:customerCode',
+        name: 'OrderApply',
+        component: OrderApply
+      },
+      {
+	path: '/customer/overview',
+	name: 'Overview',
+	component: Overview
+      },
+      {
+	path: '/customer/icons',
+	name: 'Icons',
+	component: Icons
+      },
+      {
+	path: ':customerCode',
+	name: 'customer Adjustment',
+	component: CAdjustment
+      }
+    ]
+  },
+  { path: '*', component: NotFound }
 ]
 
 /**
@@ -80,8 +193,8 @@ const routes = [
  * The specified component must be inside the Views folder
  * @param  {string} name  the filename (basename) of the view to load.
 function view(name) {
-   var res= require('../components/Dashboard/Views/' + name + '.vue');
-   return res;
+var res= require('../components/Dashboard/Views/' + name + '.vue');
+return res;
 };**/
 
-export default routes// 설정된 라우트들을 내보냄
+export default routes
