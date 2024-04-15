@@ -5,6 +5,7 @@
         <div class="col-12">
           <card>
             <template slot="header">
+              <h3 class="card-title">창고목록</h3>
               <h4 class="card-title">Light Bootstrap Table Heading</h4>
               <p class="card-category">Created using Roboto Font Family</p>
             </template>

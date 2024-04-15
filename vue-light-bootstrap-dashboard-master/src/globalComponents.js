@@ -2,6 +2,8 @@ import BaseInput from './components/Inputs/BaseInput.vue'
 import BaseCheckbox from './components/Inputs/BaseCheckbox.vue'
 import BaseRadio from './components/Inputs/BaseRadio.vue'
 import BaseDropdown from './components/BaseDropdown.vue'
+
+import Card1 from './components/Cards/Card1.vue'
 import Card from './components/Cards/Card.vue'
 
 /**

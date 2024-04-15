@@ -2,6 +2,14 @@
   <div class="content">
     <div class="container-fluid">
       <div class="row">
+
+        <div class="col-md-4">
+          <chart-card :chart-data="pieChart.data" chart-type="Pie">
+            <template v-slot:header>
+              <h4 class="card-title">Email Statistics</h4>
+              <p class="card-category">Last Campaign Performance</p>
+            </template>
+            <template v-slot:footer>
         <div class="col-xl-3 col-md-6">
           <stats-card>
             <div slot="header" class="icon-warning">
@@ -106,6 +114,33 @@
           </chart-card>
         </div>
       </div>
+
+    </div>
+  </div>
+</template>
+
+<script>
+import ChartCard from 'src/components/Cards/ChartCard1.vue'
+
+export default {
+  components: {
+    ChartCard
+  },
+  data() {
+    return {
+      pieChart: {
+        data: {
+          // labels: ['Open', 'Bounce', 'Unsubscribe'],
+          series: [80, 10, 50]
+        }
+      },
+    }
+  }
+}
+</script>
+
+<style>
+/* You can add style if you need */
 
       <div class="row">
         <div class="col-md-6">
