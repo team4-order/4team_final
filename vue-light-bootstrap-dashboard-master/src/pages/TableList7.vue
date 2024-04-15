@@ -106,7 +106,7 @@ export default {
         })
         .catch(error => {
           console.error("There was an error fetching the order list:", error);
-        });
+        }); 
     },
     fetchGoodsList(storageCode) {
       axios.get(`http://localhost:8080/api/total/storage/${storageCode}`)
