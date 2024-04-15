@@ -19,7 +19,7 @@ export default {
   methods: {
     async askQuestion() {
       try {
-        const response = await axios.post('http://localhost:8080/api/ask', this.question);
+        const response = await axios.post('http://localhost:8080/api/ask', { prompt: this.question });
         this.answer = response.data;
       } catch (error) {
         console.error('Error asking question:', error);

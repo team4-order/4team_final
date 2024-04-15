@@ -1,5 +1,7 @@
+import DashboardLayout from '../layout/DashboardLayout.vue'
 import CustomerDashboardLayout from '../layout/CustomerDashboardLayout.vue'
-import DashboardLayout from '../layout/DashboardLayout.vue'// 대시보드 레이아웃 컴포넌트
+// GeneralViews
+import NotFound from '../pages/NotFoundPage.vue'
 
 // Admin pages
 import Overview from 'src/pages/Overview.vue'
@@ -17,16 +19,9 @@ import CustomerOrderDetail from 'src/pages/TableList5.vue'
 import OrderApply1 from 'src/pages/TableList2.vue'
 import OrderApply from 'src/pages/TableList7.vue'
 import Overview1 from 'src/pages/Overview1.vue'
-import OpenAI from 'src/pages/OpenAI.vue'
+import OpenAi from 'src/pages/OpenAI.vue'
 import { component } from 'vue/types/umd.js'
-import CustomerList from 'src/components/CustomerList.vue'
-import BCustomerList from 'src/pages/BCustomerList.vue'
-import BAdjustment from 'src/pages/BAdjustment.vue' // 경로 수정
-import CustomerList from 'src/pages/CustomerList.vue'
-import InputCustomer from 'src/pages/InputCustomer.vue'
-import Delivery from 'src/pages/Delivery.vue'
-import CustomerDetail from 'src/pages/CustomerDetail.vue'
-import CAdjustment from 'src/pages/CAdjustment.vue'
+
 
 const routes = [
   {
@@ -97,40 +92,8 @@ const routes = [
       },
       {
         path: 'ask',
-        name: 'OpenAI',
-        component: OpenAI
-      },
-        path: 'bcustomer_list',
-        name: 'B Customer List',
-        component: BCustomerList
-      },
-      {
-        path: '/bcustomer_list/b_adjustment/:customerCode',
-        name: 'B Adjustment List',
-        component: BAdjustment,
-        props: true
-      },
-      {
-        path: 'customer_list',
-        name: 'Customer List',
-        component: CustomerList
-      },
-      {
-        path: 'input_customer',
-        name: 'Input Customer',
-        component: InputCustomer,
-        props: true
-      },
-      {
-        path: 'delivery',
-        name: 'Delivery',
-        component: Delivery,
-      },
-      {
-        path: 'customer_list/customer_detail/:customerCode',
-        name: 'Customer Detail',
-        component: CustomerDetail,
-        props: true
+        name: 'OpenAi',
+        component: OpenAi
       }
     ]
   },
@@ -166,25 +129,25 @@ const routes = [
         path: 'apply/:customerCode',
         name: 'OrderApply',
         component: OrderApply
-      },
-      {
-	path: '/customer/overview',
-	name: 'Overview',
-	component: Overview
-      },
-      {
-	path: '/customer/icons',
-	name: 'Icons',
-	component: Icons
-      },
-      {
-	path: ':customerCode',
-	name: 'customer Adjustment',
-	component: CAdjustment
       }
     ]
   },
+  // {
+  //   // 판매처
+  //   path: '/apply',
+  //   name: 'OrderApply',
+  //   component: OrderApply
+  // }, 
   { path: '*', component: NotFound }
 ]
 
-export default routes;
+/**
+ * Asynchronously load view (Webpack Lazy loading compatible)
+ * The specified component must be inside the Views folder
+ * @param  {string} name  the filename (basename) of the view to load.
+function view(name) {
+var res= require('../components/Dashboard/Views/' + name + '.vue');
+return res;
+};**/
+
+export default routes
