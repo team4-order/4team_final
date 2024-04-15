@@ -97,7 +97,7 @@ export default {
       if (this.$refs.dropdown) {
         this.$refs.dropdown.closeDropDown();
       }
-    },
+    },  
     fetchOrderList() {
       const customerCode = this.$route.params.customerCode;
       axios.get(`http://localhost:8080/api/storage/${customerCode}`)
