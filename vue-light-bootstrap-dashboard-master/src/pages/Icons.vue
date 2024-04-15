@@ -113,9 +113,10 @@
                   </div>
                 </div>
                 <div class="font-icon-list col-lg-2 col-md-3 col-sm-4 col-6">
-                    <div class="font-icon-detail">
-                      <i class="nc-icon nc-bell-55"></i>
-                      <p>nc-bell-55</p>
+
+                  <div class="font-icon-detail">
+                    <i class="nc-icon nc-bell-55"></i>
+                    <p>nc-bell-55</p>
                   </div>
                 </div>
                 <div class="font-icon-list col-lg-2 col-md-3 col-sm-4 col-6">
@@ -621,6 +622,7 @@
 </template>
 <script>
   import Card from 'src/components/Cards/Card1.vue'
+  import Card from 'src/components/Cards/Card.vue'
   export default {
     components: {
       Card

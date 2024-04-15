@@ -1,15 +1,13 @@
-
 <template>
   <div :class="{'nav-open': $sidebar.showSidebar}">
     <notifications></notifications>
     <router-view></router-view>
   </div>
-
 </template>
 
 <script>
-  export default {
-  }
+  export default {}
+>>>>>>> origin/dev1/0.1.0
 </script>
 <style lang="scss">
   .vue-notifyjs.notifications{
