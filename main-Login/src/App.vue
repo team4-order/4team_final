@@ -20,7 +20,7 @@
 import axios from 'axios';
 import Swal from "sweetalert2";
 export default {
-  name: 'App',
+  name: 'App' ,
   data() {
     return {
       authenticated: false,
