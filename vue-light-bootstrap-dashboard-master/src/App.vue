@@ -7,7 +7,7 @@
 
 <script>
   export default {}
->>>>>>> origin/dev1/0.1.0
+
 </script>
 <style lang="scss">
   .vue-notifyjs.notifications{

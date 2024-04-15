@@ -56,7 +56,7 @@
 <script>
   import LTable from 'src/components/Table.vue'
 
-  import Card from 'src/components/Cards/Card1.vue';
+  import Card1 from 'src/components/Cards/Card1.vue';
   import Card from 'src/components/Cards/Card.vue';
   const tableColumns = ['Id', 'Name', 'Salary', 'Country', 'City']
   const tableData = [{
@@ -97,7 +97,7 @@
   export default {
     components: {
       LTable,
-      Card
+      Card, Card1
     },
     data () {
       return {

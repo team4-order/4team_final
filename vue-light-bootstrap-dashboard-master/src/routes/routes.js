@@ -29,8 +29,8 @@ import OrderApply1 from 'src/pages/TableList2.vue'
 import OrderApply from 'src/pages/TableList7.vue'
 import Overview1 from 'src/pages/Overview1.vue'
 import OpenAI from 'src/pages/OpenAI.vue'
-import { component } from 'vue/types/umd.js'
-import CustomerList from 'src/components/CustomerList.vue'
+/*import { component } from 'vue/types/umd.js'*/
+/*import CustomerList from 'src/components/CustomerList.vue'*/
 import BCustomerList from 'src/pages/BCustomerList.vue'
 import BAdjustment from 'src/pages/BAdjustment.vue' // 경로 수정
 import CustomerList from 'src/pages/CustomerList.vue'

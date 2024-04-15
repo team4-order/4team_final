@@ -10,6 +10,7 @@
               <p class="card-category">Last Campaign Performance</p>
             </template>
             <template v-slot:footer>
+
         <div class="col-xl-3 col-md-6">
           <stats-card>
             <div slot="header" class="icon-warning">
@@ -24,7 +25,7 @@
             </div>
           </stats-card>
         </div>
-
+            </template>
         <div class="col-xl-3 col-md-6">
           <stats-card>
             <div slot="header" class="icon-success">
@@ -70,7 +71,8 @@
           </stats-card>
         </div>
 
-      </div>
+
+
       <div class="row">
         <div class="col-md-8">
           <chart-card :chart-data="lineChart.data"
@@ -114,8 +116,10 @@
           </chart-card>
         </div>
       </div>
-
+          </chart-card>
+      </div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -139,12 +143,12 @@ export default {
 }
 </script>
 
-<style>
-/* You can add style if you need */
+
+
 
       <div class="row">
         <div class="col-md-6">
-          <chart-card
+          <chart-card>
             :chart-data="barChart.data"
             :chart-options="barChart.options"
             :chart-responsive-options="barChart.responsiveOptions"
@@ -201,9 +205,7 @@ export default {
 
         </div>
       </div>
-    </div>
-  </div>
-</template>
+
 <script>
   import ChartCard from 'src/components/Cards/ChartCard.vue'
   import StatsCard from 'src/components/Cards/StatsCard.vue'
