@@ -1,32 +1,46 @@
-const { defineConfig } = require('@vue/cli-service')
+const path = require('path');
+const webpack = require('webpack');
+const { defineConfig } = require('@vue/cli-service');
 
-module.exports = defineConfig({
-      transpileDependencies: true,
-      devServer: {
+function resolveSrc(_path) {
+  return path.join(__dirname, _path);
+}
+
+module.exports = {
+  outputDir: '../../4team_final_MainSpring/demo2/src/main/resources/static',
+  lintOnSave: false,
+  transpileDependencies: true,
+  configureWebpack: {
+    // Set up all the aliases we use in our app.
+    resolve: {
+      alias: {
+        src: resolveSrc('src'),
+        'chart.js': 'chart.js/dist/Chart.js'
+      }
+    },
+    plugins: [
+      new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 6
+      })
+    ]
+  },
+  pwa: {
+    name: 'Vue Light Bootstrap Dashboard',
+    themeColor: '#344675',
+    msTileColor: '#344675',
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: '#344675'
+  },
+  css: {
+    // Enable CSS source maps.
+    sourceMap: process.env.NODE_ENV !== 'production'
+  },
+  devServer: {
     proxy: {
-        "/ROOT" : {
-            target : 'http://localhost:8081/',
-            changeOrigin : true,
-            logLevel : 'debug'
-        },
-        "/oauth2.0": {
-          target: "https://nid.naver.com/",
-          changeOrigin: true,
-          logLevel: "debug",
-            'secure':false
-          /*pathRewrite: {
-            "/oauth2.0": "https://nid.naver.com/oauth2.0",
-          }*/
-        },
-        "/v1": {
-          target: "https://openapi.naver.com/",
-          changeOrigin: true,
-          logLevel: "debug",
-            'secure':false
-          /* pathRewrite: {
-             "/v1": "https://openapi.naver.com/v1",
-           }*/
-        },
+      '/': {
+        target: "http://localhost:8080",
+        changeOrigin: true,
       }
     }
-  })
+  }
+};

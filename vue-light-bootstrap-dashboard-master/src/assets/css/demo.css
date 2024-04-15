@@ -170,6 +170,7 @@
     float: left;
 }
 
+
 .fixed-plugin li.s-line,
 .fixed-plugin li.header-title,
 .fixed-plugin li.button-container {
@@ -200,6 +201,7 @@
     text-transform: uppercase;
 }
 
+
 .fixed-plugin .s-line p {
     float: left;
     display: inline-block;
@@ -207,6 +209,7 @@
     font-size: 1em;
     color: #3C4858;
 }
+
 
 .fixed-plugin .s-line a .badge-colors {
     position: relative;
@@ -281,6 +284,7 @@
 .fixed-plugin .btn-social:first-child {
     margin-right: 2%;
 }
+
 
 .fixed-plugin .s-line a:hover,
 .fixed-plugin .s-line a:focus,
@@ -825,4 +829,5 @@
 
 .documentation .dropdown .dropdown-menu.show {
     transform: translate3d(0, 39px, 0) !important;
+
 }

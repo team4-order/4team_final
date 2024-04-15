@@ -3,7 +3,6 @@
     <thead>
       <slot name="columns">
         <tr>
-          <th v-for="column in columns" :key="column">{{ column }}</th>
         </tr>
       </slot>
     </thead>
