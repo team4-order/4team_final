@@ -20,7 +20,7 @@ import OrderApply1 from 'src/pages/TableList2.vue'
 import OrderApply from 'src/pages/TableList7.vue'
 import Overview1 from 'src/pages/Overview1.vue'
 import OpenAI from 'src/pages/OpenAI.vue'
-import { component } from 'vue/types/umd.js'
+//import { component } from 'vue/types/umd.js'
 
 
 const routes = [
