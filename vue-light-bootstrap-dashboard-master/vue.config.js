@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const { defineConfig } = require('@vue/cli-service');
 
 function resolveSrc(_path) {
   return path.join(__dirname, _path);
@@ -8,6 +9,7 @@ function resolveSrc(_path) {
 module.exports = {
   outputDir: '../../4team_final_MainSpring/demo2/src/main/resources/static',
   lintOnSave: false,
+  transpileDependencies: true,
   configureWebpack: {
     // Set up all the aliases we use in our app.
     resolve: {

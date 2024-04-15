@@ -170,7 +170,8 @@
     float: left;
 }
 
-.fixed-plugin li.adjustments-line,
+
+.fixed-plugin li.s-line,
 .fixed-plugin li.header-title,
 .fixed-plugin li.button-container {
     width: 100%;
@@ -200,7 +201,8 @@
     text-transform: uppercase;
 }
 
-.fixed-plugin .adjustments-line p {
+
+.fixed-plugin .s-line p {
     float: left;
     display: inline-block;
     margin-bottom: 0;
@@ -208,20 +210,21 @@
     color: #3C4858;
 }
 
-.fixed-plugin .adjustments-line a .badge-colors {
+
+.fixed-plugin .s-line a .badge-colors {
     position: relative;
     top: -2px;
 }
 
-.fixed-plugin .adjustments-line .togglebutton {
+.fixed-plugin .s-line .togglebutton {
     float: right;
 }
 
-.fixed-plugin .adjustments-line .togglebutton .toggle {
+.fixed-plugin .s-line .togglebutton .toggle {
     margin-right: 0;
 }
 
-.fixed-plugin .dropdown-menu>li.adjustments-line>a {
+.fixed-plugin .dropdown-menu>li.s-line>a {
     padding-right: 0;
     padding-left: 0;
     /*border-bottom: 1px solid #ddd;*/
@@ -282,9 +285,10 @@
     margin-right: 2%;
 }
 
-.fixed-plugin .adjustments-line a:hover,
-.fixed-plugin .adjustments-line a:focus,
-.fixed-plugin .adjustments-line a {
+
+.fixed-plugin .s-line a:hover,
+.fixed-plugin .s-line a:focus,
+.fixed-plugin .s-line a {
     color: transparent;
 }
 
@@ -825,4 +829,5 @@
 
 .documentation .dropdown .dropdown-menu.show {
     transform: translate3d(0, 39px, 0) !important;
+
 }

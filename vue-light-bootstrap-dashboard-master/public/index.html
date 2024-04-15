@@ -1,20 +1,8 @@
-<!--
- =========================================================
- * Vue Light Bootstrap Dashboard - v2.1.0 (Bootstrap 4)
- =========================================================
 
- * Product Page: http://www.creative-tim.com/product/light-bootstrap-dashboard
- * Copyright 2023 Creative Tim (http://www.creative-tim.com)
- * Licensed under MIT (https://github.com/creativetimofficial/light-bootstrap-dashboard/blob/master/LICENSE.md)
-
- =========================================================
-
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
--->
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+  <head >
+    
     <meta charset="utf-8" />
     <link
       rel="apple-touch-icon"
@@ -44,8 +32,20 @@
       href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200"
       rel="stylesheet"
     />
+
+    <meta charset="utf-8">
+      <script src="https://accounts.google.com/gsi/client" async defer></script>
+<!--    <script src="https://apis.google.com/js/platform.js" async defer></script>-->
+    <meta name="google-signin-client_id" content="1074874386105-qlcav64d5j58f07o9aep4snpko0elgs1.apps.googleusercontent.com" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!--      <meta http-equiv="Access-Control-Allow-Origin" content="*">-->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
   </head>
   <body>
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
