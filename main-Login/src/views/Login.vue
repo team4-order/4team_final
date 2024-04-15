@@ -32,9 +32,9 @@
     <img v-if=" this.loginstatus" src="../assets/check.png" alt="Authenticated Image" height="23" width="23" align="right">
 
 <br><br><br><br><br>
-
+  <div v-if ="this.loginstatus">
     <button type="button" class = "GLoginButton" v-on:click="checkUsernameExistence">접속하기</button>
-
+  </div>
 
 
 
