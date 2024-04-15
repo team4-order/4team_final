@@ -1,16 +1,11 @@
 {
-  "name": "vue-light-bootstrap-dashboard",
-  "version": "2.1.0",
+  "name": "simple-login-app",
+  "version": "0.1.0",
   "private": true,
-  "description": "Vue light bootstrap dashboard",
-  "author": "cristijora <joracristi@gmail.com>",
   "scripts": {
-    "serve": "vue-cli-service serve --port 8080",
-    "build": "vue-cli-service build --watch",
-    "e2e": "node test/e2e/runner.js",
-    "lint": "vue-cli-service lint",
-    "dev": "vue-cli-service serve --open",
-    "lint-fix": "vue-cli-service lint --fix"
+    "serve": "vue-cli-service serve --port 8081",
+    "build": "vue-cli-service build",
+    "dev": "nodemon --exec babel-node naverLogin.js"
   },
   "dependencies": {
     "axios": "^1.6.8",
@@ -20,19 +15,30 @@
     "google-maps": "3.2.1",
     "register-service-worker": "1.7.2",
     "v-tooltip": "2.0.0-rc.33",
-    "vue": "2.7.14",
     "vue-kakao-maps": "^0.2.11",
-    "vue-router": "3.0.2",
     "vue2-google-maps": "0.10.7"
+    "babel": "^6.23.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "form-data": "^4.0.0",
+    "node-fetch": "^2.7.0",
+    "nodemon": "^3.1.0",
+    "sweetalert2": "^11.10.7",
+    "vue": "^2.6.11",
+    "vue-js-modal": "^2.0.1",
+    "vue-jwt-decode": "^0.1.0",
+    "vue-router": "^3.1.5",
+    "vue-sweetalert2": "^5.0.5",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "3.12.1",
-    "@vue/cli-plugin-eslint": "3.12.1",
-    "@vue/cli-plugin-pwa": "3.12.1",
-    "@vue/cli-service": "3.12.1",
-    "sass": "1.56.2",
-    "sass-loader": "10.1.1",
-    "vue-template-compiler": "2.7.14"
+    "@vue/cli-plugin-router": "^5.0.1",
+    "@vue/cli-service": "^5.0.1",
+    "babel-cli": "^6.26.0",
+    "cypress": "^9.5.1",
+    "vue-template-compiler": "^2.6.11",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
   },
   "eslintConfig": {
     "globals": {
@@ -41,7 +47,6 @@
   },
   "browserslist": [
     "> 1%",
-    "last 2 versions",
-    "not ie <= 11"
+    "last 2 versions"
   ]
 }

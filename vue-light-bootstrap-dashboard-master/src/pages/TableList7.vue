@@ -23,10 +23,6 @@
               :search-query="searchQuery" :editable="true" @update-total="updateTotalAmount"
               @add-row="makeRowPermanent">
             </l-table>
-
-
-
-
           </card>
         </div>
       </div>
@@ -97,7 +93,7 @@ export default {
       if (this.$refs.dropdown) {
         this.$refs.dropdown.closeDropDown();
       }
-    },
+    },  
     fetchOrderList() {
       const customerCode = this.$route.params.customerCode;
       axios.get(`http://localhost:8080/api/storage/${customerCode}`)
@@ -106,7 +102,7 @@ export default {
         })
         .catch(error => {
           console.error("There was an error fetching the order list:", error);
-        });
+        }); 
     },
     fetchGoodsList(storageCode) {
       axios.get(`http://localhost:8080/api/total/storage/${storageCode}`)
