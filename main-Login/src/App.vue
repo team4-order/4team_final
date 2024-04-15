@@ -34,17 +34,17 @@ export default {
       this.authenticated = status;
 
     },
-    logout() {
-      Swal.fire({
-        title: 'LogOut Success!',
-        text: '성공적으로 로그아웃 되었습니다.',
-        icon: 'success',
-        confirmButtonText: '확인'
+    async logout() {
+       Swal.fire({
+            title: 'LogOut Success!',
+            text: '성공적으로 로그아웃 되었습니다.',
+            icon: 'success',
+            confirmButtonText: '확인'
 
       })
-      localStorage.removeItem('token');
+      await localStorage.removeItem('token');
       localStorage.removeItem('code');
-      this.authenticated = false;
+       this.authenticated = false;
     }
 
   }
