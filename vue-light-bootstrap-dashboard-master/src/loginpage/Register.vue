@@ -15,7 +15,7 @@
       <div class="form-inputs">
 
         <label for="password" >Password</label> <br>
-        <div class=" tooltip">
+        <div class="tooltips">
           <input type="password" id="password" name="password" v-model="input.password" @mouseover="showTooltip = true" @mouseleave="showTooltip = false" placeholder="Password" />
 
           <span class="tooltiptext" v-show="showTooltip">영문 숫자 특수기호 조합 8자리 이상 16자리 이하로 생성해주세요.</span>
@@ -110,7 +110,7 @@ export default {
         this.$router.replace({ name: "Login" });
 
       } catch (error) {
-        if (!reg.test(this.input.password)) {
+        if(!reg.test(this.input.password)){
 
           Swal.fire({
             title: 'Password Error!',
@@ -119,7 +119,8 @@ export default {
             confirmButtonText: '확인'
           })
           console.log("비밀번호가 너무 단순합니다.")
-        } else {
+        }
+        else {
           Swal.fire({
             title: 'Username Exist!',
             text: '이미 존재하는 username입니다.',
@@ -169,7 +170,7 @@ body {
   transition: 0.2s ease all;
 }
 
-.font {
+.font{
   margin: 0 auto;
   width: 400px;
 
@@ -177,7 +178,6 @@ body {
   font-weight: bold;
   text-align: center;
 }
-
 #login h2:hover {
   color: #e3e29e;
 }
@@ -210,12 +210,12 @@ body {
   width: 100%;
 }
 
-.tooltip {
+.tooltips {
   position: relative;
   /*display: inline-block;*/
 }
 
-.tooltip .tooltiptext {
+.tooltips .tooltiptext {
   visibility: hidden;
   width: 200px;
   height: auto;
@@ -234,7 +234,7 @@ body {
 
 }
 
-.tooltip .tooltiptext::after {
+.tooltips .tooltiptext::after {
   content: "";
   position: absolute;
   top: 100%;
@@ -245,7 +245,7 @@ body {
   border-color: #555 transparent transparent transparent;
 }
 
-.tooltip:hover .tooltiptext {
+.tooltips:hover .tooltiptext {
   visibility: visible;
   opacity: 0.7;
 }
