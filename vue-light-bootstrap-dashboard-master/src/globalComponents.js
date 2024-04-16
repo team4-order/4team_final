@@ -17,6 +17,7 @@ const GlobalComponents = {
     Vue.component(BaseRadio.name, BaseRadio)
     Vue.component(BaseDropdown.name, BaseDropdown)
     Vue.component('card', Card)
+    Vue.component('card1', Card1)
   }
 }
 

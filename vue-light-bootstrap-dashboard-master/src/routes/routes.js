@@ -92,28 +92,22 @@ const routes = [
         name: 'VendorList',
         component: vendorList // 공급처 관리 페이지
       },
-
       {
         path: '/vendor/:contactCode',
         name: 'VendorDetails',
         component: VendorDetails, // 공급처 상세정보 페이지
         props: true
       },
-
       {
         path: 'fruit',
         name: 'Fruit',
         component: Fruit, // 공급처 상세정보 페이지
       },
-
-
       {
         path: 'deliveryStatus',
         name: 'DeliveryStatus',
         component: DeliveryStatus, // 배송 현황
       },
-
-
       {
         path: 'user',
         name: 'User',
@@ -143,11 +137,6 @@ const routes = [
         path: 'notifications',
         name: 'Notifications',
         component: Notifications
-      },
-      {
-        path: 'upgrade',
-        name: 'Upgrade to PRO',
-        component: Upgrade
       },
       {
         path: 'orders/:businessId',
@@ -239,19 +228,19 @@ const routes = [
         component: OrderApply
       },
       {
-	path: '/customer/overview',
-	name: 'Overview',
-	component: Overview
+	      path: '/customer/overview',
+	      name: 'Overview',
+	      component: Overview
       },
       {
-	path: '/customer/icons',
-	name: 'Icons',
-	component: Icons
+        path: '/customer/icons',
+	      name: 'Icons',
+	      component: Icons
       },
       {
-	path: ':customerCode',
-	name: 'customer Adjustment',
-	component: CAdjustment
+	      path: ':customerCode',
+        name: 'customer Adjustment',
+	      component: CAdjustment
       }
     ]
   },

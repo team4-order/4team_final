@@ -360,8 +360,8 @@ export default {
       this.lineChart.options.axisY = {
         low: minPrice,
         high: maxChartValue,
-        onlyInteger: true, 
-        scaleMinSpace: 20 
+        onlyInteger: true,
+        scaleMinSpace: 20
       };
 
       this.lineChart.options.scales.yAxes[0].scaleLabel.labelString = "단위: 만 원";
