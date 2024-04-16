@@ -120,7 +120,6 @@
           <p>Upgrade to PRO</p>
         </sidebar-link>
       </template>
->>>>>>> origin/dev1/0.1.0
     </side-bar>
     <div class="main-panel">
       <top-navbar></top-navbar>
