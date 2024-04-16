@@ -1,6 +1,13 @@
 <template>
   <div class="content">
     <div class="container-fluid">
+
+      <div>
+        <input v-model="question" placeholder="Ask a question about fruit distribution">
+        <button @click="askQuestion">Ask</button>
+        <p>Answer: {{ answer }}</p>
+    </div>
+    
       <Card>
         <h5>주간 데이터</h5>
         <div class="row">
@@ -73,7 +80,7 @@
       <div class="row">
         <div class="col-md-8" v-if="isDataLoaded">
           <chart-card ref="salesChart" :chart-data="lineChart.data" :chart-options="lineChart.options"
-            :responsive-options="lineChart.responsiveOptions">
+                      :responsive-options="lineChart.responsiveOptions">
 
             <template slot="header">
               <h4 class="card-title">매출 현황</h4>
@@ -111,15 +118,15 @@
       </div>
 
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-8">
           <chart-card :chart-data="barChartData" :chart-options="barChart.options"
-            :responsive-options="barChart.responsiveOptions" chart-type="Bar" ref="customerOrdersChart">
+                      :responsive-options="barChart.responsiveOptions" chart-type="Bar" ref="customerOrdersChart">
 
             <template slot="header">
               <h4 class="card-title">고객별 주문 현황</h4>
               <p class="card-category"></p>
               <select v-model="selectedCustomerCode" class="form-control">
-                <option disabled value="">고객명</option>
+                <option disabled value="" selected>고객명</option>
                 <option v-for="customer in customers" :key="customer.contactCode" :value="customer.contactCode">
                   {{ customer.contactName }}
                 </option>
@@ -137,24 +144,37 @@
           </chart-card>
         </div>
 
-        <div class="col-md-4">
-          <chart-card :chart-data="pieChart.data" chart-type="Pie">
-            <template slot="header">
-              <h4 class="card-title">Email Statistics</h4>
+        <div class="col-md-4" v-if="selectedCustomerCode !== ''">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">정산 현황</h4>
               <p class="card-category">Last Campaign Performance</p>
-            </template>
-            <template slot="footer">
-              <div class="legend">
-                <i class="fa fa-circle text-info"></i> Open
-                <i class="fa fa-circle text-danger"></i> Bounce
-                <i class="fa fa-circle text-warning"></i> Unsubscribe
+            </div>
+            <div class="card-body">
+              <!-- Conditional rendering based on whether there are orders -->
+              <chart-card v-if="!showNoOrdersMessage" ref="settlementChart" :chart-data="pieChart.data" chart-type="Pie">
+                <template slot="footer">
+                  <div class="legend">
+                    <i class="fa fa-circle text-info"></i> 정산 완료
+                    <i class="fa fa-circle text-danger"></i> 미정산
+                    <i class="fa fa-circle text-warning"></i> 정산 요청
+                  </div>
+                  <hr>
+                  <div class="stats">
+                    <i class="fa fa-clock-o"></i> Campaign sent 2 days ago
+                  </div>
+                </template>
+              </chart-card>
+              <div v-else class="text-center">
+                <h5>이번달 주문이 없습니다.</h5>
               </div>
-              <hr>
+            </div>
+            <div class="card-footer">
               <div class="stats">
-                <i class="fa fa-clock-o"></i> Campaign sent 2 days ago
+                <i class="fa fa-history"></i> Updated 3 minutes ago
               </div>
-            </template>
-          </chart-card>
+            </div>
+          </div>
         </div>
 
 
@@ -178,8 +198,12 @@ export default {
   },
   data() {
     return {
+      question: '',
+      answer: '',
+      showNoOrdersMessage: false,
       isDataLoaded: false,
       customers: [],
+      //selectedCustomerCode: null,
       selectedCustomerCode: '',
       barChartData: { labels: [], series: [] },
       weeklyReadyOrders: 0,
@@ -190,8 +214,8 @@ export default {
       deleteTooltip: 'Remove',
       pieChart: {
         data: {
-          labels: ['40%', '20%', '40%'],
-          series: [40, 20, 40]
+          labels: [],
+          series: []
         }
       },
       lineChart: {
@@ -250,7 +274,7 @@ export default {
       },
       barChart: {
         data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          labels: [],
           series: [
             [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895],
             [412, 243, 280, 580, 453, 353, 300, 364, 368, 410, 636, 695]
@@ -281,9 +305,10 @@ export default {
     }
   },
   watch: {
-    selectedCustomerCode(newCode, oldCode) {
-      if (newCode && newCode !== oldCode) {
-        this.fetchCustomerOrders(newCode);
+    selectedCustomerCode(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        this.fetchCustomerOrders(newValue);
+        this.fetchCustomerSettlementData(newValue);
       }
     }
   },
@@ -293,42 +318,97 @@ export default {
     this.fetchMonthlySalesData();
     this.fetchCustomerList();
     this.$nextTick(() => {
-    if (this.$refs.customerOrdersChart && this.$refs.customerOrdersChart.update) {
-      this.$refs.customerOrdersChart.update();
-    }
-  });
+      if (this.$refs.customerOrdersChart && this.$refs.customerOrdersChart.update) {
+        this.$refs.customerOrdersChart.update();
+      }
+      if (this.$refs.settlementChart) {
+        this.$refs.settlementChart.update();
+      }
+    });
   },
   methods: {
+    async askQuestion() {
+            try {
+                const response = await axios.post('http://localhost:8080/api/ask', { prompt: this.question });
+                this.answer = response.data;
+            } catch (error) {
+                console.error('Error asking question:', error);
+                this.answer = 'Failed to get an answer.';
+            }
+        },
     fetchCustomerOrders(customerCode) {
       axios.get(`http://localhost:8080/api/orders/chart3/${customerCode}`)
-        .then(response => {
-          const labels = response.data.map(item => `${item.year.toString().slice(-2)}-${item.month.toString().padStart(2, '0')}`);
-          const series = response.data.map(item => item.count);
-          this.updateCustomerOrdersChart(labels, series);
-        })
-        .catch(error => console.error('Error fetching customer orders:', error));
+          .then(response => {
+            const labels = response.data.map(item => `${item.year.toString().slice(-2)}/${item.month.toString().padStart(2, '0')}`);
+            const counts = response.data.map(item => item.count);  // Extract counts
+            this.updateCustomerOrdersChart(labels, counts);
+          })
+          .catch(error => console.error('Error fetching customer orders:', error));
     },
-    updateCustomerOrdersChart(labels, series) {
-      this.barChartData = { labels: labels, series: [series] }; // Update the whole object to ensure reactivity
-      this.isDataLoaded = true; // This will trigger any v-if in your template that depends on the chart data
+
+    updateCustomerOrdersChart(labels, counts) {
+      // Assuming the chart expects an array of series, and each series is an array of values.
+      this.barChartData = {
+        labels: labels,
+        series: [counts]  // Encapsulate counts in an array if your chart expects a series array.
+      };
+      // Force reactivity if necessary
+      this.isDataLoaded = true;
+      this.$forceUpdate(); // Optionally force Vue to re-render this component
       this.$nextTick(() => {
         if (this.$refs.customerOrdersChart) {
-          this.$refs.customerOrdersChart.update();  // Assuming your chart component exposes an `update` method
+          this.$refs.customerOrdersChart.update();  // Make sure the chart updates
         }
       });
     },
+    fetchCustomerSettlementData(customerCode) {
+      axios.get(`http://localhost:8080/api/orders/${customerCode}/count`)
+          .then(response => {
+            this.updatePieChartData(response.data);
+          })
+          .catch(error => {
+            console.error('Error fetching settlement data:', error);
+          });
+    },
+    updatePieChartData(data) {
+      const total = data['정산 완료'] + data['미정산'] + data['정산 요청'];
+      if (total === 0) {
+        this.showNoOrdersMessage = true;
+        this.pieChart.data.labels = [];
+        this.pieChart.data.series = [];
+      } else {
+        this.showNoOrdersMessage = false;
+        const percentages = [
+          { value: (data['정산 완료'] / total * 100).toFixed(2), label: '정산 완료' },
+          { value: (data['미정산'] / total * 100).toFixed(2), label: '미정산' },
+          { value: (data['정산 요청'] / total * 100).toFixed(2), label: '정산 요청' }
+        ];
+
+        this.pieChart.data = {
+          labels: percentages.map(item => `${item.value}%`),
+          series: percentages.map(item => parseFloat(item.value))
+        };
+      }
+
+      this.$nextTick(() => {
+        if (this.$refs.settlementChart && !this.showNoOrdersMessage) {
+          this.$refs.settlementChart.update();
+        }
+      });
+    },
+
     fetchCustomerList() {
       const businessId = this.$route.params.businessId;
       axios.get(`http://localhost:8080/api/orders/chart2/${businessId}`)
-        .then(response => {
-          this.customers = response.data.map(customer => ({
-            contactName: customer.contactName,
-            contactCode: customer.contactCode
-          }));
-        })
-        .catch(error => {
-          console.error("고객 목록을 가져오는 데 실패했습니다.", error);
-        });
+          .then(response => {
+            this.customers = response.data.map(customer => ({
+              contactName: customer.contactName,
+              contactCode: customer.contactCode
+            }));
+          })
+          .catch(error => {
+            console.error("고객 목록을 가져오는 데 실패했습니다.", error);
+          });
     },
     async fetchMonthlySalesData() {
       try {
@@ -374,56 +454,57 @@ export default {
     fetchOrderList() {
       const businessId = this.$route.params.businessId;
       axios.get(`http://localhost:8080/api/orders/id/${businessId}`)
-        .then(response => {
-          const data = response.data;
-          const startOfWeek = new Date();
-          startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + (startOfWeek.getDay() === 0 ? -6 : 1));
-          startOfWeek.setHours(0, 0, 0, 0);
+          .then(response => {
+            const data = response.data;
+            const startOfWeek = new Date();
+            startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + (startOfWeek.getDay() === 0 ? -6 : 1));
+            startOfWeek.setHours(0, 0, 0, 0);
 
-          let totalSales = 0;
-          let completedOrders = 0;
-          let deliveryOrders = 0;
-          let readyOrders = 0;
+            let totalSales = 0;
+            let completedOrders = 0;
+            let deliveryOrders = 0;
+            let readyOrders = 0;
 
-          data.forEach(order => {
-            const orderDate = new Date(order.orderDate);
-            if (orderDate >= startOfWeek) {
-              switch (order.orderStatus) {
-                case '배송 완료':
-                  completedOrders++;
-                  totalSales += order.orderPrice; // 주문 상태가 '배송 완료'인 경우에 매출액을 더합니다.
-                  break;
-                case '배송 중':
-                  deliveryOrders++;
-                  break;
-                case '출고 준비 중':
-                  readyOrders++;
-                  break;
+            data.forEach(order => {
+              const orderDate = new Date(order.orderDate);
+              if (orderDate >= startOfWeek) {
+                switch (order.orderStatus) {
+                  case '배송 완료':
+                    completedOrders++;
+                    totalSales += order.orderPrice; // 주문 상태가 '배송 완료'인 경우에 매출액을 더합니다.
+                    break;
+                  case '배송 중':
+                    deliveryOrders++;
+                    break;
+                  case '출고 준비 중':
+                    readyOrders++;
+                    break;
+                }
               }
-            }
-          });
+            });
 
-          this.weeklyCompletedOrders = completedOrders;
-          this.weeklyReadyOrders = readyOrders;
-          this.weeklydeliveryOrders = deliveryOrders;
-          this.weeklySales = totalSales;
-        })
-        .catch(error => {
-          console.error("Failed to fetch orders:", error);
-        });
+            this.weeklyCompletedOrders = completedOrders;
+            this.weeklyReadyOrders = readyOrders;
+            this.weeklydeliveryOrders = deliveryOrders;
+            this.weeklySales = totalSales;
+          })
+          .catch(error => {
+            console.error("Failed to fetch orders:", error);
+          });
     },
     fetchAdjustmentReqList() {
       const businessId = this.$route.params.businessId;
-      axios.get(`http://localhost:8080/api/orders/req/${businessId}`)
-        .then(response => {
-          this.tableData.data = response.data.map(item => ({
-            '고객명': item.contactName,
-            '고객코드': item.contactCode
-          }));
-        })
-        .catch(error => {
-          console.error("Failed to fetch adjustment requests:", error);
-        });
+      axios.get(`http://localhost:8080/api/orders/request/${businessId}`)
+          .then(response => {
+            this.tableData.data = response.data.map(item => ({
+              '고객명': item.contactName,
+              '고객코드': item.contactCode,
+              '정산 요청 금액': item.price
+            }));
+          })
+          .catch(error => {
+            console.error("Failed to fetch adjustment requests:", error);
+          });
     }
     // continue with other methods...
   }
