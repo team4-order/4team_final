@@ -38,12 +38,32 @@ import InputCustomer from 'src/pages/InputCustomer.vue'
 import Delivery from 'src/pages/Delivery.vue'
 import CustomerDetail from 'src/pages/CustomerDetail.vue'
 import CAdjustment from 'src/pages/CAdjustment.vue'
+import Login from "../loginpage/Login.vue";
+import Register from "../loginpage/Register.vue";
+
+
+
 
 const routes = [
+  /*{
+    path: '/login',
+    name: 'App',
+    component: function (){
+      return import('../App.vue')
+    }
+  },*/
+  {
+    path: '/login',
+
+    component: Login,
+  },
+  {
+    path: '/register',
+    component: Register,
+  },
   {
     path: '/',
-    component: DashboardLayout,
-    redirect: '/admin/overview'
+    component: Login,
   },
   {
     path: '/admin',
@@ -244,7 +264,8 @@ const routes = [
       }
     ]
   },
-  { path: '*', component: NotFound }
+  { path: '*',
+    component: NotFound }
 ]
 
 /**
@@ -255,5 +276,6 @@ const routes = [
  var res= require('../components/Dashboard/Views/' + name + '.vue');
  return res;
  };**/
+
 
 export default routes;
