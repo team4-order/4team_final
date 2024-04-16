@@ -10,46 +10,37 @@
       <label for="username" >Username</label>
       <input type="text" id="username" name="username" v-model="input.username" placeholder="Username" />
     </div>
+
+      <button type="button" v-on:click="register">Register</button><br><br><br><br><br>
+
+
+
+
+
+
+
+
+
+
+
+  <div class="form-inputs">
+
     <div class="form-inputs">
 
-      <div class="form-inputs">
+      <label for="password" >Password</label> <br>
+      <div class=" tooltip">
+        <input type="password" id="password" name="password" v-model="input.password" @mouseover="showTooltip = true" @mouseleave="showTooltip = false" placeholder="Password" />
 
-        <label for="password" >Password</label> <br>
-        <div class=" tooltip">
-          <input type="password" id="password" name="password" v-model="input.password" @mouseover="showTooltip = true" @mouseleave="showTooltip = false" placeholder="Password" />
-
-          <span class="tooltiptext" v-show="showTooltip">영문 숫자 특수기호 조합 8자리 이상 16자리 이하로 생성해주세요.</span>
-        </div>
+        <span class="tooltiptext" v-show="showTooltip">영문 숫자 특수기호 조합 8자리 이상 16자리 이하로 생성해주세요.</span>
       </div>
-      <button type="button" v-on:click="register">Register</button><br><br><br><br><br>
     </div>
-
-
-
-
-
 
 
   </div>
+</div>
 
 
 
-
-
-
-<!--  <div id="Register">
-    <h1>Register</h1>
-    <div class="form-inputs">
-      <label for="username">Username</label>
-      <input type="text" id="username" name="username" v-model="input.username" placeholder="Username" />
-    </div>
-    <div class="form-inputs">
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" v-model="input.password" placeholder="Password" />
-    </div>
-    <button>비밀번호 : 영문 숫자 특수기호 조합 8자리 이상 16자리 이하</button>
-    <button type="button" v-on:click="register()">Register</button>
-  </div>-->
 </template>
 
 <script>
