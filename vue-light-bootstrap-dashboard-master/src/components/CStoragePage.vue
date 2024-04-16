@@ -108,7 +108,7 @@ export default {
         return;
       }
 
-      axios.delete(`/api/cstorage/delete/${customerCode}/${storageCode}`)
+      axios.delete(`/api/cstorage1/delete/${customerCode}/${storageCode}`)
         .then(() => {
           alert('창고 코드가 성공적으로 삭제되었습니다.');
           this.fetchCStorages(); // 목록 새로고침
@@ -121,14 +121,14 @@ export default {
 
 
     fetchContacts() {
-      axios.get('/api/cstorage/contacts')
+      axios.get('/api/cstorage1/contacts')
         .then(response => {
           this.uniqueCustomers = response.data;
         })
         .catch(error => console.error('Error fetching contacts:', error));
     },
     fetchCStorages() {
-      axios.get('/api/cstorage/list')
+      axios.get('/api/cstorage1/list')
         .then(response => {
           this.cStorages = response.data;
         })
@@ -139,7 +139,7 @@ export default {
         customerCode: this.selectedCustomerCode,
         storageCode: this.newStorageCode,
       };
-      axios.post('/api/cstorage/addOrUpdate', newCStorage)
+      axios.post('/api/cstorage1/addOrUpdate', newCStorage)
         .then(() => {
           alert('창고 코드가 성공적으로 추가되었습니다.');
           this.fetchCStorages();

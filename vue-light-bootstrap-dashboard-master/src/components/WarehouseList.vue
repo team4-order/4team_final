@@ -55,7 +55,7 @@
 
               <!-- 선택된 창고가 없을 때 안내 메시지 표시 -->
               <div v-else class="text-center">
-                <h5 class="text-muted">창고목록선택시 ~~~</h5>
+                <h5 class="text-muted">창고목록선택시 과일 수량 그래프가 나옵니다.</h5>
               </div>
             </div>
           </div>
@@ -112,7 +112,7 @@ export default {
   },
   methods: {
     fetchWarehouses() {
-      axios.get('http://localhost:8080/api/warehouses')
+      axios.get('/api/warehouses')
         .then(response => {
           this.warehouses.data = response.data.map(warehouse => ({
             '창고 코드': warehouse.contactCode,

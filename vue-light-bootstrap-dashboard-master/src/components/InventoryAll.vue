@@ -173,9 +173,7 @@ export default {
 
 
     performSearch() {
-      // 선택한 검색 카테고리에 따라 필터링
       if (this.searchCategory && this.searchQuery) {
-        // 수량 또는 판매 가격으로 검색할 때 숫자로 비교
         if (['inventoryQuantity', 'salesPrice'].includes(this.searchCategory)) {
           const searchNumber = Number(this.searchQuery);
           this.filteredInventories = this.inventories.filter(inventory => {
@@ -183,17 +181,15 @@ export default {
             return !isNaN(searchNumber) && value === searchNumber;
           });
         } else {
-          // 기타 문자열 기반의 카테고리(상품 이름, 상품 코드 등)는 소문자 포함 여부로 필터링
           this.filteredInventories = this.inventories.filter(inventory => {
             const value = inventory[this.searchCategory] ? inventory[this.searchCategory].toString().toLowerCase() : '';
             return value.includes(this.searchQuery.toLowerCase());
           });
         }
       } else {
-        // 검색 조건이나 검색어가 지정되지 않은 경우 전체 목록을 표시
         this.filteredInventories = this.inventories;
       }
-    },
+    }
 
 
 
