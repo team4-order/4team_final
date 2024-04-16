@@ -28,7 +28,7 @@ import CustomerOrderDetail from 'src/pages/TableList5.vue'
 import OrderApply1 from 'src/pages/TableList2.vue'
 import OrderApply from 'src/pages/TableList7.vue'
 import Overview1 from 'src/pages/Overview1.vue'
-/*import OpenAI from 'src/pages/OpenAI.vue'*/
+import OpenAI from 'src/pages/OpenAI.vue'
 /*import { component } from 'vue/types/umd.js'*/
 /*import CustomerList from 'src/components/CustomerList.vue'*/
 import BCustomerList from 'src/pages/BCustomerList.vue'
@@ -154,11 +154,11 @@ const routes = [
         name: 'Overview1',
         component: Overview1
       },
-      /*{
+      {
         path: 'ask',
         name: 'OpenAI',
         component: OpenAI
-      },*/
+      },
       {
         path: 'bcustomer_list',
         name: 'B Customer List',
