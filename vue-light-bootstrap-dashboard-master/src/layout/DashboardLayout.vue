@@ -91,7 +91,6 @@
         <p>공급처 관리</p>
       </sidebar-link>
 
-
       <sidebar-link to="/admin/fruit">
         <i class="nc-icon nc-chart-pie-36"></i>
         <p>과일 목록</p>
@@ -120,7 +119,6 @@
           <p>Upgrade to PRO</p>
         </sidebar-link>
       </template>
->>>>>>> origin/dev1/0.1.0
     </side-bar>
     <div class="main-panel">
       <top-navbar></top-navbar>
