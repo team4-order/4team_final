@@ -18,14 +18,14 @@
               </option>
             </select>
 
-            <input type="text" v-model="searchQuery" placeholder="상품명 검색" class="form-control" />
-            <l-table class="table-hover table-striped" :columns="goodsList.columns" :data="goodsList.data"
+            <div class="mb-3"></div>
+            <input type="text" v-model="searchQuery" :placeholder="'상품명 검색'" class="form-control" />
+            <div class="mb-3"></div>
+
+            <l-table class="table-hover table-striped" :columns="goodsList.columns" :data="filteredData"
               :search-query="searchQuery" :editable="true" @update-total="updateTotalAmount"
               @add-row="makeRowPermanent">
             </l-table>
-
-
-
 
           </card>
         </div>
@@ -56,20 +56,24 @@ export default {
         data: [],
         filteredData: []
       },
-      dropdownTitle: 'Select Storage Code',
-      totalAmount: 0
+      dropdownTitle: 'Select Storage Code'
     };
   },
   computed: {
-    // 검색된 데이터를 계산된 속성으로 필터링
+    // 선택된 검색 카테고리에 따라 데이터를 필터링
     filteredData() {
-      return this.goodsList.data.filter(goods => {
-        return goods['상품명'].toLowerCase().includes(this.searchQuery.toLowerCase());
-      });
+      const query = this.searchQuery.toLowerCase();
+      if (this.selectedSearchName === 'name') {
+        console.log('Filtering by name');
+        return this.goodsList.data.filter(goods => goods['상품명'].toLowerCase().includes(query));
+      } else {
+        console.log('No filtering');
+        return this.goodsList.data;
+      }
     },
     totalAmount() {
       return this.goodsList.data.reduce((acc, goods) => {
-        return acc + (goods['가격(BOX)'] * goods['주문 수량'].value);
+        return acc + (goods['가격(BOX)'] * goods['주문 수량']);
       }, 0);
     }
   },
@@ -111,6 +115,7 @@ export default {
     fetchGoodsList(storageCode) {
       axios.get(`http://localhost:8080/api/total/storage/${storageCode}`)
         .then(response => {
+          console.log(response.data);
           this.goodsList.data = response.data.map(goods => ({
             ...goods,
             visible: false, // Initially, rows are not visible
@@ -196,5 +201,8 @@ export default {
 
 .table tbody tr:last-child td {
   font-weight: bold;
+}
+.btn-info {
+  margin-right: 20px;
 }
 </style>
