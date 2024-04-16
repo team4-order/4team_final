@@ -39,12 +39,66 @@ import Delivery from 'src/pages/Delivery.vue'
 import CustomerDetail from 'src/pages/CustomerDetail.vue'
 import CAdjustment from 'src/pages/CAdjustment.vue'
 
+
+// 전승민 login route
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import Login from "../views/Login.vue";
+
+Vue.use(VueRouter)
+//
+
+const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes
+})
+
+
+
 const routes = [
+  // 전승민 login route 시작
   {
+    path: '/',
+    name: 'Login',
+    component: Login
+  },
+  {
+    path: '/secure',
+    name: 'Secure',
+    component: function () {
+      return import(/* webpackChunkName: "about" */ '../views/Secure.vue')
+    }
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: function () {
+      return import(/* webpackChunkName: "about" */ '../views/Login.vue')
+
+    }
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: function() {
+      return import('../views/Register.vue')
+    }
+
+  },
+  {
+    path: '/login',
+    name: 'App1',
+    component: function (){
+      return import('../App.vue')
+    }
+  },
+  // 전승민 login route 종료
+  /*{
     path: '/',
     component: DashboardLayout,
     redirect: '/admin/overview'
-  },
+  },*/
   {
     path: '/admin',
     component: DashboardLayout,

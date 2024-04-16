@@ -7,11 +7,23 @@ import GlobalComponents from './globalComponents'
 import GlobalDirectives from './globalDirectives'
 // Sidebar on the right. Used as a local plugin in DashboardLayout.vue
 import SideBar from './components/SidebarPlugin'
+import Vue from 'vue'
+import App from './App.vue'
+import router from './router'
+import VModal from 'vue-js-modal'
 
 // asset imports
 import 'bootstrap/dist/css/bootstrap.css'
 import './assets/sass/light-bootstrap-dashboard.scss'
 import './assets/css/demo.css'
+
+Vue.config.productionTip = false
+Vue.use(VModal, { dynamic: true })
+
+new Vue({
+  router,
+  render: function (h) { return h(App) }
+}).$mount('#app')
 
 /**
  * This is the main Light Bootstrap Dashboard Vue plugin where dashboard related plugins are registerd.

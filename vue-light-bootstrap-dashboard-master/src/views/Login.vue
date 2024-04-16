@@ -1,6 +1,6 @@
 <template>
   <div id="login">
-    <h1 id="logo">OMS    Login Page</h1>
+    <h1 id="logo">OMS Login Page</h1>
     <div class="form-inputs">
       <label for="username" >Username</label>
       <input type="text" id="username" name="username" v-model="input.username" placeholder="Username" />
