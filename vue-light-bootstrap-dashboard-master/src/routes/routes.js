@@ -29,7 +29,7 @@ import OrderApply1 from 'src/pages/TableList2.vue'
 import OrderApply from 'src/pages/TableList7.vue'
 import Overview1 from 'src/pages/Overview1.vue'
 /*import OpenAI from 'src/pages/OpenAI.vue'*/
-/*import { component } from 'vue/types/umd.js'*/
+// import { component } from 'vue/types/umd.js'
 /*import CustomerList from 'src/components/CustomerList.vue'*/
 import BCustomerList from 'src/pages/BCustomerList.vue'
 import BAdjustment from 'src/pages/BAdjustment.vue' // 경로 수정
@@ -38,6 +38,7 @@ import InputCustomer from 'src/pages/InputCustomer.vue'
 import Delivery from 'src/pages/Delivery.vue'
 import CustomerDetail from 'src/pages/CustomerDetail.vue'
 import CAdjustment from 'src/pages/CAdjustment.vue'
+// import { component } from 'vue/types/umd.js'
 
 const routes = [
   {
@@ -238,7 +239,7 @@ const routes = [
 	      component: Icons
       },
       {
-	      path: ':customerCode',
+	      path: 'customer/:customerCode',
         name: 'customer Adjustment',
 	      component: CAdjustment
       }
