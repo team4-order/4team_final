@@ -153,7 +153,7 @@ export default {
   methods: {
     fetchInventories() {
       const storageCode = this.$route.params.storageCode;
-      axios.get(`/api/inventories/read/${storageCode}`)
+      axios.get(`http://localhost:8080/api/inventories/read/${storageCode}`)
         .then(response => {
           this.inventories = response.data;
         })

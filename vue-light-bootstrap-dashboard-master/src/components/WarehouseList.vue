@@ -137,7 +137,7 @@ export default {
     },
     async fetchInventoryData(storageCode) {
       try {
-        const response = await axios.get(`/api/inventories/read/${storageCode}`);
+        const response = await axios.get(`http://localhost:8080/api/inventories/read/${storageCode}`);
         const inventoryData = response.data;
         let productQuantities = {};
 

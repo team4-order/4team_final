@@ -107,7 +107,7 @@ export default {
 
   methods: {
     fetchInventories() {
-      axios.get('/api/inventories').then(response => {
+      axios.get('http://localhost:8080/api/inventories').then(response => {
         this.inventories = response.data;
       }).catch(error => {
         console.error("재고 목록을 가져오는 데 실패했습니다.", error);

@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     fetchVendors() {
-      axios.get('/api/vendors')
+      axios.get('http://localhost:8080/api/vendors')
         .then(response => {
           // API 응답에서 contact_delimiter가 "V"인 항목만 필터링
           const vendors = response.data.filter(vendor => vendor.contactDelimiter === 'V');
