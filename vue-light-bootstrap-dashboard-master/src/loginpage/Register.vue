@@ -147,6 +147,7 @@ export default {
   background: #b6b5a7;
 }*/
 
+/*
 #login {
   margin: 0 auto;
   padding: 30px;
@@ -157,6 +158,24 @@ export default {
   border-radius: 20px;
   text-align: left;
   opacity: 0.78;
+}
+*/
+
+#login {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  margin: 0;
+  padding: 30px;
+  width: auto;
+  height: auto;
+  overflow: auto;
+  background: rgba(252, 244, 212, 1.0); /* 완전 불투명한 배경색 설정 */
+  border-radius: 20px;
+  text-align: left;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 1000;
 }
 
 #login h2 {

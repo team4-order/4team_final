@@ -1,47 +1,46 @@
-<template class = "bodys">
-  <div id="login">
-    <h1 id="logo">OMS    Login Page</h1>
-    <div class="form-inputs">
-      <label for="username" >Username</label>
-      <input type="text" id="username" name="username" v-model="input.username" placeholder="Username" />
+<template>
+  <div class="bodys">
+
+    <div class="video-container">
+      <video autoplay muted loop>
+        <source src="@/test1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
     </div>
-    <div class="form-inputs">
+
+
+    <div id="login">
+      <h1 id="logo">OMS Login Page</h1>
+      <div class="form-inputs">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" v-model="input.username" placeholder="Username" />
+      </div>
 
       <div class="form-inputs">
+        <label for="password">Password</label> <br>
+        <input type="password" id="password" name="password" v-model="input.password" placeholder="Password" />
+      </div>
+      <button type="button" @click="login">Login</button>
 
-        <label for="password" >Password</label> <br>
+      <br><br><br><br>
 
-        <input type="password" id="password" name="password" v-model="input.password"  placeholder="Password" />
+      <span class="font left-align">구글 아이디가 있으신가요?</span>
+      <br><br>
 
+      <button type="button" class="GLoginButton" @click="GoogleLogin">Google 로그인</button>
 
+      <img v-if="loginstatus" src="../assets/check.png" alt="Authenticated Image" height="23" width="23" align="right">
 
+      <br><br><br>
+      <div v-if="loginstatus">
+        <button type="button" class="GLoginButton" @click="checkUsernameExistence">접속하기</button>
+      </div>
     </div>
-      <button type="button" v-on:click="login">Login</button>
-    </div>
-
-    <br><br><br><br>
-
-
-
-
-
-    <span class="font left-align">구글 아이디가 있으신가요?</span>
-<br><br>
-
-
-      <button type="button" class = "GLoginButton" v-on:click="GoogleLogin" >Google 로그인</button>
-
-    <img v-if=" this.loginstatus" src="../assets/check.png" alt="Authenticated Image" height="23" width="23" align="right">
-
-<br><br><br>
-  <div v-if ="this.loginstatus">
-    <button type="button" class = "GLoginButton" v-on:click="checkUsernameExistence">접속하기</button>
-  </div>
-
-
 
   </div>
 </template>
+
+
 
 <script>
 import axios from 'axios';
@@ -176,7 +175,7 @@ export default {
 .buttonG{
   /*display: inline-block;*/
   text-align: center;
- /* text-align: center;*/
+  /* text-align: center;*/
 
 }
 .buttonCenter{
@@ -192,17 +191,6 @@ export default {
   background: #b6b5a7;
 }*/
 
-#login {
-  margin: 0 auto;
-  padding: 30px;
-  width: 400px;
-  height: auto;
-  overflow: hidden;
-  background: #fcf4d4;
-  border-radius: 20px;
-  text-align: left;
-  opacity: 0.78;
-}
 
 #login h1 {
   margin: 0 auto;
@@ -356,4 +344,41 @@ button:active {
 #login button:last-child {
   margin-right: 150px; !* 마지막 버튼의 오른쪽 여백을 없앱니다. *!
 }*/
+
+
+.video-container {
+  position: fixed; /* 화면에 고정 */
+  top: 0;
+  left: 0;
+  width: 100%; /* 전체 화면 너비 */
+  height: 100%; /* 전체 화면 높이 */
+  overflow: hidden;
+  z-index: -1; /* 동영상을 항상 배경으로 설정 */
+}
+
+video {
+  width: 100vw; /* 뷰포트 너비 */
+  height: 100vh; /* 뷰포트 높이 */
+  object-fit: cover; /* 비디오가 화면을 완전히 채우도록 설정 */
+}
+
+#login {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  margin: 0;
+  padding: 30px;
+  width: auto;
+  height: auto;
+  overflow: auto;
+  background: rgba(252, 244, 212, 1.0); /* 완전 불투명한 배경색 설정 */
+  border-radius: 20px;
+  text-align: left;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+
 </style>
+
