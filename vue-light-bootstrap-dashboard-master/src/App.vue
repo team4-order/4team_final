@@ -56,7 +56,7 @@ import axios from "axios";
         try {
           const userNow = sessionStorage.getItem('user');
           console.log(userNow);
-          if (userNow) {
+          if (userNow && userNow.length >0) {
             const response = await axios.post('http://localhost:8080/api/users/findallusername', {userNow});
             this.usernameExists = response.data.usernameExists;
             console.log(this.usernameExists);
