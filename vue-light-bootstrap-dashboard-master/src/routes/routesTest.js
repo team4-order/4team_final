@@ -66,8 +66,10 @@ const routes = [
   },
   {
     path: '/admin',
-    component: DashboardLayout,
-
+    /*component: DashboardLayout,*/
+    component: function () {
+      return import('../layout/DashboardLayout.vue')
+    },
     /*redirect: '/admin/overview',*/
     children: [
       {
@@ -246,19 +248,19 @@ const routes = [
         component: OrderApply
       },
       {
-        path: '/customer/overview',
-        name: 'Overview',
-        component: Overview
+	      path: '/customer/overview',
+	      name: 'Overview',
+	      component: Overview
       },
       {
         path: '/customer/icons',
-        name: 'Icons',
-        component: Icons
+	      name: 'Icons',
+	      component: Icons
       },
       {
-        path: ':customerCode',
+	      path: ':customerCode',
         name: 'customer Adjustment',
-        component: CAdjustment
+	      component: CAdjustment
       }
     ]
   },

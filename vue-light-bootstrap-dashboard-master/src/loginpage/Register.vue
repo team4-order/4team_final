@@ -1,4 +1,4 @@
-<template>
+<template class = "bodys">
 
 
 
@@ -138,14 +138,14 @@ export default {
 
 <style>
 
-body {
+/*body {
   margin: 70px;
   font-family: Arial, Tahoma, sans-serif;
   font-size: 10px;
   font-weight: bold;
   direction: ltr;
   background: #b6b5a7;
-}
+}*/
 
 #login {
   margin: 0 auto;

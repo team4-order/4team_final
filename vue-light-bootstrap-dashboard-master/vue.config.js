@@ -34,11 +34,16 @@ module.exports = {
     sourceMap: process.env.NODE_ENV !== 'production'
   },
   devServer: {
-    proxy: {
+    historyApiFallback: true,
+   /* proxy: {
       '/': {
-        target: "http://localhost:8080",
+        target: "http://localhost:8081/",
         changeOrigin: true,
-      }
-    }
+      },*/
+      /*'/admin': {
+        target : "http://localhost:8081/admin",
+        changeOrigin:true,
+      }*/
+
   }
 };
