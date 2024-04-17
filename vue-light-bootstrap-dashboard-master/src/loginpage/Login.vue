@@ -1,4 +1,4 @@
-<template>
+<template class = "bodys">
   <div id="login">
     <h1 id="logo">OMS    Login Page</h1>
     <div class="form-inputs">
@@ -16,8 +16,10 @@
 
 
     </div>
-      <button type="button" v-on:click="login">Login</button><br><br><br><br><br>
+      <button type="button" v-on:click="login">Login</button>
     </div>
+
+    <br><br><br><br>
 
 
 
@@ -44,7 +46,6 @@
 <script>
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import router from '@/router';
 
 axios.defaults.withCredentials = true;
 
@@ -79,12 +80,16 @@ export default {
     async login() {
       try {
         const formData = new FormData();
+
         formData.append("username", this.input.username);
+        const userIn = this.input.username;
+
         formData.append("password", this.input.password);
 
         const response = await axios.post("http://localhost:8080/login", formData);
 
-        Swal.fire({
+
+        await Swal.fire({
           title: 'Login Success!',
           text: '로그인 되었습니다. 메인 페이지로 이동합니다.',
           icon: 'success',
@@ -93,12 +98,19 @@ export default {
 
         const token = response.headers.authorization;
         localStorage.setItem('token', token);
+        //window.sessionStorage.setItem("user",instantUserName);
+        sessionStorage.setItem('user', userIn);
+
         this.$emit("authenticated", true);
-        this.$router.replace({ name: "Secure" });
+        this.$router.replace({ name: "Overview" });
+        /*this.$router.replace({ name: "Secure" });*/
         console.log("Logged in successfully!");
         console.log(response.data);
 
       } catch (error) {
+        const userIn = "";
+
+
         await Swal.fire({
           title: 'Login failed!',
           text: '아이디 및 비밀번호를 확인해주세요.',
@@ -148,6 +160,8 @@ export default {
       } catch (error) {
         console.error('Error checking username existence:', error);
       }
+    },redirect(){
+      this.$router.replace({ name: "Register" });
     },
   }
 }
@@ -169,14 +183,14 @@ export default {
   /*display: inline-block;*/
   text-align: center;
 }
-body {
+/*body {
   margin: 70px;
   font-family: Arial, Tahoma, sans-serif;
   font-size: 12px;
   font-weight: bold;
   direction: ltr;
   background: #b6b5a7;
-}
+}*/
 
 #login {
   margin: 0 auto;

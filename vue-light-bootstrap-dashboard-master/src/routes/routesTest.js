@@ -28,7 +28,7 @@ import CustomerOrderDetail from 'src/pages/TableList5.vue'
 import OrderApply1 from 'src/pages/TableList2.vue'
 import OrderApply from 'src/pages/TableList7.vue'
 import Overview1 from 'src/pages/Overview1.vue'
-import OpenAI from 'src/pages/OpenAI.vue'
+/*import OpenAI from 'src/pages/OpenAI.vue'*/
 /*import { component } from 'vue/types/umd.js'*/
 /*import CustomerList from 'src/components/CustomerList.vue'*/
 import BCustomerList from 'src/pages/BCustomerList.vue'
@@ -38,11 +38,9 @@ import InputCustomer from 'src/pages/InputCustomer.vue'
 import Delivery from 'src/pages/Delivery.vue'
 import CustomerDetail from 'src/pages/CustomerDetail.vue'
 import CAdjustment from 'src/pages/CAdjustment.vue'
-
 import Login from "../loginpage/Login.vue";
 import Register from "../loginpage/Register.vue";
 import VueRouter from 'vue-router'
-// import { component } from 'vue/types/umd.js'
 
 
 const routes = [
@@ -68,8 +66,10 @@ const routes = [
   },
   {
     path: '/admin',
-    component: DashboardLayout,
-
+    /*component: DashboardLayout,*/
+    component: function () {
+      return import('../layout/DashboardLayout.vue')
+    },
     /*redirect: '/admin/overview',*/
     children: [
       {
@@ -174,11 +174,11 @@ const routes = [
         name: 'Overview1',
         component: Overview1
       },
-      {
+      /*{
         path: 'ask',
         name: 'OpenAI',
         component: OpenAI
-      },
+      },*/
       {
         path: 'bcustomer_list',
         name: 'B Customer List',
@@ -248,20 +248,19 @@ const routes = [
         component: OrderApply
       },
       {
-        path: '/customer/overview',
-        name: 'Overview',
-        component: Overview
+	      path: '/customer/overview',
+	      name: 'Overview',
+	      component: Overview
       },
       {
         path: '/customer/icons',
-        name: 'Icons',
-        component: Icons
+	      name: 'Icons',
+	      component: Icons
       },
       {
-
-	      path: 'customer/:customerCode',
+	      path: ':customerCode',
         name: 'customer Adjustment',
-        component: CAdjustment
+	      component: CAdjustment
       }
     ]
   },

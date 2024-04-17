@@ -1,4 +1,4 @@
-<template>
+<template class = "bodys">
 
 
 
@@ -15,7 +15,7 @@
       <div class="form-inputs">
 
         <label for="password" >Password</label> <br>
-        <div class=" tooltip">
+        <div class="tooltips">
           <input type="password" id="password" name="password" v-model="input.password" @mouseover="showTooltip = true" @mouseleave="showTooltip = false" placeholder="Password" />
 
           <span class="tooltiptext" v-show="showTooltip">영문 숫자 특수기호 조합 8자리 이상 16자리 이하로 생성해주세요.</span>
@@ -37,19 +37,19 @@
 
 
 
-<!--  <div id="Register">
-    <h1>Register</h1>
-    <div class="form-inputs">
-      <label for="username">Username</label>
-      <input type="text" id="username" name="username" v-model="input.username" placeholder="Username" />
-    </div>
-    <div class="form-inputs">
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" v-model="input.password" placeholder="Password" />
-    </div>
-    <button>비밀번호 : 영문 숫자 특수기호 조합 8자리 이상 16자리 이하</button>
-    <button type="button" v-on:click="register()">Register</button>
-  </div>-->
+  <!--  <div id="Register">
+      <h1>Register</h1>
+      <div class="form-inputs">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" v-model="input.username" placeholder="Username" />
+      </div>
+      <div class="form-inputs">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" v-model="input.password" placeholder="Password" />
+      </div>
+      <button>비밀번호 : 영문 숫자 특수기호 조합 8자리 이상 16자리 이하</button>
+      <button type="button" v-on:click="register()">Register</button>
+    </div>-->
 </template>
 
 <script>
@@ -58,7 +58,6 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 
 
-import router from '@/router'; // Import your Vue Router instance
 
 
 
@@ -139,14 +138,14 @@ export default {
 
 <style>
 
-body {
+/*body {
   margin: 70px;
   font-family: Arial, Tahoma, sans-serif;
   font-size: 10px;
   font-weight: bold;
   direction: ltr;
   background: #b6b5a7;
-}
+}*/
 
 #login {
   margin: 0 auto;
@@ -211,12 +210,12 @@ body {
   width: 100%;
 }
 
-.tooltip {
+.tooltips {
   position: relative;
   /*display: inline-block;*/
 }
 
-.tooltip .tooltiptext {
+.tooltips .tooltiptext {
   visibility: hidden;
   width: 200px;
   height: auto;
@@ -235,7 +234,7 @@ body {
 
 }
 
-.tooltip .tooltiptext::after {
+.tooltips .tooltiptext::after {
   content: "";
   position: absolute;
   top: 100%;
@@ -246,7 +245,7 @@ body {
   border-color: #555 transparent transparent transparent;
 }
 
-.tooltip:hover .tooltiptext {
+.tooltips:hover .tooltiptext {
   visibility: visible;
   opacity: 0.7;
 }
