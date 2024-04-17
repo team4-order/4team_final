@@ -121,6 +121,8 @@ export default {
         const response = await axios.get(`http://localhost:8080/api/contact/customer/${this.$route.params.customerCode}`);
         this.customer = { ...response.data };
         this.originalCustomerData = { ...response.data };
+         // 비밀번호 필드 데이터를 비워줌
+        this.customer.customerPassword = '';
       } catch (error) {
         console.error('Failed to fetch customer details.', error);
       }
@@ -134,6 +136,7 @@ export default {
       } else {
         // 수정하기 버튼 클릭 시 변경 전의 원본 데이터로 복원
         this.customer = { ...this.originalCustomerData };
+        this.customer.customerPassword = '';
       }
       console.log('toggleEditing()');
     },
@@ -149,13 +152,13 @@ export default {
           aboutMe: this.customer.aboutMe,
         };
 
-        const response = await axios.put(`http://localhost:8080/api/contact/customer/${contactCode}`, updatedData);
+        const response = await axios.put(`http://localhost:8080/api/contact/customers/${contactCode}`, updatedData);
 
         if (response.status === 200) {
           this.customer = { ...response.data };
           this.originalCustomerData = { ...response.data };
           this.isEditing = false;
-          alert("Profile updated successfully!"); // 사용자에게 성공 알림
+          alert("프로필 수정이 완료되었습니다."); // 사용자에게 성공 알림
         } else {
           console.error('Failed to update profile. Unexpected response:', response);
           alert("Failed to update profile. Please try again."); // 사용자에게 실패 알림

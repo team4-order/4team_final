@@ -34,7 +34,10 @@
             <div class="adjustment">
               <l-table class="table-hover table-striped" :columns="Cadjustments.columns" :data="Cadjustments.filteredData">
                 <template slot="columns">
-                  <th>선택</th>
+                  <th>
+                    <!-- Bind the select all checkbox to allSelected -->
+                    <base-checkbox v-model="allSelected" @change="selectAll($event)"/>
+                  </th>
                   <th v-for="column in Cadjustments.columns">{{ column }}</th>
                 </template>
                 <template slot-scope="{ row }">
@@ -52,9 +55,11 @@
   </div>
 </template>
 
+
 <script>
 import LTable from 'src/components/Table.vue'
 import Card from 'src/components/Cards/Card.vue'
+import BaseCheckbox from 'src/components/Inputs/BaseCheckbox.vue' // 가정: BaseCheckbox 컴포넌트 경로
 import axios from 'axios'
 
 export default {
@@ -66,6 +71,7 @@ export default {
     return {
       selectedStatus: '', // 선택된 정산 상태
       statuses: [], // 정산 상태 카테고리
+      allSelected: false, // 추가: 모든 항목이 선택되었는지 여부를 나타냄
       Cadjustments: {
         columns: ['주문번호', '주문일자', '금액', '정산상태', '배송일자'], // 테이블 컬럼
         data: [], // 전체 데이터
@@ -94,6 +100,7 @@ export default {
             '판매처 코드': Badjustment.customerCode
           }));
           this.createStatusCategories(); // 정산 상태 카테고리 생성
+          this.setDefaultDateRange(); // 시작일과 종료일을 현재 달로 설정
           this.filterByStatus(); // 초기 필터링을 위한 호출
         })
         .catch(error => {
@@ -104,6 +111,13 @@ export default {
       // 데이터에서 정산 상태 추출하여 중복 제거 후 정렬
       const statuses = [...new Set(this.Cadjustments.data.map(item => item['정산상태']))].sort();
       this.statuses = statuses;
+    },
+    setDefaultDateRange() {
+      const currentDate = new Date();
+      const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 2);
+      const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+      this.startDate = firstDayOfMonth.toISOString().substr(0, 10); // 현재 달의 첫 번째 날짜로 설정
+      this.endDate = lastDayOfMonth.toISOString().substr(0, 10); // 현재 달의 마지막 날짜로 설정
     },
     filterByStatus() {
       let filteredData = this.Cadjustments.data;
@@ -122,10 +136,15 @@ export default {
       }
       this.Cadjustments.filteredData = filteredData;
     },
+    selectAll(checked) {
+      // Set the selection status of all checkboxes to the value of 'checked'
+      this.Cadjustments.filteredData.forEach(row => {
+        row.selected = checked;
+      });
+    },
     resetFilter() {
       this.selectedStatus = ''; // 선택된 정산 상태 초기화
-      this.startDate = ''; // 선택된 시작 날짜 초기화
-      this.endDate = ''; // 선택된 종료 날짜 초기화
+      this.setDefaultDateRange(); // 시작일과 종료일을 현재 달로 설정
       this.filterByStatus(); // 필터링된 데이터 초기화
     },
     getUnadjustedOrders() {
@@ -135,8 +154,41 @@ export default {
       return this.getUnadjustedOrders().length > 0;
     },
     adjustmentAction() {
-      const unadjustedOrders = this.getUnadjustedOrders();
-      const promises = unadjustedOrders.map(order => {
+      const selectedOrders = this.Cadjustments.filteredData.filter(order => order.selected);
+      const invalidCompletedOrders = selectedOrders.filter(order => order.정산상태 === '정산 완료');
+      const invalidUnadjustedOrders = selectedOrders.filter(order => order.정산상태 === '정산 요청');
+      const invalidCancelOrders = selectedOrders.filter(order => order.정산상태 === '주문 취소'); // 주문 취소 상태 필터링
+      const invalidUnsettledOrders = selectedOrders.filter(order => order.정산상태 === '미정산');
+
+      if (invalidCompletedOrders.length > 0) {
+        alert('정산 완료건이 선택되어 있습니다. \n미정산건만 선택해주세요.');
+        this.Cadjustments.data.forEach(item => item.selected = false);
+        this.allSelected = false; // Also reset the 'selectAll' checkbox);
+        return;
+      }
+
+      if (invalidUnadjustedOrders.length > 0) {
+        alert('정산 요청건이 선택되어 있습니다. \n미정산건만 선택해주세요.');
+        this.Cadjustments.data.forEach(item => item.selected = false);
+        this.allSelected = false; // Also reset the 'selectAll' checkbox);
+        return;
+      }
+
+      if (invalidCancelOrders.length > 0) {
+        alert('주문 취소건이 선택되어 있습니다. \n미정산건만 선택해주세요.'); // 주문 취소 상태 경고
+        this.Cadjustments.data.forEach(item => item.selected = false);
+        this.allSelected = false; // Also reset the 'selectAll' checkbox);
+        return;
+      }
+      
+      if(selectedOrders.length === 0) {
+        alert('선택된 요청 건이 없습니다.\n다시 확인해주세요.');
+        return;
+      }
+
+      alert('정산 요청 완료');
+
+      const promises = selectedOrders.map(order => {
         order.정산상태 = '정산 요청';
         // API를 통해 서버에 상태 업데이트 요청을 보냅니다.
         return axios.put(`http://localhost:8080/api/orders/adjustment/${order.주문번호}`, { adjustmentStatus: '정산 요청' });
@@ -148,7 +200,10 @@ export default {
           // 모든 요청이 성공적으로 완료되었을 때 실행됩니다.
           console.log('정산 요청 완료: ', responses);
           // 페이지 새로고침
-          window.location.reload();
+          // window.location.reload();
+          //선택된 체크박스 제거
+          this.Cadjustments.data.forEach(item => item.selected = false);
+          this.allSelected = false; // Also reset the 'selectAll' checkbox
         })
         .catch(error => {
           // 요청 중 오류가 발생했을 때 실행됩니다.
@@ -164,7 +219,7 @@ export default {
     },
     getTotalUnadjustedAmount1(){
       return this.Cadjustments.filteredData.filter(order => order.정산상태 === '미정산').reduce((total, order) => total + order.금액, 0);
-    }
+    },
   },
   computed: {
     showTotalUnadjustedAmount() {
@@ -182,7 +237,20 @@ export default {
     totalOrderedAmount() {
       return this.getTotalOrderedAmount();
     }
-  }
+  },
+  watch: {
+    // 'allSelected' data property changes
+    allSelected: {
+      handler(newVal) {
+        // Set the selection status of all checkboxes based on 'allSelected'
+        this.Cadjustments.filteredData.forEach(row => {
+          row.selected = newVal;
+        });
+      },
+      // Immediately execute the handler when the component is mounted
+      immediate: true,
+    },
+  },
 }
 </script>
 

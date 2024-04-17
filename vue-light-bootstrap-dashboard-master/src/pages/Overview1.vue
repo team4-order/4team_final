@@ -1,6 +1,13 @@
 <template>
   <div class="content">
     <div class="container-fluid">
+
+      <div>
+        <input v-model="question" placeholder="Ask a question about fruit distribution">
+        <button @click="askQuestion">Ask</button>
+        <p>Answer: {{ answer }}</p>
+    </div>
+    
       <Card>
         <h5>주간 데이터</h5>
         <div class="row">
@@ -191,6 +198,8 @@ export default {
   },
   data() {
     return {
+      question: '',
+      answer: '',
       showNoOrdersMessage: false,
       isDataLoaded: false,
       customers: [],
@@ -318,6 +327,15 @@ export default {
     });
   },
   methods: {
+    async askQuestion() {
+            try {
+                const response = await axios.post('http://localhost:8080/api/ask', { prompt: this.question });
+                this.answer = response.data;
+            } catch (error) {
+                console.error('Error asking question:', error);
+                this.answer = 'Failed to get an answer.';
+            }
+        },
     fetchCustomerOrders(customerCode) {
       axios.get(`http://localhost:8080/api/orders/chart3/${customerCode}`)
           .then(response => {

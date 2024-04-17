@@ -48,15 +48,16 @@
         <p>거래처 관리</p>
       </sidebar-link>
 
-      <sidebar-link to="/admin/delivery">
+      <!-- <sidebar-link to="/admin/delivery">
         <i class="nc-icon nc-spaceship"></i>
         <p>배송</p>
-      </sidebar-link>
+      </sidebar-link> -->
 
       <sidebar-link to="/admin/warehouses">
         <i class="nc-icon nc-bank"></i>
         <p>창고 관리</p>
       </sidebar-link>
+      
       <sidebar-link to="/admin/inventoryAll">
         <i class="nc-icon nc-app"></i>
         <p>재고</p>
