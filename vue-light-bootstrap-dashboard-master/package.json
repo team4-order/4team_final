@@ -5,7 +5,7 @@
   "description": "Vue light bootstrap dashboard",
   "author": "cristijora <joracristi@gmail.com>",
   "scripts": {
-    "serve": "vue-cli-service serve --port 8080",
+    "serve": "vue-cli-service serve --port 8081",
     "build": "vue-cli-service build --watch",
     "e2e": "node test/e2e/runner.js",
     "lint": "vue-cli-service lint",
