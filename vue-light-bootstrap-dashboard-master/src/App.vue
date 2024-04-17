@@ -52,16 +52,30 @@ import axios from "axios";
         localStorage.removeItem('code');
         sessionStorage.removeItem('user');
         this.authenticated = false;
+
       },async checkUsernameExistence() {
         try {
-          const userNow = sessionStorage.getItem('user');
+          const userNowS = sessionStorage.getItem('user');
+          const userNowL = localStorage.getItem('code');
           console.log(userNow);
-          if (userNow && userNow.length >0) {
+
+          console.log(userNow.length)
+
+          if (userNowS || userNowL ) {
             const response = await axios.post('http://localhost:8080/api/users/findallusername', {userNow});
             this.usernameExists = response.data.usernameExists;
             console.log(this.usernameExists);
             if (this.usernameExists == true) {
               this.authenticated = true;
+            }
+            else if (userNowS.length == 0 || userNowL.length == 0){
+              await Swal.fire({
+                title: 'Login Status Error',
+                text: '비정상적인 로그인 상태입니다.',
+                icon: 'error',
+                confirmButtonText: '로그인 페이지로 돌아가기.'
+              });
+              await this.$router.replace(name="/login");
             }
             else{
               await Swal.fire({
