@@ -90,9 +90,9 @@ import axios from "axios";
 </script>
 <style>
 
-.setRight{
+/*.setRight{
   text-align: right;
-}
+}*/
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -103,9 +103,9 @@ import axios from "axios";
 }
 
 #nav {
-
+  text-align: right;
   padding: 10px; /* Reduced padding for a more compact look */
-  display: inline-block; /* Use flexbox for easier alignment */
+  /*display: inline-block; *//* Use flexbox for easier alignment */
   /*justify-content: flex-end;*/ /* Align items to the right */
 }
 
