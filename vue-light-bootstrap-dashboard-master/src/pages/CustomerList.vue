@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-12">
           <div class="search-bar">
-            <input v-model="searchQuery" type="text" placeholder="거래처 이름 검색하세요" @input="filterContacts" class="form-control" />
+            <input v-model="searchQuery" type="text" placeholder="거래처 이름, 거래처 코드로 검색하세요" @input="filterContacts" class="form-control" />
           </div>
           <!-- Card 컴포넌트로 연락처 목록을 표시합니다. -->
           <card class="striped-tabled-with-hover" body-classes="table-full-width table-responsive">

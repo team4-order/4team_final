@@ -18,7 +18,7 @@
         <i class="nc-icon nc-paper-2"></i>
         <p>주문 등록</p>
       </sidebar-link>
-      <sidebar-link to="/buyer/customer/CON001">
+      <sidebar-link to="/buyer">
         <i class="nc-icon nc-cctv"></i>
         <p>정산</p>
       </sidebar-link>

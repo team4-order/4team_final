@@ -38,7 +38,6 @@ import InputCustomer from 'src/pages/InputCustomer.vue'
 import Delivery from 'src/pages/Delivery.vue'
 import CustomerDetail from 'src/pages/CustomerDetail.vue'
 import CAdjustment from 'src/pages/CAdjustment.vue'
-// import { component } from 'vue/types/umd.js'
 
 const routes = [
   {
@@ -239,7 +238,7 @@ const routes = [
 	      component: Icons
       },
       {
-	      path: 'customer/:customerCode',
+	      path: ':customerCode',
         name: 'customer Adjustment',
 	      component: CAdjustment
       }
