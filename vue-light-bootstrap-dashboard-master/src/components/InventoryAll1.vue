@@ -1,8 +1,5 @@
 <template>
   <div class="inventory-page">
-    <div v-if="showLoadingPopup" class="loading-popup">
-      <h1>Loading...</h1>
-    </div>
     <!-- NAV 영역: 총 재고 요약 -->
     <div class="nav-section">
       <h2 class="section-title">제품별 총 재고</h2>
@@ -11,17 +8,17 @@
           <thead class="thead-sticky">
           <tr>
             <th>제품 이름</th>
-            <th>총 재고량(box)</th>
-            <th>출고예정 재고량(box)</th>
-            <th>가용 재고량(box)</th>
+            <th>총 재고량</th>
+            <th>출고예정 재고량</th>
+            <th>가용 재고량</th>
           </tr>
           </thead>
           <tbody>
           <tr v-for="(total, productName) in totalInventoryByProduct" :key="productName">
             <td>{{ productName }}</td>
-            <td>{{ total.totalQuantity }}</td>
-            <td>{{ total.orderedQuantity }}</td>
-            <td>{{ total.availableQuantity }}</td>
+            <td>{{ total.totalQuantity }}개</td>
+            <td>{{ total.orderedQuantity }}개</td>
+            <td>{{ total.availableQuantity }}개</td>
           </tr>
           </tbody>
         </table>
@@ -34,7 +31,7 @@
         <option value="goodsName">상품 이름</option>
         <option value="goodsCode">상품 코드</option>
         <option value="goodsGrade">등급</option>
-        <option value="inventoryQuantity">수량(box)</option>
+        <option value="inventoryQuantity">수량</option>
         <option value="salesPrice">판매 가격</option>
         <option value="storageCode">창고 코드</option>
         <option value="firstStockDate">재고 입고일</option>
@@ -50,13 +47,13 @@
             <thead class="thead-sticky">
             <tr>
               <th>제품 이름</th>
-              <th>수량(box)</th>
+              <th>수량</th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="(quantity, productName, index) in aggregatedInventories[grade]" :key="index">
               <td>{{ productName }}</td>
-              <td>{{ quantity }}</td>
+              <td>{{ quantity }}개</td>
             </tr>
             </tbody>
           </table>
@@ -75,7 +72,8 @@
             <th>상품 이름</th>
             <th>상품 코드</th>
             <th>등급</th>
-            <th>수량(box)</th>
+            <th>수량</th>
+            <th>판매 가격</th>
             <th>창고 코드</th>
             <th>재고 입고일</th>
           </tr>
@@ -86,6 +84,7 @@
             <td>{{ inventory.goodsCode }}</td>
             <td>{{ inventory.goodsGrade }}</td>
             <td>{{ inventory.inventoryQuantity }}</td>
+            <td>{{ inventory.salesPrice }}</td>
             <td>{{ inventory.storageCode }}</td>
             <td>{{ new Date(inventory.firstStockDate).toLocaleDateString() }}</td>
           </tr>
@@ -113,7 +112,6 @@ export default {
       businessId: '', // 비즈니스 ID를 저장하는 변수 추가
       totalInventoryByProduct: {},
       loading: false,
-      showLoadingPopup: true, // 로딩 팝업 표시 상태
     };
   },
   computed: {
@@ -212,17 +210,12 @@ export default {
 
 
     fetchInventories() {
-      this.loading = true;
       axios.get(`http://localhost:8080/api/inventories/business/${this.businessId}`)
         .then(response => {
           this.inventories = response.data;
-          this.fetchOrderedSummaries();
-          this.loading = false;
+          this.fetchOrderedSummaries(); // 재고 정보를 받은 후 출고 예정 재고량 정보를 가져옴
         })
-        .catch(error => {
-          console.error("Failed to fetch inventories for business ID.", error);
-          this.loading = false;
-        });
+        .catch(error => console.error("Failed to fetch inventories for business ID.", error));
     },
 
     performSearch() {
@@ -237,11 +230,6 @@ export default {
     },
   },
   mounted() {
-    this.showLoadingPopup = true;
-    setTimeout(() => {
-      this.showLoadingPopup = false;
-    }, 2500); // 5초 후 로딩 팝업 숨기기
-
     this.fetchInventories();
     this.businessId = localStorage.getItem('user') || sessionStorage.getItem('user');
     if (this.businessId) {
@@ -322,29 +310,5 @@ export default {
   background-color: #f8f9fa;
   border-bottom: 2px solid #dee2e6;
   z-index: 1;
-}
-
-
-
-.loading-popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  color: white;
-  font-size: 24px;
-}
-
-.loading-popup h1 {
-  margin: 0;
-  padding: 20px;
-  background: #333;
-  border-radius: 10px;
 }
 </style>

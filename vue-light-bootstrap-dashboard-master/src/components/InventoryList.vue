@@ -13,7 +13,7 @@
                 <div class="col-md-4">
                   <select v-model="totalInventorySearchCriteria" class="form-control">
                     <option value="name">이름</option>
-                    <option value="quantity">수량</option>
+                    <option value="quantity">수량(box)</option>
                     <option value="grade">등급</option>
                   </select>
                 </div>
@@ -52,7 +52,7 @@
                 <div class="col-md-4">
                   <select v-model="inventorySearchCriteria" class="form-control">
                     <option value="name">이름</option>
-                    <option value="quantity">수량</option>
+                    <option value="quantity">수량(box)</option>
                     <option value="grade">등급</option>
                   </select>
                 </div>

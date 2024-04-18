@@ -60,19 +60,20 @@
         <div class="mb-3">
           <label for="periodSelect" class="form-label">기간 선택</label>
           <select id="periodSelect" v-model="selectedPeriod" @change="filterInputsByPeriod" class="form-select">
+            <option value="">기간을 선택해주세요.</option>
             <option value="week">지난 1주</option>
             <option value="month">지난 1달</option>
           </select>
         </div>
 
         <!-- 기간별 입고내역 테이블 -->
-        <div class="table-responsive">
+        <div class="table-responsive" v-if="periodInputs.length > 0">
           <table class="table">
             <thead class="thead-sticky">
             <tr>
               <th>상품 이름</th>
               <th>상품 등급</th>
-              <th>총 수량</th>
+              <th>총 수량(box)</th>
               <br>
             </tr>
             </thead>
@@ -84,6 +85,9 @@
             </tr>
             </tbody>
           </table>
+        </div>
+        <div v-else>
+          <p>기간을 선택해주세요.</p>
         </div>
       </div>
     </div>
@@ -104,7 +108,7 @@
               <th @click="sortInputs('inputId')">입고내역 ID</th>
               <th @click="sortInputs('goodsMaster.goodsName')">상품이름</th>
               <th @click="sortInputs('goodsGrade')">상품등급</th>
-              <th @click="sortInputs('inputQuantity')">상품수량</th>
+              <th @click="sortInputs('inputQuantity')">상품수량(box)</th>
               <th @click="sortInputs('inputDay')">입고 일자</th>
               <br>
             </tr>
@@ -140,8 +144,9 @@ export default {
       storages: [] ,// 사용자가 보유한 창고 목록을 저장할 배열 추가
       sortKey: '',
       sortOrder: 'asc', // 'desc'로 변경 가능
-      selectedPeriod: 'week', // 기본값은 'week'
+      selectedPeriod: '',
       periodInputs: [], // 선택한 기간의 입고내역을 저장
+
     };
   },
   mounted() {
@@ -181,7 +186,10 @@ export default {
   methods: {
 
 
+
+
     filterInputsByPeriod() {
+
       const endDate = new Date();
       const startDate = new Date();
 
@@ -221,9 +229,10 @@ export default {
 
 
     fetchStorages() {
-      axios.get('http://localhost:8080/api/warehouses') // 창고 목록을 가져오는 엔드포인트
+      const businessId = localStorage.getItem('user') || sessionStorage.getItem('user');  // 비즈니스 ID를 세션에서 직접 가져옴
+      axios.get(`http://localhost:8080/api/warehouses/${businessId}`)
         .then(response => {
-          this.storages = response.data;
+          this.storages = response.data;  // 응답 데이터를 storages 배열에 저장
         })
         .catch(error => {
           console.error("창고 목록을 가져오는 데 실패했습니다.", error);

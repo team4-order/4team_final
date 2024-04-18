@@ -14,7 +14,7 @@
         <div class="card custom-card">
           <div class="card-header">
             <button type="submit" class="btn btn-info btn-fill float-right" @click="$router.push('/admin/input_customer')">
-                  거래처 등록
+              거래처 등록
             </button>
             <h3 class="card-title">거래처 목록</h3>
             <input v-model="searchQuery" type="text" placeholder="거래처 이름 검색하세요" @input="filterContacts" class="form-control" />
@@ -75,7 +75,7 @@
           </div>
           <div class="card-body p-0">
             <ul class="list-group list-group-flush">
-              <li v-for="storage in cStorages" :key="storage.customerCode" class="list-group-item">
+              <li v-for="storage in filteredStorages" :key="storage.customerCode" class="list-group-item">
                 <div class="d-flex justify-content-between align-items-center">
                   <span>거래처 코드: {{ storage.customerCode }}, 창고 코드: {{ storage.storageCode }}</span>
                   <button class="btn btn-danger btn-sm" @click="deleteCStorage(storage.customerCode, storage.storageCode)">삭제</button>
@@ -106,6 +106,25 @@ export default {
     this.fetchCStorages();
     this.fetchContacts();
   },
+
+  mounted() {
+    // 'user' 키에서 비즈니스 ID를 로드합니다.
+    this.businessId = localStorage.getItem('user') || sessionStorage.getItem('user');
+    if (!this.businessId) {
+      console.error("Business ID is not provided.");
+      // 여기서 사용자에게 알림을 주거나 다른 페이지로 리디렉션 할 수 있습니다.
+      return;
+    }
+    this.fetchContacts(); // 호출 위치 확인
+  },
+
+  computed: {
+    filteredStorages() {
+      const customerCodes = new Set(this.uniqueCustomers.map(customer => customer.contactCode));
+      return this.cStorages.filter(storage => customerCodes.has(storage.customerCode));
+    }
+  },
+
   methods: {
 
     deleteCStorage(customerCode, storageCode) {
@@ -126,12 +145,15 @@ export default {
 
 
     fetchContacts() {
-      axios.get('http://localhost:8080/api/cstorage1/contacts')
+      axios.get(`http://localhost:8080/api/cstorage1/contacts/${this.businessId}`)
         .then(response => {
           this.uniqueCustomers = response.data;
         })
-        .catch(error => console.error('Error fetching contacts:', error));
+        .catch(error => {
+          console.error('Error fetching contacts:', error);
+        });
     },
+
     fetchCStorages() {
       axios.get('http://localhost:8080/api/cstorage1/list')
         .then(response => {
@@ -166,10 +188,10 @@ export default {
       }
     },
     navigateToCustomerDetail(contactCode) {
-    // 주문 상세 페이지 URL로 이동
-    const url = `http://localhost:8081/admin/customer_list/customer_detail/${contactCode}`;
-    window.location.href = url;
-  },
+      // 주문 상세 페이지 URL로 이동
+      const url = `http://localhost:8081/admin/customer_list/customer_detail/${contactCode}`;
+      window.location.href = url;
+    },
   },
 }
 </script>

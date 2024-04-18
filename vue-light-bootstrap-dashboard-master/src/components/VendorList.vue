@@ -44,15 +44,15 @@ export default {
   },
   methods: {
     fetchVendors() {
-      axios.get('http://localhost:8080/api/vendors')
+      const businessId = localStorage.getItem('user') || sessionStorage.getItem('user'); // 비즈니스 ID 가져오기
+      axios.get(`http://localhost:8080/api/vendors/${businessId}`)
         .then(response => {
-          // API 응답에서 contact_delimiter가 "V"인 항목만 필터링
-          const vendors = response.data.filter(vendor => vendor.contactDelimiter === 'V');
-          this.vendors = vendors;
-          this.filteredVendors = vendors;
+          this.vendors = response.data;
+          this.filteredVendors = response.data;
         })
         .catch(error => console.error("공급처 목록을 가져오는 데 실패했습니다.", error));
     },
+
     filterVendors() {
       // 검색 쿼리에 따라 필터링된 공급처 목록을 업데이트
       this.filteredVendors = this.searchQuery ?
