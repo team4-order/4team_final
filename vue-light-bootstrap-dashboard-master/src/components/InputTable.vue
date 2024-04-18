@@ -33,7 +33,7 @@
 
 <script>
 export default {
-  name: 'l-table',
+  name: 'I-table',
   props: {
     columns: Array,
     data: Array,
