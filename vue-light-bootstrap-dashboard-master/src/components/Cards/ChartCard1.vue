@@ -1,68 +1,79 @@
 <template>
   <div class="card">
-    <div class="card-header" v-if="$slots.header || title || subTitle">
-      <slot name="header">
-        <h4 class="card-title" v-if="title">{{ title }}</h4>
-        <p class="card-category" v-if="subTitle">{{ subTitle }}</p>
-      </slot>
+    <div class="card-header" v-if="title || subTitle">
+      <h4 class="card-title" v-if="title">{{ title }}</h4>
+      <p>수량 단위: box</p>
+      <p class="card-category" v-if="subTitle">{{ subTitle }}</p>
     </div>
     <div class="card-body">
       <div :id="chartId" class="ct-chart"></div>
     </div>
-    <div class="card-footer" v-if="$slots.footer">
-      <slot name="footer"></slot>
+    <div class="card-footer">
+      <div class="legend">
+        <!-- 범례에 각 등급과 총 수량 표시 -->
+        <span v-for="(total, index) in chartData.totals" :key="index" class="legend-item">
+        <i class="fa fa-circle" :style="{ color: chartData.colors[index] }"></i>
+        {{ chartData.labels[index] }} 등급
+      </span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import Chartist from 'chartist';
+
 export default {
   name: 'chart-card',
   props: {
+    title: String,
+    subTitle: String,
     chartType: {
       type: String,
-      default: 'Line' // 기본 차트 타입
-    },
-    chartOptions: {
-      type: Object,
-      default: () => ({})
+      default: 'Pie'
     },
     chartData: {
       type: Object,
-      default: () => ({ series: [] })
+      required: true
     },
-    responsiveOptions: [Object, Array]
-  },
-  data () {
-    return {
-      chartId: 'no-id',
-      $Chartist: null,
-      chart: null
+    chartOptions: {
+      type: Object,
+      default: () => ({ showLabel: true })
+    },
+    responsiveOptions: {
+      type: [Array, Object],
+      default: () => []
     }
   },
-  methods: {
-    initChart () {
-      const chartIdQuery = `#${this.chartId}`;
-      // 원형 차트에 대해 레이블을 숨기는 옵션을 기본값으로 추가
-      const defaultPieOptions = this.chartType === 'Pie' ? { showLabel: false } : {};
-      const finalOptions = Object.assign({}, defaultPieOptions, this.chartOptions);
-      this.chart = this.$Chartist[this.chartType](chartIdQuery, this.chartData, finalOptions, this.responsiveOptions);
-      this.$emit('initialized', this.chart);
-    },
-
-
-
-    updateChartId () {
-      const currentTime = new Date().getTime().toString();
-      const randomInt = Math.floor(Math.random() * (parseInt(currentTime, 10) - 0 + 1)) + 0;
-      this.chartId = `div_${randomInt}`;
-    },
+  data() {
+    return {
+      chartId: `chart-${Math.random().toString(36).substr(2, 9)}`
+    };
   },
-  async mounted () {
-    this.updateChartId();
-    const Chartist = await import('chartist');
-    this.$Chartist = Chartist.default || Chartist;
-    this.initChart();
-  }
-}
+  mounted() {
+    this.drawChart();
+  },
+  methods: {
+    drawChart() {
+      const options = {
+        ...this.chartOptions,
+        labelInterpolationFnc: (value, idx) => {
+          const quantity = this.chartData.series[idx];
+          // 각 등급과 퍼센트를 함께 표시
+          const percentage = this.chartData.series.reduce((a, b) => a + b, 0);
+          return `${quantity}(${Math.round(quantity / percentage * 100)}%)`;
+        }
+      };
+      const selector = `#${this.chartId}`;
+      new Chartist.Pie(selector, this.chartData, options, this.responsiveOptions);
+    }
+  },
+
+};
 </script>
+
+<style scoped>
+.legend-item {
+  margin-right: 15px;
+}
+</style>
