@@ -161,7 +161,7 @@ const routes = [
         component: Notifications
       },
       {
-        path: 'orders/:businessId',
+        path: 'orders',
         name: 'OrderList',
         component: OrderList
       },
@@ -172,7 +172,7 @@ const routes = [
         props: true
       },
       {
-        path: 'overview1/:businessId',
+        path: 'overview1',
         name: 'Overview1',
         component: Overview1
       },
@@ -187,7 +187,7 @@ const routes = [
         component: BCustomerList
       },
       {
-        path: '/bcustomer_list/b_adjustment/:customerCode',
+        path: '/bcustomer_list/b_adjustment',
         name: 'B Adjustment List',
         component: BAdjustment,
         props: true
@@ -209,7 +209,7 @@ const routes = [
         component: Delivery,
       },
       {
-        path: 'customer_list/customer_detail/:customerCode',
+        path: 'customer_list/customer_detail',
         name: 'Customer Detail',
         component: CustomerDetail,
         props: true
