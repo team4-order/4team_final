@@ -5,13 +5,11 @@ import DashboardLayout from '../layout/DashboardLayout.vue'// 대시보드 레�
 import Vue from 'vue';
 // Admin pages
 import Overview from 'src/pages/Overview.vue'
-import UserProfile from 'src/pages/UserProfile.vue'
 import TableList from 'src/pages/TableList.vue'
 import Typography from 'src/pages/Typography.vue'
 import Icons from 'src/pages/Icons.vue'
 import Maps from 'src/pages/Maps.vue'
 import Notifications from 'src/pages/Notifications.vue'
-import Upgrade from 'src/pages/Upgrade.vue'
 import WarehouseList from 'src/components/WarehouseList.vue'
 import InventoryList from "src/components/InventoryList.vue";
 import InventoryAll from "../components/InventoryAll.vue";
@@ -20,7 +18,6 @@ import vendorList from "../components/VendorList.vue";
 import VendorDetails from "src/components/VendorDetails.vue";
 import Fruit from "src/components/Fruit_Information";
 import DeliveryStatus from "src/components/DeliveryStatus.vue";
-
 import OrderList from 'src/pages/TableList6.vue'
 import OrderDetail from 'src/pages/TableList3.vue'
 import CustomerOrderList from 'src/pages/TableList4.vue'
@@ -38,7 +35,7 @@ import InputCustomer from 'src/pages/InputCustomer.vue'
 import Delivery from 'src/pages/Delivery.vue'
 import CustomerDetail from 'src/pages/CustomerDetail.vue'
 import CAdjustment from 'src/pages/CAdjustment.vue'
-
+import UserProfile from 'src/pages/UserProfile.vue'
 import Login from "../loginpage/Login.vue";
 import Register from "../loginpage/Register.vue";
 
@@ -79,7 +76,11 @@ const routes = [
         name: 'Overview',
         component: Overview
       },
-
+      {
+        path: 'user',
+        name: 'User',
+        component: UserProfile
+      },
       {
         path: 'cstoragePage',
         name: 'CstoragePage',

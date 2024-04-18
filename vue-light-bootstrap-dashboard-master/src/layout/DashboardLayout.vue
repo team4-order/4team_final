@@ -13,6 +13,10 @@
         <p>Dashboard</p>
       </sidebar-link>
 
+      <sidebar-link to="/admin/user">
+        <i class="nc-icon nc-circle-09"></i>
+        <p>계정 정보</p>
+      </sidebar-link>
 <!--      <sidebar-link to="/admin/user">
         <i class="nc-icon nc-circle-09"></i>
         <p>User Profile</p>
@@ -57,7 +61,7 @@
         <i class="nc-icon nc-bank"></i>
         <p>창고 관리</p>
       </sidebar-link>
-      
+
       <sidebar-link to="/admin/inventoryAll">
         <i class="nc-icon nc-app"></i>
         <p>재고</p>
