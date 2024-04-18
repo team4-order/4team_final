@@ -226,6 +226,7 @@ export default {
   },
   data() {
     return {
+      mutableBusinessId: '',
       iconUpSrc: iconUp,
       iconDownSrc: iconDown,
       currentIcon: iconUp,
@@ -348,6 +349,8 @@ export default {
     }
   },
   mounted() {
+    const storedId = localStorage.getItem("code") || sessionStorage.getItem("user");
+    this.mutableBusinessId = storedId;
     this.fetchOrderList();
     this.fetchAdjustmentReqList();
     this.fetchMonthlySalesData();
@@ -471,16 +474,17 @@ export default {
     },
 
     fetchCustomerList() {
-      const Google = localStorage.getItem("code");
-      const Standard = sessionStorage.getItem("user");
-      const businessId = '';
-      if (Google.length) {
-        businessId = Google;
-      } else {
-        businessId = Standard;
-      }
+      // const Google = localStorage.getItem("code");
+      // const Standard = sessionStorage.getItem("user");
+      // let businessId = '';
+      // if (Google !== null) {
+      //   businessId = Google;
+      // } else {
+      //   businessId = Standard;
+      // }
 
-      axios.get(`http://localhost:8080/api/orders/chart2/${businessId}`)
+      //businessId = this.$route.params.businessId;
+      axios.get(`http://localhost:8080/api/orders/chart2/${this.mutableBusinessId}`)
         .then(response => {
           this.customers = response.data.map(customer => ({
             contactName: customer.contactName,
@@ -493,15 +497,15 @@ export default {
     },
     async fetchMonthlySalesData() {
       try {
-        const Google = localStorage.getItem("code");
-        const Standard = sessionStorage.getItem("user");
-        const businessId = '';
-        if (Google.length) {
-          businessId = Google;
-        } else {
-          businessId = Standard;
-        }
-        const response = await axios.get(`http://localhost:8080/api/orders/chart1/${businessId}`);
+        // const Google = localStorage.getItem("code");
+        // const Standard = sessionStorage.getItem("user");
+        // let businessId = '';
+        // if (Google != null) {
+        //   businessId = Google;
+        // } else {
+        //   businessId = Standard;
+        // }
+        const response = await axios.get(`http://localhost:8080/api/orders/chart1/${this.mutableBusinessId}`);
         const months = response.data.map(item => `${item.year.toString().slice(-2)}/${item.month.toString().padStart(2, '0')}`);
         const sales = response.data.map(item => item.price);
         this.updateSalesChart(months, sales);
@@ -540,15 +544,15 @@ export default {
 
     },
     fetchOrderList() {
-      const Google = localStorage.getItem("code");
-      const Standard = sessionStorage.getItem("user");
-      const businessId = '';
-      if (Google.length) {
-        businessId = Google;
-      } else {
-        businessId = Standard;
-      }
-      axios.get(`http://localhost:8080/api/orders/id/${businessId}`)
+      // const Google = localStorage.getItem("code");
+      // const Standard = sessionStorage.getItem("user");
+      // let businessId = '';
+      // if (Google !== null) {
+      //   businessId = Google;
+      // } else {
+      //   businessId = Standard;
+      // }
+      axios.get(`http://localhost:8080/api/orders/id/${this.mutableBusinessId}`)
         .then(response => {
           const data = response.data;
           const startOfWeek = new Date();
@@ -588,15 +592,15 @@ export default {
         });
     },
     fetchAdjustmentReqList() {
-      const Google = localStorage.getItem("code");
-      const Standard = sessionStorage.getItem("user");
-      const businessId = '';
-      if (Google.length) {
-        businessId = Google;
-      } else {
-        businessId = Standard;
-      }
-      axios.get(`http://localhost:8080/api/orders/request/${businessId}`)
+      // const Google = localStorage.getItem("code");
+      // const Standard = sessionStorage.getItem("user");
+      // let businessId = '';
+      // if (Google.length) {
+      //   businessId = Google;
+      // } else {
+      //   businessId = Standard;
+      // }
+      axios.get(`http://localhost:8080/api/orders/request/${this.mutableBusinessId}`)
         .then(response => {
           this.tableData.data = response.data.map(item => ({
             '고객명': item.contactName,

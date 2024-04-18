@@ -64,6 +64,7 @@ export default {
   },
   data() {
     return {
+      mutableBusinessId: '',
       currentPage: 1,
       itemsPerPage: 30,
       searchQuery: '',
@@ -79,13 +80,15 @@ export default {
     };
   },
   mounted() {
+    const storedId = localStorage.getItem("code") || sessionStorage.getItem("user");
+    this.mutableBusinessId = storedId;
     this.fetchOrderList();
     this.fetchCustomerList();
   },
   methods: {
     fetchCustomerList() {
       const businessId = this.$route.params.businessId;
-      axios.get(`http://localhost:8080/api/contact/busId/${businessId}`)
+      axios.get(`http://localhost:8080/api/contact/busId/${this.mutableBusinessId}`)
       .then(response => { 
       this.customers = response.data.map(customer => ({
         contactName: customer.contactName,
@@ -131,8 +134,8 @@ export default {
       this.filterOrders();
     },
     fetchOrderList() {
-      const businessId = this.$route.params.businessId;
-      axios.get(`http://localhost:8080/api/orders/busId/${businessId}`)
+      //const businessId = this.$route.params.businessId;
+      axios.get(`http://localhost:8080/api/orders/busId/${this.mutableBusinessId}`)
         .then(response => {
           this.orders.data = response.data.map(order => {
             return {

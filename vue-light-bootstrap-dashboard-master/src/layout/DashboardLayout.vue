@@ -8,7 +8,7 @@
         <p>Dashboard</p>
       </sidebar-link>-->
 
-      <sidebar-link to="/admin/overview1/BUS002">
+      <sidebar-link to="/admin/overview1">
         <i class="nc-icon nc-chart-pie-35"></i>
         <p>Dashboard</p>
       </sidebar-link>
@@ -61,6 +61,11 @@
       <sidebar-link to="/admin/inventoryAll">
         <i class="nc-icon nc-app"></i>
         <p>재고</p>
+      </sidebar-link>
+
+      <sidebar-link to="/admin/orders">
+        <i class="nc-icon nc-app"></i>
+        <p>주문</p>
       </sidebar-link>
 
       <sidebar-link to="/admin/cstoragePage">

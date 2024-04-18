@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-          <card class="strpied-tabled-with-hover" body-classes="table-full-width table-responsive">
+          
             <template slot="header">
               <h4 class="card-title">주문 등록</h4>
               <p class="card-category">apply</p>
@@ -11,23 +11,25 @@
               <!-- <button @click="saveOrderChanges"></button> -->
             </template>
 
-            <select v-model="selectedStorageCode" class="form-control">
-              <option disabled value="">창고 선택</option>
-              <option v-for="code in storageCodes" :value="code" :key="code">
-                {{ code }}
-              </option>
-            </select>
+            <select v-model="selectedStorageCode">
+      <option disabled value="">Please select one</option>
+      <option v-for="code in storageCodes" :key="code" :value="code">{{ code }}</option>
+    </select>
 
-            <div class="mb-3"></div>
-            <input type="text" v-model="searchQuery" :placeholder="'상품명 검색'" class="form-control" />
-            <div class="mb-3"></div>
+            <input type="text" v-model="searchQuery" placeholder="상품명 검색" class="form-control"/>
+            <l-table class="table-hover table-striped"
+         :columns="goodsList.columns"
+         :data="goodsList.data"
+         :search-query="searchQuery"
+         :editable="true"
+         @update-total="updateTotalAmount"
+         @add-row="makeRowPermanent">
+</l-table>
 
-            <l-table class="table-hover table-striped" :columns="goodsList.columns" :data="filteredData"
-              :search-query="searchQuery" :editable="true" @update-total="updateTotalAmount"
-              @add-row="makeRowPermanent">
-            </l-table>
+            
 
-          </card>
+
+
         </div>
       </div>
     </div>
@@ -56,26 +58,22 @@ export default {
         data: [],
         filteredData: []
       },
-      dropdownTitle: 'Select Storage Code'
+      dropdownTitle: 'Select Storage Code',
+      totalAmount: 0
     };
   },
   computed: {
-    // 선택된 검색 카테고리에 따라 데이터를 필터링
+    // 검색된 데이터를 계산된 속성으로 필터링
     filteredData() {
-      const query = this.searchQuery.toLowerCase();
-      if (this.selectedSearchName === 'name') {
-        console.log('Filtering by name');
-        return this.goodsList.data.filter(goods => goods['상품명'].toLowerCase().includes(query));
-      } else {
-        console.log('No filtering');
-        return this.goodsList.data;
-      }
+      return this.goodsList.data.filter(goods => {
+        return goods['상품명'].toLowerCase().includes(this.searchQuery.toLowerCase());
+      });
     },
     totalAmount() {
-      return this.goodsList.data.reduce((acc, goods) => {
-        return acc + (goods['가격(BOX)'] * goods['주문 수량']);
-      }, 0);
-    }
+    return this.goodsList.data.reduce((acc, goods) => {
+      return acc + (goods['가격(BOX)'] * goods['주문 수량'].value);
+    }, 0);
+  }
   },
   watch: {
     selectedStorageCode(newVal) {
@@ -89,8 +87,8 @@ export default {
   },
   methods: {
     updateTotalAmount(amount) {
-      this.totalAmount = amount;
-    },
+    this.totalAmount = amount;
+  },
     selectStorageCode(code) {
       this.selectedStorageCode = code;
       this.dropdownTitle = code; // 드롭다운 타이틀 업데이트
@@ -101,7 +99,7 @@ export default {
       if (this.$refs.dropdown) {
         this.$refs.dropdown.closeDropDown();
       }
-    },  
+    },
     fetchOrderList() {
       const customerCode = this.$route.params.customerCode;
       axios.get(`http://localhost:8080/api/storage/${customerCode}`)
@@ -113,77 +111,69 @@ export default {
         });
     },
     fetchGoodsList(storageCode) {
-      axios.get(`http://localhost:8080/api/total/storage/${storageCode}`)
-        .then(response => {
-          console.log(response.data);
-          this.goodsList.data = response.data.map(goods => ({
-            ...goods,
-            visible: false, // Initially, rows are not visible
-            '상품 코드': goods.goodsCode,
-            '상품명': goods.goodsName,
-            '상품 등급': goods.goodsGrade,
-            '주문 가능 수량': goods.totalQuantity,
-            '가격(BOX)': Math.ceil(goods.inputPrice * (100 + goods.marginRate) / 100),
-            '주문 수량': 0,
-            '금액(원)': 0
-          }));
-        })
-        .catch(error => {
-          console.error(`There was an error fetching the goods list for storageCode ${storageCode}:`, error);
-        });
-    },
-    makeRowPermanent(goodsCode) {
-      const itemIndex = this.goodsList.data.findIndex(item => item['상품 코드'] === goodsCode);
-      if (itemIndex > -1) {
-        const item = this.goodsList.data[itemIndex];
-        item.visible = true; // 항목을 보이게 설정
-        this.goodsList.data.splice(itemIndex, 1); // 원래 위치에서 항목 제거
-        this.goodsList.data.unshift(item); // 배열의 시작 부분에 항목 추가
-      }
-    },
+    axios.get(`http://localhost:8080/api/total/storage/${storageCode}`)
+      .then(response => {
+        this.goodsList.data = response.data.map(goods => ({
+          ...goods,
+          visible: false, // Initially, rows are not visible
+          '상품 코드': goods.goodsCode,
+          '상품명': goods.goodsName,
+          '상품 등급': goods.goodsGrade,
+          '주문 가능 수량': goods.totalQuantity,
+          '가격(BOX)': Math.ceil(goods.inputPrice * (100 + goods.marginRate) / 100),
+          '주문 수량': 0,
+          '금액(원)' : 0
+        }));
+      })
+      .catch(error => {
+        console.error(`There was an error fetching the goods list for storageCode ${storageCode}:`, error);
+      });
+  },
+  makeRowPermanent(goodsCode) {
+    const item = this.goodsList.data.find(item => item['상품 코드'] === goodsCode);
+    if (item) item.visible = true;
+  },
     submitOrder() {
       if (this.totalAmount <= 0) {
-        window.alert("총 금액이 0원입니다. 주문을 등록할 수 없습니다.");
-        return;
-      }
+    window.alert("총 금액이 0원입니다. 주문을 등록할 수 없습니다.");
+    return;
+  }
       //const customerCode = this.$route.params.customerCode;
-      const orderData = {
-        customerCode: "CON001",
-        storageCode: this.selectedStorageCode,
-        orderPrice: this.totalAmount,
-        adjustmentStatus: "미정산",
-        orderStatus: "주문 완료"
-      };
-      axios.post('/api/orders/post', orderData)
-        .then(response => {
-          console.log('Order created!', response.data);
-          const createdOrderNumber = response.data.orderNumber;
-          console.log(createdOrderNumber);
+    const orderData = {
+      customerCode: "CON001", 
+      storageCode: this.selectedStorageCode,
+      orderPrice: this.totalAmount, 
+      adjustmentStatus: "미정산"
+    };
+    axios.post('/api/orders/post', orderData)
+      .then(response => {
+        console.log('Order created!', response.data);
+        const createdOrderNumber = response.data.orderNumber;
+        console.log(createdOrderNumber);
 
-          const nonZeroItems = this.goodsList.data.filter(item => item['주문 수량'] > 0);
+        const nonZeroItems = this.goodsList.data.filter(item => item['주문 수량'] > 0);
 
-          nonZeroItems.forEach(item => {
-            const orderProductData = {
-              orderNumber: createdOrderNumber,
-              goodsCode: item['상품 코드'],
-              goodsGrade: item['상품 등급'],
-              orderQuantity: item['주문 수량'],
-              orderPrice: item['금액(원)']
-            };
-            axios.post('/api/order/detail/post', orderProductData)
-              .then(res => {
-                console.log('Item added with the order number', res.data);
-              })
-              .catch(err => {
-                console.error('Error posting item:', err);
-              });
-
+        nonZeroItems.forEach(item => {
+        const orderProductData = {
+          orderNumber: createdOrderNumber,
+          goodsCode: item['상품 코드'],
+          goodsGrade: item['상품 등급'],
+          orderQuantity: item['주문 수량'],
+          orderPrice: item['금액(원)'] 
+        };
+        axios.post('/api/order/detail/post', orderProductData)
+          .then(res => {
+            console.log('Item added with the order number', res.data);
+          })
+          .catch(err => {
+            console.error('Error posting item:', err);
           });
-        })
-        .catch(error => {
-          console.error('Error creating order:', error);
-        });
-    }
+      });
+    })
+    .catch(error => {
+      console.error('Error creating order:', error);
+    });
+  }
 
   }
 };
@@ -193,7 +183,6 @@ export default {
 .dropdown .dropdown-toggle {
   cursor: pointer;
 }
-
 .total-amount h4 {
   margin-top: 20px;
   font-weight: bold;
@@ -201,8 +190,5 @@ export default {
 
 .table tbody tr:last-child td {
   font-weight: bold;
-}
-.btn-info {
-  margin-right: 20px;
 }
 </style>
