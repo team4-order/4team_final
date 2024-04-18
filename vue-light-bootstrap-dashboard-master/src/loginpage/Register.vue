@@ -100,7 +100,7 @@ export default {
         // Assuming your backend returns some data upon successful registration
         console.log("Registered successfully!");
 
-        Swal.fire({
+       await Swal.fire({
           title: 'Register Success!',
           text: '계정이 생성되었습니다. 로그인 페이지로 이동합니다.',
           icon: 'success',
