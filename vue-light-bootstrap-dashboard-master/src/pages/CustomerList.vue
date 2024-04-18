@@ -18,8 +18,8 @@
               <p class="card-category">거래처 목록을 확인하는 페이지</p>
             </template>
             <!-- LTable 컴포넌트를 사용하여 테이블을 표시합니다. -->
-            <l-table class="table-hover table-striped" 
-            :columns="contacts.columns" 
+            <l-table class="table-hover table-striped"
+            :columns="contacts.columns"
             :data="contacts.filteredData"
             @row-click="handleRowClick"></l-table>
           </card>
@@ -41,6 +41,7 @@ export default {
   },
   data() {
     return {
+      mutableBusinessId: '',
       searchQuery: '',
       selectedContactName: '', // 추가: 선택된 연락처 이름
       contacts: {
@@ -52,11 +53,13 @@ export default {
     }
   },
   mounted() {
+    const storedId = localStorage.getItem("code") || sessionStorage.getItem("user");
+    this.mutableBusinessId = storedId;
     this.fetchContacts();
   },
   methods: {
     fetchContacts() {
-      axios.get('http://localhost:8080/api/contact/customers/BUS002')
+      axios.get(`http://localhost:8080/api/contact/customers/${this.mutableBusinessId}`)
         .then(response => {
           this.contacts.data = response.data.map(contact => ({
             '거래처 이름': contact.contactName,
@@ -91,7 +94,7 @@ export default {
     handleRowClick(row) {
       const contactCode = row['거래처 코드']; // 변수명을 orderNumber에서 contactCode로 변경
       // 주문 상세 페이지 URL로 이동
-      window.location.href = `http://localhost:8081/#/admin/customer_list/customer_detail/${contactCode}`;
+      window.location.href = `http://localhost:8081/admin/customer_list/customer_detail/${contactCode}`;
     }
   }
 }

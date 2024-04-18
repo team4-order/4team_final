@@ -48,11 +48,15 @@ export default {
         contactName: '',
         contactAddress: '',
         customerPhone: '',
-        businessId: 'BUS002' // businessId에 "BUS002" 할당 --> businessId는 기업이 로그인하면 그것에 맞는 ID들어가게 수정해야 함
+        mutableBusinessId: ''
       },
       registeredId: '', // 등록된 아이디 저장 변수
       registeredPassword: '' // 등록된 비밀번호 저장 변수
     }
+  },
+  mounted() {
+    const storedId = localStorage.getItem("code") || sessionStorage.getItem("user");
+    this.mutableBusinessId = storedId;
   },
   methods: {
     submitClient() {
@@ -67,16 +71,16 @@ export default {
         contactName: this.customer.contactName,
         contactAddress: this.customer.contactAddress,
         customerPhone: this.customer.customerPhone,
-        businessId: this.customer.businessId // businessId도 함께 전송 (지금은 지정된  ID가 정송됌)
+        businessId: this.customer.mutableBusinessId // businessId도 함께 전송 (지금은 지정된  ID가 정송됌)
       })
       .then(response => {
         // 서버 응답으로부터 등록된 아이디와 비밀번호 받아오기
         this.registeredId = response.data.contactCode;
         this.registeredPassword = response.data.customerPassword;
-        
+
         // 알림창에 등록된 아이디와 비밀번호 표시
         alert(`거래처가 성공적으로 등록되었습니다. \n아이디: ${this.registeredId}, 비밀번호: ${this.registeredPassword}`); //추가
-        
+
         // 폼 리셋
         this.resetForm();
       })

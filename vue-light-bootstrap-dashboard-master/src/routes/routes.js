@@ -187,7 +187,7 @@ const routes = [
         component: BCustomerList
       },
       {
-        path: '/bcustomer_list/b_adjustment',
+        path: '/bcustomer_list/b_adjustment/:customerCode',
         name: 'B Adjustment List',
         component: BAdjustment,
         props: true
@@ -209,7 +209,7 @@ const routes = [
         component: Delivery,
       },
       {
-        path: 'customer_list/customer_detail',
+        path: 'customer_list/customer_detail/:customerCode',
         name: 'Customer Detail',
         component: CustomerDetail,
         props: true

@@ -6,7 +6,7 @@
           <div class="search-bar">
             <input v-model="searchQuery" type="text" placeholder="거래처 이름 검색하세요" @input="filterContacts" class="form-control" />
           </div>
-          
+
           <!-- Card 컴포넌트로 연락처 목록을 표시합니다. -->
           <card class="striped-tabled-with-hover" body-classes="table-full-width table-responsive">
             <template slot="header">
@@ -22,8 +22,8 @@
               <p class="card-category">거래처 목록을 확인하는 페이지</p>
             </template>
             <!-- LTable 컴포넌트를 사용하여 테이블을 표시합니다. -->
-            <l-table class="table-hover table-striped" 
-                     :columns="Bcontacts.columns" 
+            <l-table class="table-hover table-striped"
+                     :columns="Bcontacts.columns"
                      :data="filteredContacts"
                      @row-click="handleRowClick"></l-table>
           </card>
@@ -45,6 +45,7 @@ export default {
   },
   data() {
     return {
+      mutableBusinessId: '',
       searchQuery: '',
       selectedStatus: '', // 선택된 정산 상태
       Bcontacts: {
@@ -56,6 +57,8 @@ export default {
     }
   },
   mounted() {
+    const storedId = localStorage.getItem("code") || sessionStorage.getItem("user");
+    this.mutableBusinessId = storedId;
     this.fetchBContacts();
   },
   watch: {
@@ -66,7 +69,7 @@ export default {
   methods: {
     async fetchBContacts() {
       try {
-        const response = await axios.get('http://localhost:8080/api/contact/customers/BUS002');
+        const response = await axios.get(`http://localhost:8080/api/contact/customers/${this.mutableBusinessId}`);
         for (const contact of response.data) {
           const settlementStatus = await this.isPendingSettlement(contact.contactCode);
           const adjustmentStatusCount = await this.adjustmentcount(contact.contactCode);
@@ -114,7 +117,7 @@ export default {
     },
     handleRowClick(row) {
       const customerCode = row['거래처 코드'];
-      window.location.href = `http://localhost:8081/#/bcustomer_list/b_adjustment/${customerCode}`;
+      window.location.href = `http://localhost:8081/bcustomer_list/b_adjustment/${customerCode}`;
     }
   },
   computed: {

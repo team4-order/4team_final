@@ -55,7 +55,7 @@
 
 <script>
 import LTable from 'src/components/Table.vue'
-import Card from 'src/components/Cards/Card.vue'  
+import Card from 'src/components/Cards/Card.vue'
 import axios from 'axios'
 
 export default {
@@ -172,7 +172,7 @@ export default {
       }
 
       alert('정산이 완료되었습니다.');
-     
+
       const promises = selectedOrders.map(order => {
         order.정산상태 = '정산 완료';
         // API를 통해 서버에 상태 업데이트 요청을 보냅니다.
@@ -186,7 +186,7 @@ export default {
           console.log('정산 완료: ', responses);
           //선택된 체크박스 제거
           this.filteredData.forEach(item => item.selected = false); // Reset the selection state of all rows
-          
+
           this.Cadjustments.data.forEach(item => item.selected = false);
           this.allSelected = false; // Also reset the 'selectAll' checkbox
         })

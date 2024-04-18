@@ -134,6 +134,7 @@ export default {
         this.originalCustomerData = { ...this.customer };
         this.updateProfile(); // updateProfile 함수 호출
       } else {
+
         // 수정하기 버튼 클릭 시 변경 전의 원본 데이터로 복원
         this.customer = { ...this.originalCustomerData };
         this.customer.customerPassword = '';
