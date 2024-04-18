@@ -8,7 +8,7 @@
   <div id="app">
     <div id="nav">
       <router-link class = "setRight" v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Logout</router-link>
-      <router-link v-else to="/login">Login</router-link>
+<!--      <router-link v-if="!authenticated" to="/login">Login</router-link>-->
       <router-link v-if="!authenticated" to="/register">Register</router-link>
     </div>
     <router-view @authenticated="setAuthenticated"/>
@@ -32,8 +32,6 @@ import axios from "axios";
     },
     mounted() {
       this.checkUsernameExistence();
-
-
       },
     methods: {
       setAuthenticated(status) {
@@ -56,45 +54,119 @@ import axios from "axios";
       },async checkUsernameExistence() {
         try {
           const userNowS = sessionStorage.getItem('user');
-          const userNowL = localStorage.getItem('code');
-          console.log(userNow);
+          const code = localStorage.getItem('code');
 
-          console.log(userNow.length)
 
-          if (userNowS || userNowL ) {
-            const response = await axios.post('http://localhost:8080/api/users/findallusername', {userNow});
-            this.usernameExists = response.data.usernameExists;
-            console.log(this.usernameExists);
-            if (this.usernameExists == true) {
-              this.authenticated = true;
+          if (code) {
+
+               if(code.length > 0) {
+                  const response = await axios.post('http://localhost:8080/api/users/findallusername', {code});
+                  this.usernameExists = response.data.usernameExists;
+                  console.log(this.usernameExists);
+                  if (this.usernameExists == true) {
+                    this.authenticated = true;
+                }
+                  else if(this.usernameExists ==false){
+                    await Swal.fire({
+                      title: 'Login Status Error',
+                      text: '비정상적인 로그인 입니다.',
+                      icon: 'error',
+                      confirmButtonText: '돌아가기',
+                    });
+                    this.authenticated = false;
+                    this.$router.replace(name = "/login");
+                  }
+              }
+               else if(code.length < 0 ){
+                 await Swal.fire({
+                   title: 'Login Status Error',
+                   text: '세션이 만료되었습니다.',
+                   icon: 'error',
+                   confirmButtonText: '돌아가기',
+                 });
+                 this.authenticated = false;
+                 this.$router.replace(name = "/login");
+
+               }
+               else {
+                 await Swal.fire({
+                   title: 'Login Status Error',
+                   text: '비정상적인 로그인입니다.',
+                   icon: 'error',
+                   confirmButtonText: '돌아가기',
+                 });
+                 this.authenticated = false;
+                 this.$router.replace(name = "/login");
+
+               }
             }
-            else if (userNowS.length == 0 || userNowL.length == 0){
-              await Swal.fire({
-                title: 'Login Status Error',
-                text: '비정상적인 로그인 상태입니다.',
-                icon: 'error',
-                confirmButtonText: '로그인 페이지로 돌아가기.'
-              });
-              await this.$router.replace(name="/login");
-            }
-            else{
-              await Swal.fire({
-                title: 'Login Status Error',
-                text: '비정상적인 로그인 상태입니다.',
-                icon: 'error',
-                confirmButtonText: '로그인 페이지로 돌아가기.'
-              });
-              this.$router.replace(name="/login");
-            }
+           else if (userNowS) {
+
+             if(userNowS.length > 0) {
+               const response = await axios.post('http://localhost:8080/api/ausers/findallusername', {userNowS});
+               this.usernameExists = response.data.usernameExists;
+               console.log(this.usernameExists);
+               if (this.usernameExists == true) {
+                 this.authenticated = true;
+               }
+               else if(this.usernameExists ==false){
+                 await Swal.fire({
+                   title: 'Login Status Error',
+                   text: '비정상적인 로그인 입니다.',
+                   icon: 'error',
+                   confirmButtonText: '돌아가기',
+                 });
+                 this.authenticated = false;
+                 this.$router.replace(name = "/login");
+               }
+
+
+
+             }
+             else if(userNowS.length < 0){
+               await Swal.fire({
+                 title: 'Login Status Error',
+                 text: '세션이 만료되었습니다.',
+                 icon: 'error',
+                 confirmButtonText: '돌아가기',
+               });
+               this.authenticated = false;
+               this.$router.replace(name = "/login");
+             }
+             else{
+               await Swal.fire({
+                 title: 'Login Status Error',
+                 text: '비정상적인 로그인입니다.',
+                 icon: 'error',
+                 confirmButtonText: '돌아가기',
+               });
+               this.authenticated = false;
+               this.$router.replace(name = "/login");
+
+             }
+
           }
+            else
+            {
+              await Swal.fire({
+                title: 'Login Status Error',
+                text: '로그인을 진행해주세요!',
+                icon: 'info',
+                confirmButtonText: '확인'
+              });
+            this.authenticated = false;
+            this.$router.replace(name = "/login");
+            }
+
         }
       catch (error){
-        Swal.fire({
+    await Swal.fire({
           title: 'Login Status Error',
-          text: '비정상적인 로그인 상태입니다.',
-          icon: 'error',
-          confirmButtonText: '로그인 페이지로 돌아가기.'
+          text: '로그인을 진행해주세요!',
+          icon: 'info',
+          confirmButtonText: '확인'
         });
+        this.$router.replace(name="/login");
       }
       }
     }

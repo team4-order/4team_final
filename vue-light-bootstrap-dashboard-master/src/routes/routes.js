@@ -2,7 +2,7 @@
 import NotFound from '../pages/NotFoundPage.vue'
 import CustomerDashboardLayout from '../layout/CustomerDashboardLayout.vue'
 import DashboardLayout from '../layout/DashboardLayout.vue'// 대시보드 레이아웃 컴포넌트
-
+import Vue from 'vue';
 // Admin pages
 import Overview from 'src/pages/Overview.vue'
 import UserProfile from 'src/pages/UserProfile.vue'
@@ -41,9 +41,9 @@ import CAdjustment from 'src/pages/CAdjustment.vue'
 
 import Login from "../loginpage/Login.vue";
 import Register from "../loginpage/Register.vue";
-import VueRouter from 'vue-router'
-// import { component } from 'vue/types/umd.js'
 
+
+// import { component } from 'vue/types/umd.js'
 
 const routes = [
   /*{
@@ -67,10 +67,12 @@ const routes = [
     component: Login,
   },
   {
+
+
     path: '/admin',
     component: DashboardLayout,
+    meta: { requiresAuth: true },
 
-    /*redirect: '/admin/overview',*/
     children: [
       {
         path: 'overview',
@@ -277,6 +279,7 @@ const routes = [
  var res= require('../components/Dashboard/Views/' + name + '.vue');
  return res;
  };**/
+
 
 
 
