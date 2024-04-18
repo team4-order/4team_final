@@ -127,13 +127,13 @@ export default {
         icon: 'info',
         confirmButtonText: '확인'
       });
-      window.location.href = "https://accounts.google.com/o/oauth2/v2/auth?client_id=1074874386105-qlcav64d5j58f07o9aep4snpko0elgs1.apps.googleusercontent.com&redirect_uri=http://localhost:8080/api/v1/oauth2/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
+      window.location.href = "https://accounts.google.com/o/oauth2/v2/auth?client_id=1074874386105-qlcav64d5j58f07o9aep4snpko0elgs1.apps.googleusercontent.com&redirect_uri=http://localhost:8079/api/v1/oauth2/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
     },
     async checkUsernameExistence() {
       try {
         const code = localStorage.getItem('code');
         if (code) {
-          const response = await axios.post('http://localhost:8080/api/users/findallusername', { code });
+          const response = await axios.post('http://localhost:8079/api/users/findallusername', { code });
           this.usernameExists = response.data.usernameExists;
           console.log(this.usernameExists);
           if (this.usernameExists == true) {
