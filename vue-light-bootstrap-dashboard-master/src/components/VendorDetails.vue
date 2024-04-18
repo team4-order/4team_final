@@ -68,11 +68,12 @@
         <!-- 기간별 입고내역 테이블 -->
         <div class="table-responsive">
           <table class="table">
-            <thead>
+            <thead class="thead-sticky">
             <tr>
               <th>상품 이름</th>
               <th>상품 등급</th>
               <th>총 수량</th>
+              <br>
             </tr>
             </thead>
             <tbody>
@@ -98,15 +99,14 @@
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-striped">
-            <thead>
+            <thead class="thead-sticky">
             <tr>
               <th @click="sortInputs('inputId')">입고내역 ID</th>
               <th @click="sortInputs('goodsMaster.goodsName')">상품이름</th>
               <th @click="sortInputs('goodsGrade')">상품등급</th>
-<!--              <th>상품이름</th>-->
-<!--              <th>상품등급</th>-->
               <th @click="sortInputs('inputQuantity')">상품수량</th>
               <th @click="sortInputs('inputDay')">입고 일자</th>
+              <br>
             </tr>
             </thead>
 
@@ -221,7 +221,7 @@ export default {
 
 
     fetchStorages() {
-      axios.get('/api/warehouses') // 창고 목록을 가져오는 엔드포인트
+      axios.get('http://localhost:8080/api/warehouses') // 창고 목록을 가져오는 엔드포인트
         .then(response => {
           this.storages = response.data;
         })
@@ -232,7 +232,7 @@ export default {
 
 
     updateStorageCode() {
-      axios.put(`/api/vendors/updateStorageCode/${this.vendor.contactCode}?storageCode=${this.selectedStorageCode}`)
+      axios.put(`http://localhost:8080/api/vendors/updateStorageCode/${this.vendor.contactCode}?storageCode=${this.selectedStorageCode}`)
         .then(response => {
           alert('창고 코드가 성공적으로 업데이트되었습니다.');
           window.location.reload(); //창 새로고침
@@ -246,14 +246,14 @@ export default {
 
 
     fetchVendorDetails() {
-      axios.get(`/api/vendors/read/${this.$route.params.contactCode}`)
+      axios.get(`http://localhost:8080/api/vendors/read/${this.$route.params.contactCode}`)
         .then(response => {
           this.vendor = response.data;
         })
         .catch(error => console.error("공급처 정보를 가져오는 데 실패했습니다.", error));
     },
     fetchVendorInputs() {
-      axios.get(`/api/inputs/vendor/${this.$route.params.contactCode}`)
+      axios.get(`http://localhost:8080/api/inputs/vendor/${this.$route.params.contactCode}`)
         .then(response => {
           this.inputs = response.data;
         })
@@ -276,10 +276,12 @@ export default {
   border-top: 1px solid #dee2e6;
 }
 
-/* 테이블 헤더 스타일링 */
-.table thead th {
-  vertical-align: bottom;
+.thead-sticky th {
+  position: sticky;
+  top: 0;
+  background-color: #f8f9fa;
   border-bottom: 2px solid #dee2e6;
+  z-index: 1;
 }
 
 /* 테이블 높이 고정 및 스크롤 추가 */

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>배송 현황 (페이지 삭제 예정)</h1>
+    <h1>배송 현황</h1>
     <table>
       <thead>
       <tr>
@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     fetchDeliveries() {
-      axios.get('/api/deliveries/details')
+      axios.get('http://localhost:8080/api/deliveries/details')
         .then(response => {
           this.deliveries = response.data;
         })

@@ -5,7 +5,7 @@
       <h2 class="section-title">제품별 총 재고</h2>
       <div class="table-responsive">
         <table class="inventory-table">
-          <thead>
+          <thead class="thead-sticky">
           <tr>
             <th>제품 이름</th>
             <th>총 재고량</th>
@@ -31,7 +31,7 @@
         <h2 class="section-title">{{ grade }} 등급 과일</h2>
         <div class="table-responsive">
           <table class="inventory-table">
-            <thead>
+            <thead class="thead-sticky">
             <tr>
               <th>제품 이름</th>
               <th>수량</th>
@@ -143,7 +143,7 @@ export default {
     fetchOrderedSummaries() {
       // "출고 준비 중" 상태에 대한 주문 요약 정보만 가져옵니다.
       // 실제 API 엔드포인트 주소와 파라미터는 백엔드 구현에 따라 달라질 수 있습니다.
-      axios.get('/api/inventories/summaries', { params: { orderStatus: '출고 준비 중' } })
+      axios.get('http://localhost:8080/api/inventories/summaries', { params: { orderStatus: '출고 준비 중' } })
         .then(response => {
           this.orderedSummaries = response.data;
         })
@@ -163,7 +163,7 @@ export default {
 
 
     fetchInventories() {
-      axios.get('/api/inventories').then(response => {
+      axios.get('http://localhost:8080/api/inventories').then(response => {
         this.inventories = response.data;
         this.filteredInventories = response.data;
       }).catch(error => {
