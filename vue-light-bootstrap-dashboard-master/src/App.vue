@@ -60,7 +60,7 @@ import axios from "axios";
           if (code) {
 
                if(code.length > 0) {
-                  const response = await axios.post('http://localhost:8080/api/users/findallusername', {code});
+                  const response = await axios.post('http://localhost:8079/api/users/findallusername', {code});
                   this.usernameExists = response.data.usernameExists;
                   console.log(this.usernameExists);
                   if (this.usernameExists == true) {
@@ -103,7 +103,7 @@ import axios from "axios";
            else if (userNowS) {
 
              if(userNowS.length > 0) {
-               const response = await axios.post('http://localhost:8080/api/ausers/findallusername', {userNowS});
+               const response = await axios.post('http://localhost:8079/api/ausers/findallusername', {userNowS});
                this.usernameExists = response.data.usernameExists;
                console.log(this.usernameExists);
                if (this.usernameExists == true) {
