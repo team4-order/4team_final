@@ -45,6 +45,7 @@ export default {
   },
   data() {
     return {
+      mutableBusinessId: '',
       searchQuery: '',
       selectedStatus: '', // 선택된 정산 상태
       Bcontacts: {
@@ -56,6 +57,8 @@ export default {
     }
   },
   mounted() {
+    const storedId = localStorage.getItem("code") || sessionStorage.getItem("user");
+    this.mutableBusinessId = storedId;
     this.fetchBContacts();
   },
   watch: {
@@ -66,7 +69,7 @@ export default {
   methods: {
     async fetchBContacts() {
       try {
-        const response = await axios.get('http://localhost:8080/api/contact/customers/BUS002');
+        const response = await axios.get(`http://localhost:8080/api/contact/customers/${this.mutableBusinessId}`);
         for (const contact of response.data) {
           const settlementStatus = await this.isPendingSettlement(contact.contactCode);
           const adjustmentStatusCount = await this.adjustmentcount(contact.contactCode);

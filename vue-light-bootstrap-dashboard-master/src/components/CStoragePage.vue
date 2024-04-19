@@ -13,7 +13,11 @@
         <!-- 거래처 목록 테이블 -->
         <div class="card custom-card">
           <div class="card-header">
+            <button type="submit" class="btn btn-info btn-fill float-right" @click="$router.push('/admin/input_customer')">
+                  거래처 등록
+            </button>
             <h3 class="card-title">거래처 목록</h3>
+            <input v-model="searchQuery" type="text" placeholder="거래처 이름 검색하세요" @input="filterContacts" class="form-control" />
           </div>
           <div class="card-body">
             <div v-if="uniqueCustomers.length > 0" class="table-responsive">
@@ -25,7 +29,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="contact in uniqueCustomers" :key="contact.contactCode">
+                <tr v-for="contact in uniqueCustomers" :key="contact.contactCode" @click="navigateToCustomerDetail(contact.contactCode)">
                   <td>{{ contact.contactName }}</td>
                   <td>{{ contact.contactCode }}</td>
                 </tr>
@@ -91,6 +95,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      searchQuery: '',
       cStorages: [], // 서버에서 받아온 거래처와 창고 코드 목록
       uniqueCustomers: [], // 중복 제거된 거래처 코드 목록
       selectedCustomerCode: '', // 선택된 거래처 코드
@@ -151,6 +156,20 @@ export default {
           alert('창고 코드 추가에 실패하였습니다.');
         });
     },
+    filterContacts() {
+      if (this.searchQuery) {
+        this.uniqueCustomers = this.uniqueCustomers.filter(contact =>
+          contact.contactName.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+      } else {
+        this.fetchContacts(); // 검색어가 없으면 전체 거래처를 다시 가져옴
+      }
+    },
+    navigateToCustomerDetail(contactCode) {
+    // 주문 상세 페이지 URL로 이동
+    const url = `http://localhost:8081/admin/customer_list/customer_detail/${contactCode}`;
+    window.location.href = url;
+  },
   },
 }
 </script>
@@ -189,4 +208,13 @@ export default {
   background-color: #f8f9fa;
   border-bottom: 2px solid #dee2e6;
 }
+.card-title {
+  margin-left: 14%;
+}
+.btn-info {
+  margin-bottom: 10px;
+  margin-top: -5px;
+  margin-right: -0.5px;
+}
+
 </style>

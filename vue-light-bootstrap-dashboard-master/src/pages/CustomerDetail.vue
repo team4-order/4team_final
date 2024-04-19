@@ -47,18 +47,21 @@
               </div>
             </div>
 
+          <template>
             <div class="row">
               <div class="col-md-4">
                 <base-input
                   type="text"
                   label="Company Phone"
-                  placeholder="Company Phone"
+                  placeholder="- 빼고 전화번호 입력해주세요"
                   v-model="customer.customerPhone"
                   :disabled="!isEditing"
                 ></base-input>
               </div>
             </div>
+          </template>
 
+            
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
@@ -133,6 +136,7 @@ export default {
         // 완료 버튼 클릭 시 변경사항을 원본 데이터에 저장
         this.originalCustomerData = { ...this.customer };
         this.updateProfile(); // updateProfile 함수 호출
+        this.customer.customerPassword = '';
       } else {
         // 수정하기 버튼 클릭 시 변경 전의 원본 데이터로 복원
         this.customer = { ...this.originalCustomerData };
@@ -159,6 +163,7 @@ export default {
           this.originalCustomerData = { ...response.data };
           this.isEditing = false;
           alert("프로필 수정이 완료되었습니다."); // 사용자에게 성공 알림
+          this.customer.customerPassword = '';
         } else {
           console.error('Failed to update profile. Unexpected response:', response);
           alert("Failed to update profile. Please try again."); // 사용자에게 실패 알림
@@ -193,5 +198,12 @@ export default {
 .table-responsive {
   height: 250px;
   overflow-y: auto;
+}
+
+.hint-text {
+  font-size: 0.8em;
+  color: #888;
+  margin-left: -45px;
+  margin-top: -px;
 }
 </style>
