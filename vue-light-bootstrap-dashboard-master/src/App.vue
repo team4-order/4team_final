@@ -69,12 +69,24 @@ import axios from "axios";
                   else if(this.usernameExists ==false){
                     await Swal.fire({
                       title: 'Login Status Error',
-                      text: '비정상적인 로그인 입니다.',
+                      text: '로그인이 해제되었습니다. 다시 로그인해주세요.',
                       icon: 'error',
                       confirmButtonText: '돌아가기',
                     });
                     this.authenticated = false;
                     this.$router.replace(name = "/login");
+                  }
+
+                  else if(code.length < 0 ){
+                    await Swal.fire({
+                      title: 'Login Status Error',
+                      text: '세션이 만료되었습니다.',
+                      icon: 'error',
+                      confirmButtonText: '돌아가기',
+                    });
+                    this.authenticated = false;
+                    this.$router.replace(name = "/login");
+
                   }
               }
                else if(code.length < 0 ){
@@ -112,7 +124,7 @@ import axios from "axios";
                else if(this.usernameExists ==false){
                  await Swal.fire({
                    title: 'Login Status Error',
-                   text: '비정상적인 로그인 입니다.',
+                   text: '로그인이 해제되었습니다. 다시 로그인해주세요.',
                    icon: 'error',
                    confirmButtonText: '돌아가기',
                  });
@@ -120,6 +132,16 @@ import axios from "axios";
                  this.$router.replace(name = "/login");
                }
 
+               else if(userNowS.length < 0){
+                 await Swal.fire({
+                   title: 'Login Status Error',
+                   text: '세션이 만료되었습니다.',
+                   icon: 'error',
+                   confirmButtonText: '돌아가기',
+                 });
+                 this.authenticated = false;
+                 this.$router.replace(name = "/login");
+               }
 
 
              }
@@ -136,7 +158,7 @@ import axios from "axios";
              else{
                await Swal.fire({
                  title: 'Login Status Error',
-                 text: '비정상적인 로그인입니다.',
+                 text: '비정상적인 로그인 상태입니다.',
                  icon: 'error',
                  confirmButtonText: '돌아가기',
                });
@@ -146,7 +168,7 @@ import axios from "axios";
              }
 
           }
-            /*else
+            else
             {
               await Swal.fire({
                 title: 'Require Login',
@@ -156,7 +178,7 @@ import axios from "axios";
               });
             this.authenticated = false;
             this.$router.replace(name = "/login");
-            }*/
+            }
 
         }
       catch (error){

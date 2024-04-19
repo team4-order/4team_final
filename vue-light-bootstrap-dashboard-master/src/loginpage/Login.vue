@@ -1,4 +1,4 @@
-<template class = "bodys">
+<template>
   <div id="login">
     <h1 id="logo">OMS    Login Page</h1>
     <div class="form-inputs">

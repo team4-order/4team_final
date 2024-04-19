@@ -27,7 +27,7 @@
         </div>
       </div>
       <div class="text-center">
-        <button  class="btn btn-info btn-fill float-right" v-on:click="delUser">
+        <button class="btn btn-info btn-fill float-right" @click.prevent="showConfirmation">
           회원 탈퇴
         </button>
       </div>
@@ -37,6 +37,7 @@
 </template>
 <script>
 import axios from 'axios';
+import Swal from "sweetalert2";
 
 
   export default {
@@ -58,13 +59,23 @@ import axios from 'axios';
       async delUser () {
 
         const username = this.user.username;
-        alert(username);
+
         try {
 
           const response = await axios.post('http://localhost:8079/api/delete-username', { username: username });
           this.user.username = ''; // Reset the input after sending
 
+          console.log("회원 탈퇴가 완료되었습니다.");
+          this.$emit("authenticated", false);
 
+          await Swal.fire(
+            '삭제 완료!',
+            '회원 탈퇴가 완료되었습니다.',
+            'success'
+          )
+
+          this.$router.replace({ name: "Login" });
+          window.location.reload();
         }
         catch (error) {
           console.error('Failed to delete username:', error);
@@ -83,7 +94,22 @@ import axios from 'axios';
           this.user.username = Susername;
         }
 
-      }
+      },async showConfirmation() {
+        await Swal.fire({
+          title: '정말 삭제하시겠습니까?',
+          text: "한 번 삭제하면 되돌릴 수 없습니다!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: '삭제',
+          cancelButtonText: '취소'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.delUser();
+          }
+        });
+      },
     }
   }
 
