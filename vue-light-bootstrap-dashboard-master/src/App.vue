@@ -171,7 +171,7 @@ import axios from "axios";
              }
 
           }
-            else
+            /*else
             {
               await Swal.fire({
                 title: 'Require Login',
@@ -181,7 +181,7 @@ import axios from "axios";
               });
             this.authenticated = false;
             this.$router.replace(name = "/login");
-            }
+            }*/
 
         }
       catch (error){

@@ -47,10 +47,10 @@
         <p>정산</p>
       </sidebar-link>
 
-      <sidebar-link to="/admin/customer_list">
+      <!-- <sidebar-link to="/admin/customer_list">
         <i class="nc-icon nc-badge"></i>
         <p>거래처 관리</p>
-      </sidebar-link>
+      </sidebar-link> -->
 
       <!-- <sidebar-link to="/admin/delivery">
         <i class="nc-icon nc-spaceship"></i>
