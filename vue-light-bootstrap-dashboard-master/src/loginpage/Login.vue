@@ -225,6 +225,7 @@ export default {
 
       if (this.rememberMe) {
         // Set the cookie if "Remember me" is checked
+        this.$cookies.remove("idCookie");
         this.$cookies.set("idCookie", username);
       } else {
         // Remove the cookie if "Remember me" is unchecked
