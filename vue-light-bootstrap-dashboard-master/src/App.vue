@@ -8,7 +8,7 @@
   <div id="app">
     <div id="nav">
       <router-link class = "setRight" v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Logout</router-link>
-<!--      <router-link v-if="!authenticated" to="/login">Login</router-link>-->
+      <router-link v-if="!authenticated" to="/login">Login</router-link>
       <router-link v-if="!authenticated" to="/register">Register</router-link>
     </div>
     <router-view @authenticated="setAuthenticated"/>
@@ -39,17 +39,20 @@ import axios from "axios";
 
       },
       async logout() {
-        Swal.fire({
+
+        await Swal.fire({
           title: 'LogOut Success!',
           text: '성공적으로 로그아웃 되었습니다.',
           icon: 'success',
           confirmButtonText: '확인'
 
         })
-        await localStorage.removeItem('token');
+
+        localStorage.removeItem('token');
         localStorage.removeItem('code');
         sessionStorage.removeItem('user');
         this.authenticated = false;
+        /* window.location.reload();*/
 
       },async checkUsernameExistence() {
         try {
