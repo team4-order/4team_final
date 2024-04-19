@@ -44,7 +44,7 @@ export default {
       orderStatus: '',
       adjustmentStatus: '',
       orderDetails: {
-        columns: ['상품명', '상품 등급', '가격(BOX)', '주문 수량', '금액(원)'],
+        columns: ['상품명', '상품 등급', '가격(box)', '주문 수량', '금액(원)'],
         data: [],
         filteredData: []
       }
@@ -99,7 +99,7 @@ export default {
               ...orderDetail,
               '주문 번호': orderDetail.orderNumber,
               '상품명': orderDetail.goodsName,
-              '가격(BOX)': orderDetail.orderPrice * 1,
+              '가격(box)': orderDetail.orderPrice,
               '주문 수량': orderDetail.orderQuantity,
               '상품 코드': orderDetail.goodsCode,
               '상품 등급': orderDetail.goodsGrade,
