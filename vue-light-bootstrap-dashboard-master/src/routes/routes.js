@@ -26,6 +26,7 @@ import OrderApply1 from 'src/pages/TableList2.vue'
 import OrderApply from 'src/pages/TableList7.vue'
 import Overview from 'src/pages/Overview1.vue'
 import OpenAI from 'src/pages/OpenAI.vue'
+import DeliveryStatus1 from "src/pages/DeliveryStatus.vue";
 /*import { component } from 'vue/types/umd.js'*/
 /*import CustomerList from 'src/components/CustomerList.vue'*/
 import BCustomerList from 'src/pages/BCustomerList.vue'
@@ -128,10 +129,15 @@ const routes = [
         component: Fruit, // 공급처 상세정보 페이지
       },
       {
-        path: 'deliveryStatus',
-        name: 'DeliveryStatus',
-        component: DeliveryStatus, // 배송 현황
+        path: 'delivery',
+        name: 'DeliveryStatus1',
+        component: DeliveryStatus1, // 배송 현황
       },
+      // {
+      //   path: 'deliveryStatus',
+      //   name: 'DeliveryStatus',
+      //   component: DeliveryStatus, // 배송 현황
+      // },
       {
         path: 'user',
         name: 'User',

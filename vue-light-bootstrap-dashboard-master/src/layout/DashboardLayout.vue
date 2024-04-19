@@ -87,7 +87,7 @@
         <p>과일 목록</p>
       </sidebar-link>
 
-      <sidebar-link to="/admin/deliveryStatus">
+      <sidebar-link to="/admin/delivery">
         <i class="nc-icon nc-ambulance"></i>
         <p>배송 현황</p>
       </sidebar-link>
