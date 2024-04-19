@@ -38,6 +38,7 @@ import CAdjustment from 'src/pages/CAdjustment.vue'
 import UserProfile from 'src/pages/UserProfile.vue'
 import Login from "../loginpage/Login.vue";
 import Register from "../loginpage/Register.vue";
+import TLogin from "../loginpage/TLogin.vue";
 
 
 // import { component } from 'vue/types/umd.js'
@@ -54,6 +55,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path: '/tlogin',
+    name: 'TLogin',
+    component: TLogin,
   },
   {
     path: '/register',
@@ -223,7 +229,7 @@ const routes = [
     path: '/buyer',
     component: CustomerDashboardLayout,
     redirect: '/buyer/:customerCode',
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: false },
     children: [
       {
         //주문 목록(판매처)

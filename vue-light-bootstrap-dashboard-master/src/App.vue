@@ -8,6 +8,7 @@
   <div id="app">
     <div id="nav">
       <router-link class = "setRight" v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Logout</router-link>
+      <router-link  v-if="!authenticated" to="/tlogin">거래처 페이지</router-link>
       <router-link v-if="!authenticated" to="/login">Login</router-link>
       <router-link v-if="!authenticated" to="/register">Register</router-link>
     </div>
@@ -58,7 +59,7 @@ import axios from "axios";
         try {
           const userNowS = sessionStorage.getItem('user');
           const code = localStorage.getItem('code');
-
+          const cuser =sessionStorage.getItem('cuser');
 
           if (code) {
 
@@ -170,6 +171,62 @@ import axios from "axios";
 
              }
 
+          }
+           else if(cuser)
+          {
+            if(cuser.length > 0) {
+              const response = await axios.post('http://localhost:8079/api/cusers/findallusername', {cuser});
+              this.usernameExists = response.data.usernameExists;
+              console.log(this.usernameExists);
+              if (this.usernameExists == true) {
+
+                this.authenticated = true;
+              }
+              else if(this.usernameExists ==false){
+                await Swal.fire({
+                  title: 'Login Status Error',
+                  text: '로그인이 해제되었습니다. 다시 로그인해주세요.',
+                  icon: 'error',
+                  confirmButtonText: '돌아가기',
+                });
+                this.authenticated = false;
+                this.$router.replace(name = "/login");
+              }
+
+              else if(code.length < 0 ){
+                await Swal.fire({
+                  title: 'Login Status Error',
+                  text: '세션이 만료되었습니다.',
+                  icon: 'error',
+                  confirmButtonText: '돌아가기',
+                });
+                this.authenticated = false;
+                this.$router.replace(name = "/login");
+
+              }
+            }
+            else if(code.length < 0 ){
+              await Swal.fire({
+                title: 'Login Status Error',
+                text: '세션이 만료되었습니다.',
+                icon: 'error',
+                confirmButtonText: '돌아가기',
+              });
+              this.authenticated = false;
+              this.$router.replace(name = "/login");
+
+            }
+            else {
+              await Swal.fire({
+                title: 'Login Status Error',
+                text: '비정상적인 로그인입니다.',
+                icon: 'error',
+                confirmButtonText: '돌아가기',
+              });
+              this.authenticated = false;
+              this.$router.replace(name = "/login");
+
+            }
           }
             /*else
             {
