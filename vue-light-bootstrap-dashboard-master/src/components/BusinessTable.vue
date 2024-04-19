@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: 'l-table',
+  name: 'l-table3',
   props: {
     columns: Array,
     data: Array

@@ -227,7 +227,7 @@ const routes = [
     children: [
       {
         //주문 목록(판매처)
-        path: ':customerCode',
+        path: 'status/:customerCode',
         name: 'CustomerOrderList',
         component: CustomerOrderList
       },

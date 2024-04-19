@@ -10,9 +10,9 @@
         <i class="nc-icon nc-atom"></i>
         <p>Icons</p>
       </sidebar-link>
-      <sidebar-link to="/buyer/CON001">
+      <sidebar-link to="/buyer/status/CON001">
         <i class="nc-icon nc-cart-simple"></i>
-        <p>주문</p>
+        <p>주문 현황</p>
       </sidebar-link>
       <sidebar-link to="/buyer/apply/CON001">
         <i class="nc-icon nc-paper-2"></i>
