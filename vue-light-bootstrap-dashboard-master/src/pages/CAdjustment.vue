@@ -19,9 +19,9 @@
             </div>
           </div>
           <div class="adjustment-summary">
-              <p class="all" v-if="showTotalUnadjustedAmount">정산 요청 금액: {{ totalUnadjustedAmount }}원 </p>
-              <p class="all" v-if="showTotalUnadjustedAmount1">미정산된 금액: {{ totalUnadjustedAmount1 }}원 </p>
-              <p class="all">주문된 총 금액: {{ totalOrderedAmount }}원</p>
+              <p class="all" v-if="showTotalUnadjustedAmount">정산 요청 금액: {{ totalUnadjustedAmount.toLocaleString() }}원 </p>
+              <p class="all" v-if="showTotalUnadjustedAmount1">미정산된 금액: {{ totalUnadjustedAmount1.toLocaleString() }}원 </p>
+              <p class="all">주문된 총 금액: {{ totalOrderedAmount.toLocaleString() }}원</p>
               <button v-if="showAdjustButton" @click="adjustmentAction" class="btn btn-primary">정산 요청</button>
           </div>
           <!-- 카드 컴포넌트로 정산 목록을 표시 -->

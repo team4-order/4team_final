@@ -117,7 +117,7 @@ export default {
     },
     handleRowClick(row) {
       const customerCode = row['거래처 코드'];
-      window.location.href = `http://localhost:8081/#/bcustomer_list/b_adjustment/${customerCode}`;
+      window.location.href = `http://localhost:8081/bcustomer_list/b_adjustment/${customerCode}`;
     }
   },
   computed: {
