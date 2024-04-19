@@ -146,22 +146,22 @@ import axios from "axios";
              }
 
           }
-            else
+            /*else
             {
               await Swal.fire({
-                title: 'Login Status Error',
+                title: 'Require Login',
                 text: '로그인을 진행해주세요!',
                 icon: 'info',
                 confirmButtonText: '확인'
               });
             this.authenticated = false;
             this.$router.replace(name = "/login");
-            }
+            }*/
 
         }
       catch (error){
     await Swal.fire({
-          title: 'Login Status Error',
+          title: 'Require Login',
           text: '로그인을 진행해주세요!',
           icon: 'info',
           confirmButtonText: '확인'
