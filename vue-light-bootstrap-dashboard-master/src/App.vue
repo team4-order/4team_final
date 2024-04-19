@@ -52,7 +52,7 @@ import axios from "axios";
         localStorage.removeItem('code');
         sessionStorage.removeItem('user');
         this.authenticated = false;
-        /* window.location.reload();*/
+         window.location.reload();
 
       },async checkUsernameExistence() {
         try {
@@ -210,12 +210,16 @@ import axios from "axios";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+
   color: #2c3e50;
 }
 
 #nav {
+  outline : solid 1px darkgrey;
+
   text-align: right;
-  padding: 10px; /* Reduced padding for a more compact look */
+  padding: 20px;
+  /* Reduced padding for a more compact look */
   /*display: inline-block; *//* Use flexbox for easier alignment */
   /*justify-content: flex-end;*/ /* Align items to the right */
 }
@@ -224,7 +228,7 @@ import axios from "axios";
 
   font-weight: bold;
   text-align: center;
-  color: #504e2c;
+  color: #070707;
   padding: 15px 1px; /* Add padding to the top and bottom for spacing */
   font-size: 20px; /* Reduced font size for better proportion */
   text-decoration: none; /* Remove default underline */
@@ -237,8 +241,8 @@ import axios from "axios";
 }
 
 #nav a:hover {
-  color: #a48c45; /* Change color on hover */
-  background-color: #ecce87; /* Add background color on hover */
+  color: #282727; /* Change color on hover */
+  background-color: #b0dff6; /* Add background color on hover */
   border-radius: 5px; /* Add rounded corners on hover */
 }
 

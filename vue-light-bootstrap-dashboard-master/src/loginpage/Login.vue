@@ -3,16 +3,16 @@
   <div class="login-fg">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-xl-8 col-lg-7 col-md-12 bg" style="background-image:url('https://images.unsplash.com/photo-1538475711279-0373b6bc754e?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=ad852715b5223db487fe48eef21df4ce&auto=format&fit=crop&w=1308&q=80')">
+        <div class="col-xl-8 col-lg-7 col-md-12 bg" style="background-image:url('http://localhost:8081/img/market.jpg')">
           <div class="info">
             <h1>Easy OMS</h1>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</p>
+            <p>로그인 혹은 회원가입 후 이용해주세요.</p>
           </div>
         </div>
         <div class="col-xl-4 col-lg-5 col-md-12 login">
           <div class="login-section">
             <div class="logo clearfix">
-              <a href="#">
+              <a href="/login">
                 Easy OMS LOGIN
               </a>
             </div>
@@ -62,12 +62,11 @@
                 </div>
                 <div class="checkbox clearfix" >
                   <div class="form-check checkbox-fg" v-if="!loginstatus">
-                    <input class="form-check-input" type="checkbox" value="" id="remember">
+                    <input class="form-check-input" type="checkbox" v-model="rememberMe"  id="remember">
                     <label class="form-check-label" for="remember">
                       Remember me
                     </label>
                   </div>
-
                 </div>
                 <div class="form-group mt-2">
                   <button type="button" class="btn-md btn-fg btn-block" v-if ="!this.loginstatus" v-on:click="login">Login</button>
@@ -101,10 +100,17 @@ export default {
       loginstatus: false,
       usernameExists: false,
       showTooltip: false,
+      rememberMe: false,
     }
   },
   mounted() {
     this.checkAndStoreCode();
+
+    const idCookie = this.$cookies.get("idCookie");
+    if (idCookie) {
+      this.input.username = idCookie;
+      this.rememberMe = true; // 이전에 체크된 상태로 "Remember me" 체크박스 설정
+    }
   },
   methods: {
     checkAndStoreCode() {
@@ -114,7 +120,6 @@ export default {
         localStorage.setItem('code', code);
         this.loginstatus = true;
       }
-
     },
     async login() {
       try {
@@ -139,6 +144,17 @@ export default {
         localStorage.setItem('token', token);
         //window.sessionStorage.setItem("user",instantUserName);
         sessionStorage.setItem('user', userIn);
+
+
+          if (this.rememberMe) {
+            this.loginRemember();
+          }
+          else
+          {
+            this.loginRemember();
+          }
+
+
 
         this.$emit("authenticated", true);
         this.$router.replace({ name: "Overview" });
@@ -201,7 +217,26 @@ export default {
       }
     },redirect(){
       this.$router.replace({ name: "Register" });
-    },
+    },loginRemember() {
+      console.log(this.rememberMe)
+
+      const username = sessionStorage.getItem("user");
+      console.log("Username retrieved from session storage:", username);
+
+      if (this.rememberMe) {
+        // Set the cookie if "Remember me" is checked
+        this.$cookies.set("idCookie", username);
+      } else {
+        // Remove the cookie if "Remember me" is unchecked
+        this.$cookies.remove("idCookie");
+      }
+
+
+
+
+
+
+    }
   }
 }
 </script>

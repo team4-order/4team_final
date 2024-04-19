@@ -19,8 +19,8 @@
           <div class="form-group">
             <label>경고!</label>
             <textarea  rows="2" class="form-control"
-                      placeholder="탈퇴 버튼을 누르면 되돌릴 수 없습니다.
-  버튼을 누르는 즉시 계정이 삭제됩니다."
+                      placeholder="                                                                                     탈퇴 후 계정을 되돌릴 수 없습니다.
+                                                                                        회원 탈퇴는 신중히 선택해 주세요."
                       v-model="user.aboutMe" readonly>
               </textarea>
           </div>

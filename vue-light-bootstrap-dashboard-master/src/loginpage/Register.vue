@@ -3,20 +3,20 @@
   <div class="login-fg">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-xl-8 col-lg-7 col-md-12 bg" style="background-image:url('https://images.unsplash.com/photo-1538475711279-0373b6bc754e?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=ad852715b5223db487fe48eef21df4ce&auto=format&fit=crop&w=1308&q=80')">
+        <div class="col-xl-8 col-lg-7 col-md-12 bg" style="background-image:url('http://localhost:8081/img/market.jpg')">
           <div class="info">
             <h1>Easy OMS</h1>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</p>
+            <p>로그인 혹은 회원가입 후 이용해주세요.</p>
           </div>
         </div>
         <div class="col-xl-4 col-lg-5 col-md-12 login">
           <div class="login-section">
             <div class="logo clearfix">
-              <a href="#">
-                Easy OMS LOGIN
+              <a href="/register">
+                Easy OMS REGISTER
               </a>
             </div>
-            <h3>Sign in into your account</h3>
+            <h3>Register account</h3>
 
 
 
@@ -36,9 +36,7 @@
 
 
 
-            <div class="or-login clearfix">
-              <span >Or</span>
-            </div>
+
             <div class="form-container">
               <form action="#" method="GET">
                 <div class="form-group form-fg" v>

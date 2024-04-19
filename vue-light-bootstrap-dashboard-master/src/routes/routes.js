@@ -58,6 +58,7 @@ const routes = [
   {
     path: '/register',
     component: Register,
+    meta: { requiresAuth: false },
   },
   {
     path: '/',
@@ -222,6 +223,7 @@ const routes = [
     path: '/buyer',
     component: CustomerDashboardLayout,
     redirect: '/buyer/:customerCode',
+    meta: { requiresAuth: true },
     children: [
       {
         //주문 목록(판매처)

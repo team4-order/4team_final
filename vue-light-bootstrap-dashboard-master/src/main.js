@@ -5,6 +5,9 @@ import LightBootstrap from "./light-bootstrap-main";// LightBootstrap plugin
 import routes from "./routes/routes";// router setup
 import "./registerServiceWorker";
 import Swal from 'sweetalert2';
+import VueCookies from 'vue-cookies';
+
+Vue.use(VueCookies);
 // plugin setup
 Vue.use(VueRouter);
 Vue.use(LightBootstrap);
