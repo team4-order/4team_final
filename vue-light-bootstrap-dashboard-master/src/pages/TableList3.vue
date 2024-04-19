@@ -3,21 +3,19 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-            <card class="strpied-tabled-with-hover"
-                  body-classes="table-full-width table-responsive"
-            >
+           <card2>
               <template slot="header">
                 <h4 class="card-title">Order Detail List</h4>
                 <p v-if="firstOrderNumber" class="card-category">{{ firstOrderNumber }} 번 주문</p>
                 <p class="card-category">주문 상태: {{ orderStatus }} </p>
                 <p v-if="adjustmentStatus !== '주문 취소'" class="card-category">정산 상태: {{ adjustmentStatus }} </p>
               </template>
-
-              <l-table class="table-hover table-striped"
+            
+              <l-table2 class="table-hover table-striped"
                 :columns="orderDetails.columns"
                 :data="orderDetails.filteredData">
-              </l-table>
-            </card>
+              </l-table2>
+            </card2>
 
           </div>
         </div>
@@ -28,13 +26,13 @@
 
 <script>
 import axios from 'axios';
-import LTable from 'src/components/Table.vue'
-import Card from 'src/components/Cards/Card.vue'
+import LTable2 from 'src/components/Table1.vue'
+import Card2 from 'src/components/Cards/Card2.vue'
 
 export default {
 components: {
-    LTable,
-    Card
+    LTable2,
+    Card2
   },
 data() {
   return {
@@ -43,7 +41,7 @@ data() {
     orderStatus: '',
     adjustmentStatus: '',
     orderDetails: {
-      columns: ['상품명', '상품 등급', '가격(BOX)', '주문 수량', '금액(원)'],
+      columns: ['상품명', '상품 등급', '가격(box)', '주문 수량', '금액(원)'],
       data: [],
       filteredData: []
     }
@@ -99,7 +97,7 @@ methods: {
             ...orderDetail,
             '주문 번호': orderDetail.orderNumber,
             '상품명': orderDetail.goodsName,
-            '가격(BOX)': orderDetail.orderPrice * 1,
+            '가격(box)': orderDetail.orderPrice * 1,
             '주문 수량': orderDetail.orderQuantity,
             '상품 코드': orderDetail.goodsCode,
             '상품 등급': orderDetail.goodsGrade,

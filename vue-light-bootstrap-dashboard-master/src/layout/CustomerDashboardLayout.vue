@@ -2,14 +2,14 @@
   <div class="wrapper">
     <side-bar>
       <mobile-menu slot="content"></mobile-menu>
-      <sidebar-link to="/buyer">
+      <!-- <sidebar-link to="/buyer">
         <i class="nc-icon nc-chart-pie-35"></i>
         <p>Dashboard</p>
       </sidebar-link>
       <sidebar-link to="/admin/icons">
         <i class="nc-icon nc-atom"></i>
         <p>Icons</p>
-      </sidebar-link>
+      </sidebar-link> -->
       <sidebar-link to="/buyer/status/CON001">
         <i class="nc-icon nc-cart-simple"></i>
         <p>주문 현황</p>

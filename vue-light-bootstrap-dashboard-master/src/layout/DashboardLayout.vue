@@ -8,7 +8,7 @@
         <p>Dashboard</p>
       </sidebar-link>-->
 
-      <sidebar-link to="/admin/overview1">
+      <sidebar-link to="/admin/overview">
         <i class="nc-icon nc-chart-pie-35"></i>
         <p>Dashboard</p>
       </sidebar-link>
