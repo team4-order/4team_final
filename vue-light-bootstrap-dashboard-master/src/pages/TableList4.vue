@@ -3,28 +3,32 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-          <card class="strpied-tabled-with-hover" body-classes="table-full-width table-responsive">
-            <template slot="header">
-              <h4 class="card-title">Order List</h4>
-              <p class="card-category">주문 현황</p>
 
-              <div class="row">
-            <div class="date-and-filter-bar">
-              <div class="filter-dates">
-                <input type="date" v-model="startDate" @change="filterOrders" class="form-control">
-                <input type="date" v-model="endDate" @change="filterOrders" class="form-control">
-              </div>
+          <div class="date-and-filter-bar">
+            <div class="date-filter">
+              <input type="date" v-model="startDate" @change="filterOrders" class="form-control">
+              <input type="date" v-model="endDate" @change="filterOrders" class="form-control">
+
+              <select v-model="selectedStatus" @change="filterByStatus" class="form-control">
+                <option value="">전체</option>
+                <option v-for="status in statuses" :value="status">{{ status }}</option>
+              </select>
             </div>
           </div>
-            </template>
 
-            <l-table class="table-hover table-striped" :columns="orders.columns" :data="orders.filteredData"
+
+          <card2>
+            <h4 class="card-title">Order List</h4>
+            <p class="card-category">주문 현황</p>
+            <l-table2 class="table-hover table-striped" :columns="orders.columns" :data="orders.filteredData"
               @row-click="handleRowClick">
-            </l-table>
+            </l-table2>
             <div class="pagination-controls">
-              <button class="btn btn-info btn-fill" @click="changePage(1)" :disabled="currentPage === 1"> << </button>
+              <button class="btn btn-info btn-fill" @click="changePage(1)" :disabled="currentPage === 1">
+                << </button>
                   <button class="btn btn-info btn-fill" @click="changePage(currentPage - 1)"
-                    :disabled="currentPage <= 1"> < </button>
+                    :disabled="currentPage <= 1">
+                    < </button>
 
                       <span v-for="number in pageNumbers" :key="number" class="page-number" @click="changePage(number)"
                         :class="{ 'active': currentPage === number }">
@@ -36,7 +40,7 @@
                       <button class="btn btn-info btn-fill" @click="changePage(totalPages)"
                         :disabled="currentPage === totalPages">>></button>
             </div>
-          </card>
+          </card2>
         </div>
       </div>
     </div>
@@ -45,13 +49,13 @@
 
 <script>
 import axios from 'axios';
-import LTable from 'src/components/Table.vue';
-import Card from 'src/components/Cards/Card.vue';
+import LTable2 from 'src/components/Table1.vue';
+import Card2 from 'src/components/Cards/Card2.vue';
 
 export default {
   components: {
-    LTable,
-    Card
+    LTable2,
+    Card2
   },
   data() {
     return {
@@ -109,7 +113,7 @@ export default {
     handleRowClick(row) {
       const orderNumber = row['주문 번호'];
       // 주문 상세 페이지 URL로 이동
-      window.location.href = `http://localhost:8080/#/buyer/detail/${orderNumber}`;
+      window.location.href = `http://localhost:8081/buyer/detail/${orderNumber}`;
     }
   },
   computed: {
