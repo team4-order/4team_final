@@ -10,11 +10,14 @@
       <div class="map-container">
         <!-- 제목 -->
         <h3>배송 경로</h3>
+        <p class="card-category">
+          <div>거리: {{ distance }}km, 소요 시간: {{ hours }}시간 {{ minutes }}분</div>
+        </p>
         <!-- 지도 영역 -->
         <div id="map" class="map"></div>
       </div>
       <!-- 출고 등록 버튼 -->
-      <button type="submit" class="btn btn-info btn-fill" @click="$router.push('/admin/input_customer')">
+      <button type="submit" class="btn btn-info btn-fill" @click="submitDelivery">
         출고 등록
       </button>
     </div>
@@ -31,12 +34,18 @@ export default {
   },
   data() {
     return {
+      mutableBusinessId: '',
       isScriptLoaded: false,
       storageLatLong: null,
-      customerLatLong: null
+      customerLatLong: null,
+      distance: 0, // 거리 데이터
+      hours: 0, // 시간 데이터
+      minutes: 0 // 분 데이터
     };
   },
   async mounted() {
+    const storedId = localStorage.getItem("code") || sessionStorage.getItem("user");
+    this.mutableBusinessId = storedId;
     await this.loadKaKaoPostcodeScript();
     kakao.maps.load(() => {
         this.initMap();
@@ -77,9 +86,8 @@ export default {
       }
     },
     async fetchData() {
-      const orderNumber = '2';
       try {
-        const response = await axios.get(`http://localhost:8080/api/orders/id/BUS002/${orderNumber}`);
+        const response = await axios.get(`http://localhost:8080/api/orders/id/${this.mutableBusinessId}/${this.$route.params.orderNumber}`);
         if (response && response.data) {
           const storageContact = response.data.storageContact;
           const customerContact = response.data.customerContact;
@@ -101,8 +109,9 @@ export default {
         return Promise.reject(`${type} 주소가 제공되지 않았습니다.`);
       }
       return axios.get(`https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURI(address)}`, {
+        withCredentials: false, // 이 부분을 추가하여 인증 정보를 포함하지 않도록 설정합니다
         headers: {
-          'Authorization': 'KakaoAK f74e4f598452c26325500e84e020e0fc'
+          'Authorization': 'KakaoAK c4297977a44e472f16e253b264138e76'
         }
       }).then(response => {
         if (response && response.data && response.data.documents.length > 0) {
@@ -125,6 +134,7 @@ export default {
       }
 
       axios.get('https://apis-navi.kakaomobility.com/v1/directions', {
+        withCredentials: false, // 이 부분을 추가하여 인증 정보를 포함하지 않도록 설정합니다
         params: {
           origin: `${this.storageLatLong.long},${this.storageLatLong.lat}`,
           destination: `${this.customerLatLong.long},${this.customerLatLong.lat}`,
@@ -136,7 +146,7 @@ export default {
           road_details: false
         },
         headers: {
-          'Authorization': 'KakaoAK f74e4f598452c26325500e84e020e0fc',
+          'Authorization': 'KakaoAK c4297977a44e472f16e253b264138e76',
           'Content-Type': 'application/json'
         }
       })
@@ -193,18 +203,43 @@ export default {
             strokeStyle: 'solid'
           });
           polyline.setMap(map);
-          // 커스텀 오버레이 추가
-          const customOverlay = new kakao.maps.CustomOverlay({
-            position: new kakao.maps.LatLng(37.39843974939604, 127.10972941510465),
-            content: `<div class="label" style="background-color: white;">거리: ${distance}km, 소요 시간: ${Math.floor(duration / 3600)}시간 ${Math.floor((duration % 3600) / 60)}분</div>` // 배경 색상 추가
-          });
-          customOverlay.setMap(map);
+          //커스텀 오버레이 추가
+          this.distance = distance;
+          this.hours = Math.floor(duration / 3600);
+          this.minutes = Math.floor((duration % 3600) / 60);
         }
       })
       .catch(error => {
         console.log(error);
       });
-    }
+    },
+    async submitDelivery() {
+      try {
+        const orderNumber = this.$route.params.orderNumber;
+        const response = await axios.get(`http://localhost:8080/api/orders/id/${this.mutableBusinessId}/${orderNumber}`);
+        
+        if (response && response.data) {
+          const customerContact = response.data.customerContact;
+          console.log(customerContact); // customerContact 객체를 콘솔에 출력하여 확인
+
+          if (customerContact && customerContact.contactAddress) {
+            const deliveryAddress = customerContact.contactAddress;
+            // 주소를 포함하여 POST 요청
+            await axios.post(`http://localhost:8080/api/deliveries/delivery/${orderNumber}`, {
+              deliveryAddress: deliveryAddress
+            });
+            this.$router.push('/admin/deliveryStatus'); // 페이지 이동
+          } else {
+            console.error('도착지 주소를 찾을 수 없습니다.');
+          }
+        } else {
+          console.error('API 응답에서 주문 데이터를 가져올 수 없습니다.');
+        }
+      } catch (error) {
+        console.error('출고 등록에 실패했습니다:', error);
+      }
+    },
+
   }
 };
 </script>
