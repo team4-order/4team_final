@@ -8,7 +8,7 @@
         <p>Dashboard</p>
       </sidebar-link>-->
 
-      <sidebar-link to="/admin/overview1">
+      <sidebar-link to="/admin/overview">
         <i class="nc-icon nc-chart-pie-35"></i>
         <p>Dashboard</p>
       </sidebar-link>
@@ -87,7 +87,7 @@
         <p>과일 목록</p>
       </sidebar-link>
 
-      <sidebar-link to="/admin/deliveryStatus">
+      <sidebar-link to="/admin/delivery">
         <i class="nc-icon nc-ambulance"></i>
         <p>배송 현황</p>
       </sidebar-link>

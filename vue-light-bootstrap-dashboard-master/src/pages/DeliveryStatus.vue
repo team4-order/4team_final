@@ -6,7 +6,7 @@
 
            
 
-            <div class="date-and-filter-bar">
+            <!-- <div class="date-and-filter-bar">
               <div class="date-filter">
                 <input type="date" v-model="startDate" @change="filterOrders" class="form-control">
                 <input type="date" v-model="endDate" @change="filterOrders" class="form-control">
@@ -18,15 +18,15 @@
   </option>
 </select>
               </div>
-            </div>
+            </div> -->
           <card2>
  <template slot="header">
-              <h4 class="card-title">Order List</h4>
+              <h4 class="card-title">배송 현황</h4>
               <p class="card-category">Here is a subtitle for this table</p>
             </template>
 
-            <l-table3 class="table-hover table-striped" :columns="orders.columns" :data="orders.filteredData"
-              @row-click="handleRowClick">
+            <l-table3 class="table-hover table-striped" :columns="orders.columns" :data="orders.data">
+              
             </l-table3>
             <div class="pagination-controls">
               <button class="btn btn-info btn-fill" @click="changePage(1)" :disabled="currentPage === 1">
@@ -54,7 +54,7 @@
 
 <script>
 import axios from 'axios';
-import LTable3 from 'src/components/BusinessTable.vue';
+import LTable3 from 'src/components/Table2.vue';
 import Card2 from 'src/components/Cards/Card2.vue';
 
 export default {
@@ -73,88 +73,47 @@ export default {
       selectedCustomerCode: '',
       customers: [],
       orders: {
-        columns: ['주문 번호', '고객명', '주문 금액(원)', '주문 일자', '주문 상태'],
-        data: [],
-        filteredData: []
+        columns: ['배송 번호', '주문 번호', '고객명', '배송지', '배송 신청일', '배송 도착일', '배송 상태'],
+        data: []
       }
     };
   },
   mounted() {
     const storedId = localStorage.getItem("code") || sessionStorage.getItem("user");
+    console.log(storedId);
     this.mutableBusinessId = storedId;
     this.fetchOrderList();
-    this.fetchCustomerList();
   },
   methods: {
-    fetchCustomerList() {
-      axios.get(`http://localhost:8080/api/contact/busId/${this.mutableBusinessId}`)
-        .then(response => {
-          this.customers = response.data.map(customer => ({
-            contactName: customer.contactName,
-            contactCode: customer.contactCode
-          }));
-        })
-        .catch(error => {
-          console.error("고객 목록을 가져오는 데 실패했습니다.", error);
-        });
-    },
-    filterOrders() {
-  console.log("Selected Customer Code:", this.selectedCustomerCode);
-  const startDate = this.startDate ? new Date(this.startDate) : new Date('1970-01-01');
-  const endDate = this.endDate ? new Date(this.endDate) : new Date();
-
-  console.log(`Filtering from ${startDate} to ${endDate}`);
-
-  let filtered = this.orders.data.filter(order => {
-    const orderDate = new Date(order['주문 일자']);
-    console.log(`Order ${order['주문 번호']}: Date ${orderDate}, Customer Code ${order['판매처 코드']}`);
-
-    return (!this.selectedCustomerCode || order['판매처 코드'] === this.selectedCustomerCode) &&
-      orderDate >= startDate && orderDate <= endDate;
-  });
-
-  console.log(`Filtered ${filtered.length} orders`);
-  this.orders.filteredData = filtered.slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage);
-},
-    filterByStatus() {
-      this.currentPage = 1; // Reset to first page
-      this.filterOrders();
-    },
-    changePage(page) {
-      this.currentPage = page;
-      this.filterOrders();
-    },
     fetchOrderList() {
       //const businessId = this.$route.params.businessId;
-      axios.get(`http://localhost:8080/api/orders/busId/${this.mutableBusinessId}`)
+      axios.get(`http://localhost:8080/api/deliveries/status/${this.mutableBusinessId}`)
         .then(response => {
           this.orders.data = response.data.map(order => {
             return {
+              '배송 번호': order.deliveryNumber,
+              '배송지': order.deliveryAddress,
+              '배송 신청일': order.deliveryApply ? order.deliveryApply.replace('T', ' ') : '-',
+          '배송 도착일': order.deliveryArrive ? order.deliveryArrive.split('.')[0].replace('T', ' ') : '-',
               '주문 번호': order.orderNumber,
-              '고객명': order.customerName,
-              '주문 금액(원)': order.orderPrice,
-              '주문 일자': order.orderDate,
-              '주문 상태': order.orderStatus,
-              '판매처 코드': order.customerCode
+              '고객명': order.contactName,
+              '배송 상태': order.orderStatus
             };
           })
-            .sort((a, b) => new Date(b['주문 일자']) - new Date(a['주문 일자']));
-          this.filterOrders();
-
         })
         .catch(error => {
-          console.error("주문 목록을 가져오는 데 실패했습니다.", error);
+          console.error("배송 현황 목록을 가져오는 데 실패했습니다.", error);
         });
-    },
-    handleRowClick(row) {
-      const orderNumber = row['주문 번호'];
-      // 주문 상세 페이지 URL로 이동
-      window.location.href = `http://localhost:8081/admin/orders/detail/${orderNumber}`;
     }
   },
   computed: {
     totalPages() {
       return Math.ceil(this.orders.data.length / this.itemsPerPage);
+    },
+    paginatedData() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.orders.data.slice(start, end);
     },
     pageNumbers() {
       let numbers = [];
@@ -169,6 +128,12 @@ export default {
 
 
 <style>
+.table th, .table td {
+  vertical-align: middle; /* Align content vertically in the middle of the cell */
+  text-align: left; /* Align text to the left */
+  padding: 8px; /* Standard padding for all cells */
+}
+
 .date-and-filter-bar {
   display: flex;
   justify-content: space-between;

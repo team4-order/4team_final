@@ -128,14 +128,9 @@
               <h5 class="title">정산 요청 리스트</h5>
               <p class="category"></p>
             </template>
-            <l-table :data="tableData.data" :columns="tableData.columns">
-            </l-table>
-            <div class="footer">
-              <hr>
-              <div class="stats">
-                <i class="fa fa-history"></i> Updated 3 minutes ago
-              </div>
-            </div>
+            <l-table2 :data="tableData.data" :columns="tableData.columns">
+            </l-table2>
+            
           </card>
 
         </div>
@@ -211,7 +206,7 @@
 import axios from 'axios';
 import ChartCard from 'src/components/Cards/ChartCard.vue'
 import StatsCard from 'src/components/Cards/StatsCard.vue'
-import LTable from 'src/components/Table.vue'
+import LTable2 from 'src/components/Table1.vue'
 import Card from '../components/Cards/Card.vue'
 import iconUp from 'src/assets/img/iconUp.png'
 import iconDown from 'src/assets/img/iconDown.png'
@@ -219,7 +214,7 @@ import iconDown from 'src/assets/img/iconDown.png'
 
 export default {
   components: {
-    LTable,
+    LTable2,
     ChartCard,
     StatsCard,
     Card
