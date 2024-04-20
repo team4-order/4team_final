@@ -19,9 +19,9 @@
             </div>
           </div>
           <div class="adjustment-summary">
-              <p class="all" v-if="showTotalUnadjustedAmount">정산 요청 금액: {{ totalUnadjustedAmount.toLocaleString() }}원 </p>
-              <p class="all" v-if="showTotalUnadjustedAmount1">미정산된 금액: {{ totalUnadjustedAmount1.toLocaleString() }}원 </p>
-              <p class="all">주문된 총 금액: {{ totalOrderedAmount.toLocaleString() }}원</p>
+              <p class="all" v-if="showTotalUnadjustedAmount">정산 요청 금액: {{ totalUnadjustedAmount }} </p>
+              <p class="all" v-if="showTotalUnadjustedAmount1">미정산된 금액: {{ totalUnadjustedAmount1 }} </p>
+              <p class="all">주문된 총 금액: {{ totalOrderedAmount }}</p>
               <button v-if="showAdjustButton" @click="adjustmentAction" class="btn btn-primary">정산 요청</button>
           </div>
           <!-- 카드 컴포넌트로 정산 목록을 표시 -->
@@ -44,7 +44,11 @@
                   <td>
                     <base-checkbox v-model="row.selected"></base-checkbox>
                   </td>
-                  <td v-for="column in Cadjustments.columns">{{ row[column] }}</td>
+                  <td v-for="(column, index) in Cadjustments.columns" :key="index">
+                    <!-- '금액' 필드에만 포맷팅 적용 -->
+                    <span v-if="column === '금액'">{{ formatCurrency(row[column]) }}</span>
+                    <span v-else>{{ row[column] }}</span>
+                  </td>
                 </template>
               </l-table>
             </div>
@@ -73,7 +77,7 @@ export default {
       statuses: [], // 정산 상태 카테고리
       allSelected: false, // 추가: 모든 항목이 선택되었는지 여부를 나타냄
       Cadjustments: {
-        columns: ['주문번호', '주문일자', '금액', '정산상태', '배송일자'], // 테이블 컬럼
+        columns: ['주문번호', '주문일자', '금액', '정산상태'], // 테이블 컬럼
         data: [], // 전체 데이터
         filteredData: [] // 필터링된 데이터
       },
@@ -106,6 +110,9 @@ export default {
         .catch(error => {
           console.error("정산 목록을 가져오는 데 실패했습니다.", error);
         });
+    },
+    formatCurrency(amount) {
+      return amount.toLocaleString() + '원';
     },
     createStatusCategories() {
       // 데이터에서 정산 상태 추출하여 중복 제거 후 정렬
@@ -212,7 +219,7 @@ export default {
     },
     getTotalUnadjustedAmount() {
       const unadjustedOrders = this.getUnadjustedOrders();
-      return unadjustedOrders.reduce((total, order) => total + order.금액, 0);
+      return unadjustedOrders.filteredData.filter(order => order.정산상태 === '정산 요청').reduce((total, order) => total + order.금액, 0);
     },
     getTotalOrderedAmount() {
       return this.Cadjustments.filteredData.reduce((total, order) => total + order.금액, 0);
@@ -226,16 +233,19 @@ export default {
       return this.getUnadjustedOrders().length > 0;
     },
     totalUnadjustedAmount() {
-      return this.getTotalUnadjustedAmount();
+      const total = this.getTotalUnadjustedAmount();
+      return this.formatCurrency(total);
     },
     showTotalUnadjustedAmount1() {
       return this.Cadjustments.filteredData.some(order => order.정산상태 === '미정산');
     },
     totalUnadjustedAmount1() {
-      return this.getTotalUnadjustedAmount1();
+      const total = this.getTotalUnadjustedAmount1();
+      return this.formatCurrency(total);
     },
     totalOrderedAmount() {
-      return this.getTotalOrderedAmount();
+      const total = this.getTotalOrderedAmount();
+      return this.formatCurrency(total);
     }
   },
   watch: {

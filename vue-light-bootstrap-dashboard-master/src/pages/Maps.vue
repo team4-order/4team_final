@@ -228,7 +228,7 @@ export default {
             await axios.post(`http://localhost:8080/api/deliveries/delivery/${orderNumber}`, {
               deliveryAddress: deliveryAddress
             });
-            this.$router.push('/admin/deliveryStatus'); // 페이지 이동
+            this.$router.push('/admin/delivery'); // 페이지 이동
           } else {
             console.error('도착지 주소를 찾을 수 없습니다.');
           }
