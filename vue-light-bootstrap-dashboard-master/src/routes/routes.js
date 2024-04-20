@@ -165,7 +165,7 @@ const routes = [
         component: Icons
       },
       {
-        path: 'maps',
+        path: 'maps/:orderNumber',
         name: 'Maps',
         component: Maps
       },

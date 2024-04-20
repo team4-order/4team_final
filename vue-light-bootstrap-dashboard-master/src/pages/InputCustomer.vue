@@ -13,15 +13,15 @@
             <form @submit.prevent="submitClient">
               <div class="form-group text-left"> <!-- 텍스트 왼쪽 정렬 -->
                 <label for="customerName">거래처 명</label>
-                <input type="text" class="form-control" id="customerName" v-model="customer.contactName" required>
+                <input type="text" class="form-control" id="customerName" v-model="customer.contactName" placeholder="판매 거래처 명을 입력하세요." required>
               </div>
               <div class="form-group text-left"> <!-- 텍스트 왼쪽 정렬 -->
                 <label for="customerAddress">거래처 주소</label>
-                <input type="text" class="form-control" id="customerAddress" v-model="customer.contactAddress" required>
+                <input type="text" class="form-control" id="customerAddress" v-model="customer.contactAddress" placeholder="거래처 주소를 입력하세요" required>
               </div>
               <div class="form-group text-left"> <!-- 텍스트 왼쪽 정렬 -->
                 <label for="customerPhone">거래처 연락처</label>
-                <input type="text" class="form-control" id="customerPhone" v-model="customer.customerPhone" required>
+                <input type="text" class="form-control" id="customerPhone" v-model="customer.customerPhone" placeholder="- 빼고 입력하세요." required>
               </div>
               <div class="form-group text-right"> <!-- 버튼 오른쪽 정렬 -->
                 <button type="submit" class="btn btn-primary">등록</button>
@@ -45,14 +45,18 @@ export default {
   data() {
     return {
       customer: {
+        mutableBusinessId: '',
         contactName: '',
         contactAddress: '',
-        customerPhone: '',
-        businessId: 'BUS002' // businessId에 "BUS002" 할당 --> businessId는 기업이 로그인하면 그것에 맞는 ID들어가게 수정해야 함
+        customerPhone: ''
       },
       registeredId: '', // 등록된 아이디 저장 변수
       registeredPassword: '' // 등록된 비밀번호 저장 변수
     }
+  },
+  mounted() {
+    const storedId = localStorage.getItem("code") || sessionStorage.getItem("user");
+    this.mutableBusinessId = storedId;
   },
   methods: {
     submitClient() {
@@ -67,7 +71,7 @@ export default {
         contactName: this.customer.contactName,
         contactAddress: this.customer.contactAddress,
         customerPhone: this.customer.customerPhone,
-        businessId: this.customer.businessId // businessId도 함께 전송 (지금은 지정된  ID가 정송됌)
+        businessId: this. mutableBusinessId // businessId도 함께 전송 (지금은 지정된  ID가 정송됌)
       })
       .then(response => {
         // 서버 응답으로부터 등록된 아이디와 비밀번호 받아오기

@@ -4,8 +4,6 @@
       <div class="row">
         <div class="col-12">
 
-           
-
             <div class="date-and-filter-bar">
               <div class="date-filter">
                 <input type="date" v-model="startDate" @change="filterOrders" class="form-control">
@@ -99,6 +97,34 @@ export default {
         });
     },
     filterOrders() {
+      // 선택된 고객 코드에 해당하는 주문들만 필터링
+      const filteredByCustomer = this.orders.data.filter(order => {
+        console.log(this.selectedCustomerCode);
+        return this.selectedCustomerCode === '' || order['판매처 코드'] === this.selectedCustomerCode;
+      });
+
+      // 이미 고객 코드로 필터링된 주문들을 대상으로 날짜에 따라 추가 필터링
+      const filteredByDateAndCustomer = filteredByCustomer.filter(order => {
+        const orderDate = new Date(order['주문 일자']);
+        const startDate = this.startDate ? new Date(this.startDate) : new Date('1970-01-01');
+        const endDate = this.endDate ? new Date(this.endDate) : new Date();
+        return orderDate >= startDate && orderDate <= endDate;
+      });
+
+      // 페이지네이션을 고려하여 최종적으로 표시될 데이터 계산
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
+
+      // 최종적으로 필터링된 데이터를 filteredData에 할당
+      this.orders.filteredData = filteredByDateAndCustomer.slice(startIndex, endIndex);
+
+      // 필터링 결과가 있을 때만 현재 페이지를 재설정
+      if (this.orders.filteredData.length > 0) {
+        this.currentPage = 1;
+      } else {
+        // 필터링된 데이터가 없다면, 사용자에게 표시될 데이터가 없음을 알림
+        console.log("No orders found for the selected customer within the specified date range.");
+      }
   console.log("Selected Customer Code:", this.selectedCustomerCode);
   const startDate = this.startDate ? new Date(this.startDate) : new Date('1970-01-01');
   const endDate = this.endDate ? new Date(this.endDate) : new Date();

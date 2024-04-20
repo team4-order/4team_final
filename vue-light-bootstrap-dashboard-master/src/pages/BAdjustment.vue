@@ -17,9 +17,13 @@
           </div>
            <!-- 금액 표시 부분을 여기로 이동 -->
            <div class="adjustment-summary">
-            <p class="all" v-if="showTotalUnadjustedAmount">미정산된 금액: {{ totalUnadjustedAmount1 }}원</p>
-            <p class="all" v-if="showTotalAdjustedAmount">요청된 정산 금액: {{ totalUnadjustedAmount }}원</p>
-            <p class="all">주문된 총 금액: {{ totalOrderedAmount }}원</p>
+            <!-- 미정산된 금액 -->
+            <p class="all" v-if="showTotalUnadjustedAmount">미정산된 금액: {{ totalUnadjustedAmount1.toLocaleString() }}원</p>
+            <!-- 요청된 정산 금액 -->
+            <p class="all" v-if="showTotalAdjustedAmount">요청된 정산 금액: {{ totalUnadjustedAmount.toLocaleString() }}원</p>
+            <!-- 주문된 총 금액 -->
+            <p class="all">주문된 총 금액: {{ totalOrderedAmount.toLocaleString() }}원</p>
+            <!-- 정산하기 버튼 -->
             <button v-if="showAdjustButton" @click="adjustmentAction" class="btn btn-primary">정산하기</button>
           </div>
           <!-- 카드 컴포넌트로 정산 목록을 표시 -->
@@ -33,7 +37,7 @@
               <l-table v-if="filteredData.length > 0" class="table-hover table-striped" :columns="Cadjustments.columns" :data="filteredData">
                 <template slot="columns">
                   <th>
-                    <base-checkbox :value="allSelected" @input="selectAll"/>
+                    <base-checkbox v-model="allSelected" @change="selectAll($event)"/>
                   </th>
                   <th v-for="column in Cadjustments.columns">{{ column }}</th>
                 </template>
@@ -138,15 +142,15 @@ export default {
       return this.filteredData.some(order => order.정산상태 === '미정산');
     },
     adjustmentAction() {
-      const selectedOrders = this.filteredData.filter(order => order.selected);
+      const selectedOrders = this.Cadjustments.filteredData.filter(order => order.selected);
       const invalidCompletedOrders = selectedOrders.filter(order => order.정산상태 === '정산 완료');
       const invalidUnadjustedOrders = selectedOrders.filter(order => order.정산상태 === '미정산');
       const invalidCancelOrders = selectedOrders.filter(order => order.정산상태 === '주문 취소');
-      const invalidUnsettledOrders = selectedOrders.filter(order => order.정산상태 === '정산 요청');
+      // const invalidUnsettledOrders = selectedOrders.filter(order => order.정산상태 === '정산 요청');
 
       if (invalidCompletedOrders.length > 0) {
         alert('정산 완료건이 선택되어 있습니다.\n정산 요청건만 선택해주세요.');
-        this.filteredData.forEach(item => item.selected = false);
+        this.Cadjustments.filteredData.forEach(item => item.selected = false);
         this.allSelected = false; // Also reset the 'selectAll' checkbox
 
         return;
@@ -154,14 +158,14 @@ export default {
 
       if (invalidUnadjustedOrders.length > 0) {
         alert('미정산건이 선택되어 있습니다. \n정산 요청건만 선택해주세요.');
-        this.filteredData.forEach(item => item.selected = false);
+        this.Cadjustments.filteredData.forEach(item => item.selected = false);
         this.allSelected = false; // Also reset the 'selectAll' checkbox
         return;
       }
 
       if(invalidCancelOrders.length > 0) {
         alert('주문취소건이 선택되어 있습니다. \n정산 요청건만 선택해주세요.');
-        this.filteredData.forEach(item => item.selected = false);
+        this.Cadjustments.filteredData.forEach(item => item.selected = false);
         this.allSelected = false;
         return;
       }
@@ -205,12 +209,10 @@ export default {
     getTotalOrderedAmount() {
       return this.filteredData.reduce((total, order) => total + order.금액, 0);
     },
-    selectAll(value) {
-      this.allSelected = value;
-      this.filteredData.forEach(row => {
-        row.selected = this.allSelected;
-      });
-    }
+    selectAll(event) {
+      // 'allSelected' 값을 최상단 체크박스 상태에 따라 변경
+      this.allSelected = event.target.checked;
+    },
   },
   computed: {
     showTotalUnadjustedAmount() {
@@ -228,7 +230,16 @@ export default {
     totalOrderedAmount() {
       return this.getTotalOrderedAmount();
     }
-  }
+  },
+  watch: {
+    // 'allSelected' 데이터 속성 변화 감지
+    allSelected(newVal) {
+      // 모든 하위 체크박스 선택 상태 변경
+      this.filteredData.forEach(row => {
+        row.selected = newVal;
+      });
+    },
+  },
 }
 </script>
 

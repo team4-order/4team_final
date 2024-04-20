@@ -32,7 +32,7 @@
         <p>Typography</p>
       </sidebar-link>-->
 
-      <sidebar-link to="/admin/maps">
+      <sidebar-link to="/admin/maps/:orderNumber">
         <i class="nc-icon nc-pin-3"></i>
         <p>Maps</p>
       </sidebar-link>
