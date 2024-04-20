@@ -94,7 +94,7 @@ export default {
               '배송 번호': order.deliveryNumber,
               '배송지': order.deliveryAddress,
               '배송 신청일': order.deliveryApply ? order.deliveryApply.replace('T', ' ') : '-',
-          '배송 도착일': order.deliveryArrive ? order.deliveryArrive.replace('T', ' ') : '-',
+          '배송 도착일': order.deliveryArrive ? order.deliveryArrive.split('.')[0].replace('T', ' ') : '-',
               '주문 번호': order.orderNumber,
               '고객명': order.contactName,
               '배송 상태': order.orderStatus
