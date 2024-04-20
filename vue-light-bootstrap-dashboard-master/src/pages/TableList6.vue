@@ -4,19 +4,17 @@
       <div class="row">
         <div class="col-12">
 
-           
-
             <div class="date-and-filter-bar">
               <div class="date-filter">
                 <input type="date" v-model="startDate" @change="filterOrders" class="form-control">
                 <input type="date" v-model="endDate" @change="filterOrders" class="form-control">
 
-                <select v-model="selectedCustomerCode" class="form-control">
-                  <option disabled value="">모든 고객</option>
-                  <option v-for="customer in customers" :key="customer.contactCode" :value="customer.contactCode">
-                    {{ customer.contactName }}
-                  </option>
-                </select>
+                <select v-model="selectedCustomerCode" @change="filterByStatus" class="form-control">
+  <option value="">모든 고객</option>
+  <option v-for="customer in customers" :key="customer.contactCode" :value="customer.contactCode">
+    {{ customer.contactName }}
+  </option>
+</select>
               </div>
             </div>
           <card2>
@@ -87,7 +85,6 @@ export default {
   },
   methods: {
     fetchCustomerList() {
-      const businessId = this.$route.params.businessId;
       axios.get(`http://localhost:8080/api/contact/busId/${this.mutableBusinessId}`)
         .then(response => {
           this.customers = response.data.map(customer => ({
@@ -128,6 +125,26 @@ export default {
         // 필터링된 데이터가 없다면, 사용자에게 표시될 데이터가 없음을 알림
         console.log("No orders found for the selected customer within the specified date range.");
       }
+  console.log("Selected Customer Code:", this.selectedCustomerCode);
+  const startDate = this.startDate ? new Date(this.startDate) : new Date('1970-01-01');
+  const endDate = this.endDate ? new Date(this.endDate) : new Date();
+
+  console.log(`Filtering from ${startDate} to ${endDate}`);
+
+  let filtered = this.orders.data.filter(order => {
+    const orderDate = new Date(order['주문 일자']);
+    console.log(`Order ${order['주문 번호']}: Date ${orderDate}, Customer Code ${order['판매처 코드']}`);
+
+    return (!this.selectedCustomerCode || order['판매처 코드'] === this.selectedCustomerCode) &&
+      orderDate >= startDate && orderDate <= endDate;
+  });
+
+  console.log(`Filtered ${filtered.length} orders`);
+  this.orders.filteredData = filtered.slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage);
+},
+    filterByStatus() {
+      this.currentPage = 1; // Reset to first page
+      this.filterOrders();
     },
     changePage(page) {
       this.currentPage = page;
@@ -158,7 +175,7 @@ export default {
     handleRowClick(row) {
       const orderNumber = row['주문 번호'];
       // 주문 상세 페이지 URL로 이동
-      window.location.href = `http://localhost:8081/orders/detail/${orderNumber}`;
+      window.location.href = `http://localhost:8081/admin/orders/detail/${orderNumber}`;
     }
   },
   computed: {

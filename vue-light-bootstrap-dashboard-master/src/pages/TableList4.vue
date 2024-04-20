@@ -10,9 +10,12 @@
               <input type="date" v-model="endDate" @change="filterOrders" class="form-control">
 
               <select v-model="selectedStatus" @change="filterByStatus" class="form-control">
-                <option value="">전체</option>
-                <option v-for="status in statuses" :value="status">{{ status }}</option>
+                <option disabled value="">전체</option>
+                <option v-for="status in statuses" :value="status" :key="status">
+                  {{ status }}
+                </option>
               </select>
+
             </div>
           </div>
 
@@ -64,6 +67,7 @@ export default {
       searchQuery: '',
       startDate: '',
       endDate: '',
+      statuses: ['주문 완료', '주문 취소', '출고 준비 중', '배송 중', '배송 완료'],
       orders: {
         columns: ['주문 번호', '주문 일자', '주문 금액(원)', '주문 상태'],
         data: [],
@@ -78,13 +82,18 @@ export default {
     filterOrders() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
       const endIndex = startIndex + this.itemsPerPage;
-      const filteredByDate = this.orders.data.filter(order => {
+      let filtered = this.orders.data.filter(order => {
         const orderDate = new Date(order['주문 일자']);
         const startDate = this.startDate ? new Date(this.startDate) : new Date('1970-01-01');
         const endDate = this.endDate ? new Date(this.endDate) : new Date();
-        return orderDate >= startDate && orderDate <= endDate;
+        return (!this.selectedStatus || order['주문 상태'] === this.selectedStatus) &&
+          orderDate >= startDate && orderDate <= endDate;
       });
-      this.orders.filteredData = filteredByDate.slice(startIndex, endIndex);
+      this.orders.filteredData = filtered.slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage);
+    },
+    filterByStatus() {
+      this.currentPage = 1; // Reset to first page
+      this.filterOrders();
     },
     changePage(page) {
       this.currentPage = page;

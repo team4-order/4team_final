@@ -4,7 +4,7 @@ import CustomerDashboardLayout from '../layout/CustomerDashboardLayout.vue'
 import DashboardLayout from '../layout/DashboardLayout.vue'// 대시보드 레이아웃 컴포넌트
 import Vue from 'vue';
 // Admin pages
-import Overview from 'src/pages/Overview.vue'
+//import Overview from 'src/pages/Overview.vue'
 import TableList from 'src/pages/TableList.vue'
 import Typography from 'src/pages/Typography.vue'
 import Icons from 'src/pages/Icons.vue'
@@ -24,8 +24,9 @@ import CustomerOrderList from 'src/pages/TableList4.vue'
 import CustomerOrderDetail from 'src/pages/TableList5.vue'
 import OrderApply1 from 'src/pages/TableList2.vue'
 import OrderApply from 'src/pages/TableList7.vue'
-import Overview1 from 'src/pages/Overview1.vue'
+import Overview from 'src/pages/Overview1.vue'
 import OpenAI from 'src/pages/OpenAI.vue'
+import DeliveryStatus1 from "src/pages/DeliveryStatus.vue";
 /*import { component } from 'vue/types/umd.js'*/
 /*import CustomerList from 'src/components/CustomerList.vue'*/
 import BCustomerList from 'src/pages/BCustomerList.vue'
@@ -38,6 +39,7 @@ import CAdjustment from 'src/pages/CAdjustment.vue'
 import UserProfile from 'src/pages/UserProfile.vue'
 import Login from "../loginpage/Login.vue";
 import Register from "../loginpage/Register.vue";
+import TLogin from "../loginpage/TLogin.vue";
 
 
 // import { component } from 'vue/types/umd.js'
@@ -54,6 +56,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path: '/tlogin',
+    name: 'TLogin',
+    component: TLogin,
   },
   {
     path: '/register',
@@ -128,10 +135,15 @@ const routes = [
         component: Fruit, // 공급처 상세정보 페이지
       },
       {
-        path: 'deliveryStatus',
-        name: 'DeliveryStatus',
-        component: DeliveryStatus, // 배송 현황
+        path: 'delivery',
+        name: 'DeliveryStatus1',
+        component: DeliveryStatus1, // 배송 현황
       },
+      // {
+      //   path: 'deliveryStatus',
+      //   name: 'DeliveryStatus',
+      //   component: DeliveryStatus, // 배송 현황
+      // },
       {
         path: 'user',
         name: 'User',
@@ -168,15 +180,15 @@ const routes = [
         component: OrderList
       },
       {
-        path: '/orders/detail/:orderNumber',
+        path: 'orders/detail/:orderNumber',
         name: 'OrderDetail',
         component: OrderDetail,
         props: true
       },
       {
-        path: 'overview1',
-        name: 'Overview1',
-        component: Overview1
+        path: 'overview',
+        name: 'Overview',
+        component: Overview
       },
       {
         path: 'ask',
@@ -223,7 +235,7 @@ const routes = [
     path: '/buyer',
     component: CustomerDashboardLayout,
     redirect: '/buyer/:customerCode',
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: false },
     children: [
       {
         //주문 목록(판매처)
