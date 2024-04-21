@@ -13,16 +13,11 @@
             <h4 color="red">{{ fruitName }}</h4>
 
               <!-- 범례 표시 -->
-              <div class="legend">
-                <i class="fa fa-circle text-info"></i> A 등급
-                <i class="fa fa-circle text-danger"></i> B 등급
-                <i class="fa fa-circle text-warning"></i> C 등급
-                <i class="fa fa-circle text-secondary"></i> 폐기
-              </div>
-              <hr>
-              <div class="stats">
-                <i class="fa fa-clock-o"></i> 실시간
-              </div>
+<!--              <div class="legend">-->
+<!--                <i class="fa fa-circle text-info"></i> A 등급-->
+<!--                <i class="fa fa-circle text-danger"></i> B 등급-->
+<!--                <i class="fa fa-circle text-warning"></i> C 등급-->
+<!--              </div>-->
             </template>
           </chart-card>
         </div>
@@ -45,73 +40,79 @@ export default {
   data() {
     return {
       inventories: [],
-      searchQuery: '', // 검색어를 저장할 데이터 속성
-    }
+      searchQuery: '',
+      loading: false,
+      businessId: localStorage.getItem('user') || sessionStorage.getItem('user'), // 세션에서 비즈니스 ID를 로딩하고 데이터 프로퍼티에 저장
+    };
   },
-
-
   computed: {
-
-
     filteredFruitsChartData() {
       if (!this.searchQuery) {
-        return this.fruitsChartData; // 검색어가 없다면 모든 데이터 반환
+        return this.fruitsChartData;
       }
-
       const searchQueryLowerCase = this.searchQuery.toLowerCase();
-      const filteredData = {};
-      Object.entries(this.fruitsChartData).forEach(([fruitName, data]) => {
-        if (fruitName.toLowerCase().includes(searchQueryLowerCase)) {
-          filteredData[fruitName] = data; // 검색어가 포함된 과일만 필터링
-        }
-      });
-
-      return filteredData;
+      return Object.fromEntries(
+        Object.entries(this.fruitsChartData)
+          .filter(([fruitName]) => fruitName.toLowerCase().includes(searchQueryLowerCase))
+      );
     },
-
-
-
-
     fruitsChartData() {
+      // "폐기" 등급을 제외한 등급 배열
+      const grades = ['A', 'B', 'C'];
       const gradeColors = {
-        'A': '#4caf50',
-        'B': '#ffeb3b',
-        'C': '#f44336',
-        '폐기': '#9e9e9e'
+        'A': '#26c4e1',
+        'B': '#d72020',
+        'C': '#e7a46d',
+        // '폐기' 등급은 제외
       };
-
-      const grades = ['A', 'B', 'C', '폐기']; // 모든 가능한 등급을 정의합니다.
 
       const fruitsData = {};
       this.inventories.forEach(inventory => {
-        // 과일 이름으로 데이터 구조 초기화
-        if (!fruitsData[inventory.goodsName]) {
-          fruitsData[inventory.goodsName] = { data: { labels: grades, series: Array(grades.length).fill(0), colors: grades.map(grade => gradeColors[grade]) } };
+        const { goodsName, goodsGrade, inventoryQuantity } = inventory;
+
+        // "폐기" 등급이면 아래 로직을 수행하지 않음
+        if (goodsGrade === '폐기') return;
+
+        if (!fruitsData[goodsName]) {
+          fruitsData[goodsName] = {
+            data: {
+              labels: grades,
+              series: Array(grades.length).fill(0),
+              colors: grades.map(grade => gradeColors[grade]),
+              totals: Array(grades.length).fill(0), // 각 등급별 총 수량
+            }
+          };
         }
 
-        const gradeIndex = grades.indexOf(inventory.goodsGrade);
-        if (gradeIndex !== -1 && inventory.inventoryQuantity > 0) {
-          // 해당 등급의 재고량을 업데이트합니다.
-          fruitsData[inventory.goodsName].data.series[gradeIndex] += parseInt(inventory.inventoryQuantity, 10);
+        const index = grades.indexOf(goodsGrade);
+        if (index !== -1) {
+          fruitsData[goodsName].data.series[index] += parseInt(inventoryQuantity, 10);
+          fruitsData[goodsName].data.totals[index] += parseInt(inventoryQuantity, 10);
         }
       });
 
       return fruitsData;
     }
+
+
+
   },
-
-
-
-
-
-
   methods: {
     fetchInventories() {
-      axios.get('http://localhost:8080/api/inventories').then(response => {
-        this.inventories = response.data;
-      }).catch(error => {
-        console.error("재고 목록을 가져오는 데 실패했습니다.", error);
-      });
+      if (!this.businessId) {
+        console.error("Business ID is not provided.");
+        return;
+      }
+      this.loading = true;
+      axios.get(`http://localhost:8080/api/inventories/business/${this.businessId}`)
+        .then(response => {
+          this.inventories = response.data;
+          this.loading = false;
+        })
+        .catch(error => {
+          console.error("Failed to fetch inventories for business ID.", error);
+          this.loading = false;
+        });
     },
   },
   mounted() {
@@ -119,3 +120,4 @@ export default {
   },
 }
 </script>
+

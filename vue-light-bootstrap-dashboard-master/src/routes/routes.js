@@ -95,9 +95,10 @@ const routes = [
         component: CstoragePage // 거래처 창고관리 페이지
       },
       {
-        path: 'warehouses',
+        path: '/admin/warehouses',
         name: 'Warehouses',
-        component: WarehouseList // 추가된 컴포넌트 라우트 창고페이지
+        component: WarehouseList, // 'WarehouseList'는 해당 페이지의 컴포넌트입니다.
+        meta: { requiresAuth: true }
       },
 
       {

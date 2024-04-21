@@ -65,9 +65,10 @@
   </div>
 </template>
 
+
 <script>
 import axios from 'axios';
-import ChartCard from 'src/components/Cards/ChartCard1.vue'
+import ChartCard from 'src/components/Cards/ChartCard1.vue';
 
 export default {
   components: {
@@ -76,6 +77,7 @@ export default {
   data() {
     return {
       searchQuery: '',
+      businessId: '', // 사용자의 비즈니스 ID를 저장하는 변수
       warehouses: {
         data: [],
         filteredData: [],
@@ -102,17 +104,25 @@ export default {
               },
             },
           }],
-        ]
+        ],
+        chartKey: Date.now(), // 차트 키 초기화
       },
-      chartKey: Date.now(), // 차트 키 초기화
     };
   },
+
   mounted() {
+    // 'user' 키에서 비즈니스 ID를 로드합니다.
+    this.businessId = localStorage.getItem('user') || sessionStorage.getItem('user');
+    if (!this.businessId) {
+      console.error("Business ID is not provided.");
+      // 여기서 사용자에게 알림을 주거나 다른 페이지로 리디렉션 할 수 있습니다.
+      return;
+    }
     this.fetchWarehouses();
   },
   methods: {
     fetchWarehouses() {
-      axios.get('http://localhost:8080/api/warehouses')
+      axios.get(`http://localhost:8080/api/warehouses/${this.businessId}`)
         .then(response => {
           this.warehouses.data = response.data.map(warehouse => ({
             '창고 코드': warehouse.contactCode,
@@ -121,7 +131,7 @@ export default {
           }));
           this.warehouses.filteredData = this.warehouses.data;
         })
-        .catch(error => console.error("창고 목록을 가져오는 데 실패했습니다.", error));
+        .catch(error => console.error("Failed to fetch warehouses.", error));
     },
     filterWarehouses() {
       this.warehouses.filteredData = this.searchQuery ?
@@ -143,7 +153,7 @@ export default {
 
         inventoryData.forEach(item => {
           const productName = item.goodsName;
-          const quantity = Number(item.inventoryQuantity); // `Number()`는 필요에 따라 사용
+          const quantity = Number(item.inventoryQuantity);
           if (!productQuantities[productName]) {
             productQuantities[productName] = 0;
           }
@@ -167,6 +177,9 @@ export default {
   },
 }
 </script>
+
+
+
 
 <style scoped>
 .search-bar {
