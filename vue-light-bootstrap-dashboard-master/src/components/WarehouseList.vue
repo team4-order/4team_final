@@ -55,7 +55,7 @@
 
               <!-- 선택된 창고가 없을 때 안내 메시지 표시 -->
               <div v-else class="text-center">
-                <h5 class="text-muted">창고목록선택시 ~~~</h5>
+                <h5 class="text-muted">창고 선택 시 창고별 재고 수량 그래프가 나옵니다.</h5>
               </div>
             </div>
           </div>
