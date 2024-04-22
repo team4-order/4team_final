@@ -130,4 +130,8 @@ export default {
 .table-hover.table-striped {
   cursor: pointer;
 }
+
+.card-plain {
+  margin-top: -14px;
+}
 </style>

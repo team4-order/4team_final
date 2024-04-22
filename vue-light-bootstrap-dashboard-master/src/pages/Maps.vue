@@ -11,7 +11,7 @@
         <!-- 제목 -->
         <h3>배송 경로</h3>
         <p class="card-category">
-          <div>거리: {{ distance }}km, 소요 시간: {{ hours }}시간 {{ minutes }}분</div>
+          <div>거리: {{ (distance / 10000).toFixed(0) }}km, 소요 시간: {{ hours }}시간 {{ minutes }}분</div>
         </p>
         <!-- 지도 영역 -->
         <div id="map" class="map"></div>
@@ -38,6 +38,9 @@ export default {
       isScriptLoaded: false,
       storageLatLong: null,
       customerLatLong: null,
+      storageLatLong: { lat: 0, long: 0 },
+      sLat: 0,
+      sLong: 0,
       distance: 0, // 거리 데이터
       hours: 0, // 시간 데이터
       minutes: 0 // 분 데이터
@@ -72,12 +75,19 @@ export default {
     initMap() {
       if (this.isScriptLoaded) {
         const mapOptions = {
-          center: new kakao.maps.LatLng(37.56595928, 126.97885624),
+          center: new kakao.maps.LatLng(`${this.sLat}`, `${this.sLong}`),
           level: 10
         };
+        
         const map = new kakao.maps.Map(document.getElementById('map'), mapOptions);
         this.fetchData().then(() => {
           if (this.storageLatLong && this.customerLatLong) {
+            this.findRoute(map);
+            const mapOptions = {
+              center: new kakao.maps.LatLng(`${this.sLat}`, `${this.sLong}`),
+              level: 10
+            };
+            const map = new kakao.maps.Map(document.getElementById('map'), mapOptions);
             this.findRoute(map);
           } else {
             console.error("위도와 경도 정보가 없습니다.");
@@ -118,6 +128,13 @@ export default {
           const lat = parseFloat(response.data.documents[0].y);
           const long = parseFloat(response.data.documents[0].x);
           this[`${type}LatLong`] = { lat, long };
+          //console.log(this.storageLatLong);
+          //this[`${type}LatLong1`] = { lat, long };
+          //console.log(this.storageLatLong1);
+          if(`${type}` == 'storage'){
+            this.sLat = lat;
+            this.sLong = long;
+          }
         } else {
           console.error(`${type} 주소에 해당하는 위도와 경도를 찾을 수 없습니다.`);
           throw new Error(`${type} 주소에 해당하는 위도와 경도를 찾을 수 없습니다.`);
@@ -252,6 +269,7 @@ export default {
   align-items: center;
   margin: 0 3%; /* 여백 조정 */
   margin-bottom: 30px;
+  margin-top: -8%;
 }
 
 .map-container {

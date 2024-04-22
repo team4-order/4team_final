@@ -31,11 +31,11 @@
         <i class="nc-icon nc-paper-2"></i>
         <p>Typography</p>
       </sidebar-link>-->
-
+<!-- 
       <sidebar-link to="/admin/maps/:orderNumber">
         <i class="nc-icon nc-pin-3"></i>
         <p>Maps</p>
-      </sidebar-link>
+      </sidebar-link> -->
 
 <!--      <sidebar-link to="/admin/notifications">
         <i class="nc-icon nc-bell-55"></i>
