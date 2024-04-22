@@ -103,6 +103,7 @@ export default {
       this.filterOrders(); // Ensure this method updates the displayed items based on currentPage
     },
     fetchOrderList() {
+      
       axios.get(`http://localhost:8080/api/orders/customer/${this.mutableCId}`)
         .then(response => {
           this.orders.data = response.data.map(order => {
@@ -114,6 +115,7 @@ export default {
               '정산 상태': order.adjustmentStatus,
               '판매처 코드': order.customerCode
             };
+            window.location.reload();
           })
             .sort((a, b) => new Date(b['주문 일자']) - new Date(a['주문 일자']));
           this.filterOrders();

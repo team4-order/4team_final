@@ -20,7 +20,7 @@
           <card2>
  <template slot="header">
               <h4 class="card-title">Order List</h4>
-              <p class="card-category">Here is a subtitle for this table</p>
+              <p class="card-category"></p>
             </template>
 
             <l-table3 class="table-hover table-striped" :columns="orders.columns" :data="orders.filteredData"
@@ -163,6 +163,7 @@ export default {
               '주문 상태': order.orderStatus,
               '판매처 코드': order.customerCode
             };
+            //window.location.reload();
           })
             .sort((a, b) => new Date(b['주문 일자']) - new Date(a['주문 일자']));
           this.filterOrders();
