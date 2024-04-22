@@ -5,12 +5,20 @@
        :data-image="backgroundImage">
     <div class="sidebar-wrapper">
       <div class="logo">
-        <a href="/admin/overview" class="simple-text logo__container">
+
+
+
+<!--        <router-link
+          :to="sessionStorage.getItem('cuser') ? '/admin/status/' + sessionStorage.getItem('cuser') : '/admin/overview'"
+          class="simple-text logo__container"
+        >-->
+        <a @click="navigateToStatus" class="simple-text logo__container">
           <div class="logo-img">
             <img src="../../../public/img/eo.png" alt="">
           </div>
           {{title}}
         </a>
+<!--        </router-link>-->
       </div>
 
       <slot name="content"></slot>
@@ -27,14 +35,15 @@
           </sidebar-link>
         </slot>
       </ul>
-      <ul class="nav nav-bottom" v-if="$slots['bottom-links']">
+<!--      <ul class="nav nav-bottom" v-if="$slots['bottom-links']">
         <slot name="bottom-links"></slot>
-      </ul>
+      </ul>-->
     </div>
   </div>
 </template>
 <script>
 import SidebarLink from './SidebarLink.vue'
+
 
 export default {
   components: {
@@ -83,6 +92,15 @@ export default {
     sidebarStyle() {
       return {
         backgroundImage: `url(http://localhost:8081/img/sidebar-5.jpg)`
+      }
+    }
+  },methods: {
+    navigateToStatus() {
+      const cuser = sessionStorage.getItem('cuser');
+      if (cuser) {
+        this.$router.push('/buyer/status/' + cuser);
+      } else {
+        this.$router.push('/admin/overview');
       }
     }
   }
