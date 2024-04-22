@@ -10,7 +10,7 @@
         <i class="nc-icon nc-atom"></i>
         <p>Icons</p>
       </sidebar-link> -->
-      <sidebar-link to="/buyer/status">
+      <sidebar-link to="/buyer/status/:customerCode">
         <i class="nc-icon nc-cart-simple"></i>
         <p>주문 현황</p>
       </sidebar-link>

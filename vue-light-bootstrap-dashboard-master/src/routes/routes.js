@@ -240,7 +240,7 @@ const routes = [
     children: [
       {
         //주문 목록(판매처)
-        path: 'status',
+        path: 'status/:customerCode',
         name: 'CustomerOrderList',
         component: CustomerOrderList
       },
