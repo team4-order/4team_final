@@ -68,7 +68,7 @@
 
 <script>
 import axios from 'axios';
-import ChartCard from 'src/components/Cards/ChartCard1.vue';
+import ChartCard from 'src/components/Cards/ChartCard2.vue';
 
 export default {
   components: {
