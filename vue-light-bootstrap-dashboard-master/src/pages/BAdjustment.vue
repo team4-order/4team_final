@@ -30,7 +30,7 @@
           <card class="striped-tabled-with-hover" body-classes="table-full-width table-responsive">
             <template slot="header">
               <h4 class="card-title">{{ selectedStatus }} 정산 목록</h4>
-              <p class="card-category">거래처의 정산 상태를 확인하는 페이지</p>
+              <p class="card-category">{{ this.$route.params.customerCode }} 거래처의 정산 상태를 확인하는 페이지</p>
             </template>
             <!-- 테이블 컴포넌트로 데이터 표시 -->
             <div class="adjustment">
