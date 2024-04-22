@@ -22,7 +22,7 @@
           <card2>
  <template slot="header">
               <h4 class="card-title">배송 현황</h4>
-              <p class="card-category">Here is a subtitle for this table</p>
+              <p class="card-category"></p>
             </template>
 
             <l-table3 class="table-hover table-striped" :columns="orders.columns" :data="orders.data">

@@ -73,6 +73,7 @@ export default {
   },
   data() {
     return {
+      mutableCId: '',
       selectedStatus: '', // 선택된 정산 상태
       statuses: [], // 정산 상태 카테고리
       allSelected: false, // 추가: 모든 항목이 선택되었는지 여부를 나타냄
@@ -86,13 +87,15 @@ export default {
     }
   },
   mounted() {
+    const storedId = sessionStorage.getItem("cuser");
+    this.mutableCId = storedId;
     this.fetchBAdjustments(); // 컴포넌트 마운트 시 데이터 로드
     this.selectedStatus = ''; // 초기에는 모든 정산 상태를 표시하기 위해 빈 상태로 설정
   },
   methods: {
     fetchBAdjustments() {
       // API를 통해 주문 데이터 가져오기
-      axios.get(`http://localhost:8080/api/orders/customer/${this.$route.params.customerCode}`)
+      axios.get(`http://localhost:8080/api/orders/customer/${this.mutableCId}`)
         .then(response => {
           // API 응답을 데이터로 변환하여 저장
           this.Cadjustments.data = response.data.map(Badjustment => ({
