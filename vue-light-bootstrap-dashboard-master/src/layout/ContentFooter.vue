@@ -1,3 +1,4 @@
+<!--
 <template>
   <footer class="footer">
     <div class="container-fluid">
@@ -24,3 +25,4 @@
 <style>
 
 </style>
+-->

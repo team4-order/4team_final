@@ -7,7 +7,7 @@
       <div class="logo">
         <a href="/admin/overview" class="simple-text logo__container">
           <div class="logo-img">
-            <img src="../../../public/img/vue-logo.png" alt="">
+            <img src="../../../public/img/eo.png" alt="">
           </div>
           {{title}}
         </a>
@@ -43,7 +43,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'Vue LBD'
+      default: 'Easy Oms'
     },
     backgroundColor: {
       type: String,
