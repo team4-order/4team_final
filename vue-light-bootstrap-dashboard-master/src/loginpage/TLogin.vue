@@ -88,45 +88,62 @@ export default {
       usernameExists: false,
       showTooltip: false,
       rememberMe: false,
+
     }
   },
   mounted() {
 
 
-    const idCookie = this.$cookies.get("idCookie");
-    if (idCookie) {
-      this.input.username = idCookie;
+    const idCookies = this.$cookies.get("idCookies");
+    if (idCookies) {
+      this.input.contactCode = idCookies;
       this.rememberMe = true; // 이전에 체크된 상태로 "Remember me" 체크박스 설정
     }
   },
   methods: {
-    async  login() {
+     async login() {
       // 비밀번호를 안전하게 전송하기 위해 HTTPS를 사용해야 합니다.
       // 여기에서는 예시로 보여주기 위해 간단한 HTTP 요청을 사용하겠습니다.
       axios.post('http://localhost:8079/omsuser/checkPassword', {
         contactCode: this.input.contactCode,
         password: this.input.password
       })
-        .then(response => {
+        .then(async response => {
           // 비밀번호가 확인되면 다음 페이지로 redirection
           if (response.data.validPassword) {
-              sessionStorage.setItem("cuser",this.input.contactCode);
+            sessionStorage.setItem("cuser", this.input.contactCode);
 
-            if(this.rememberMe)
-            {
+            if (this.rememberMe) {
               this.loginRemember()
             }
 
             this.$emit("authenticated", true);
             const cNum = sessionStorage.getItem('cuser');
-            window.location.href = 'http://localhost:8081/buyer/${cNum}'; // 다음 페이지의 경로를 지정
+
+            await Swal.fire({
+              title: 'Login Success!',
+              text: '로그인에 성공했습니다.',
+              icon: 'success',
+              confirmButtonText: '확인'
+            });
+            window.location.href = 'http://localhost:8081/buyer/status/${cNum}'; // 다음 페이지의 경로를 지정
           } else {
-            alert('Invalid password');
+            await Swal.fire({
+              title: 'Login failed!',
+              text: '아이디 및 비밀번호를 확인해주세요.',
+              icon: 'error',
+              confirmButtonText: '확인'
+            });
           }
         })
-        .catch(error => {
+        .catch(async error => {
           console.error('Error:', error);
-          alert('An error occurred while logging in');
+          await Swal.fire({
+            title: 'Error',
+            text: '로그인 에러입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          });
         });
     },loginRemember() {
       console.log(this.rememberMe)
@@ -136,11 +153,11 @@ export default {
 
       if (this.rememberMe) {
         // Set the cookie if "Remember me" is checked
-        this.$cookies.remove("idCookie");
-        this.$cookies.set("idCookie", username);
+        this.$cookies.remove("idCookies");
+        this.$cookies.set("idCookies", username);
       } else {
         // Remove the cookie if "Remember me" is unchecked
-        this.$cookies.remove("idCookie");
+        this.$cookies.remove("idCookies");
       }
 
 
