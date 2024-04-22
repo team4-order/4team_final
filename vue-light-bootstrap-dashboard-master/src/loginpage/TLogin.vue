@@ -51,7 +51,7 @@
                   <div class="form-check checkbox-fg" v-if="!loginstatus">
                     <input class="form-check-input" type="checkbox" v-model="rememberMe"  id="remember">
                     <label class="form-check-label" for="remember">
-                      Remember me
+                      아이디 기억하기
                     </label>
                   </div>
                 </div>
