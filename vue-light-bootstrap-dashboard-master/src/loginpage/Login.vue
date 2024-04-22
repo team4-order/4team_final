@@ -111,8 +111,27 @@ export default {
       this.input.username = idCookie;
       this.rememberMe = true; // 이전에 체크된 상태로 "Remember me" 체크박스 설정
     }
+
+    this.isloggedin();
+
   },
   methods: {
+    isloggedin(){
+      if(sessionStorage.getItem("user"))
+      {
+        this.$router.replace("/admin/overview");
+
+      }
+      else if(sessionStorage.getItem("cuser"))
+      {
+        const nowSession = sessionStorage.getItem("cuser");
+        this.$router.replace("/buyer/status/nowSession");
+      }
+      else if(localStorage.getItem("code")){
+        this.$router.replace("/admin/overview");
+      }
+    }
+    ,
     checkAndStoreCode() {
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');

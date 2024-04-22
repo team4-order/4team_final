@@ -93,7 +93,7 @@ export default {
   },
   mounted() {
 
-
+    this.isloggedin();
     const idCookies = this.$cookies.get("idCookies");
     if (idCookies) {
       this.input.contactCode = idCookies;
@@ -101,6 +101,21 @@ export default {
     }
   },
   methods: {
+    isloggedin(){
+      if(sessionStorage.getItem("user"))
+      {
+        this.$router.replace("/admin/overview");
+
+      }
+      else if(sessionStorage.getItem("cuser"))
+      {
+        const nowSession = sessionStorage.getItem("cuser");
+        this.$router.replace("/buyer/status/nowSession");
+      }
+      else if(localStorage.getItem("code")){
+        this.$router.replace("/admin/overview");
+      }
+    },
      async login() {
       // 비밀번호를 안전하게 전송하기 위해 HTTPS를 사용해야 합니다.
       // 여기에서는 예시로 보여주기 위해 간단한 HTTP 요청을 사용하겠습니다.
