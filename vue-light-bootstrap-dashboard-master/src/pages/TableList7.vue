@@ -184,8 +184,8 @@ submitOrder() {
       Promise.all(orderDetailsPromises)
         .then(results => {
           window.alert("주문이 완료되었습니다.");
-          const customerCode = this.$route.params.customerCode; // Make sure customerCode is correctly sourced
-          this.$router.push(`/status/${customerCode}`); // Redirect after successful order
+          //const customerCode = this.$route.params.customerCode; // Make sure customerCode is correctly sourced
+          this.$router.push(`/buyer/status/${this.mutableCId}`); // Redirect after successful order
         })
         .catch(err => {
           console.error('Error posting order details:', err);
