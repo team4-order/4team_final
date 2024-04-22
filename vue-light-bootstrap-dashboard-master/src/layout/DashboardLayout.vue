@@ -68,7 +68,7 @@
       </sidebar-link>
 
       <sidebar-link to="/admin/orders">
-        <i class="nc-icon nc-app"></i>
+        <i class="nc-icon nc-cart-simple"></i>
         <p>주문</p>
       </sidebar-link>
 

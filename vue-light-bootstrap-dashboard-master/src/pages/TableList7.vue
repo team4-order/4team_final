@@ -48,6 +48,7 @@ export default {
   },
   data() {
     return {
+      mutableCId: '',
       searchQuery: '',
       storageCodes: [],
       selectedStorageCode: '',
@@ -84,6 +85,8 @@ export default {
   }
   },
   mounted() {
+    const storedId = sessionStorage.getItem("cuser");
+    this.mutableCId = storedId;
     this.fetchOrderList();
   },
   methods: {
@@ -102,8 +105,8 @@ export default {
       }
     },
     fetchOrderList() {
-      const customerCode = this.$route.params.customerCode;
-      axios.get(`http://localhost:8080/api/storage/${customerCode}`)
+      //const customerCode = this.$route.params.customerCode;
+      axios.get(`http://localhost:8080/api/storage/${this.mutableCId}`)
         .then(response => {
           this.storageCodes = response.data.map(item => item.storageCode);
         })
@@ -153,7 +156,7 @@ submitOrder() {
     return;
   }
   const orderData = {
-    customerCode: "CON001",
+    customerCode: this.mutableCId,
     storageCode: this.selectedStorageCode,
     orderPrice: this.totalAmount,
     adjustmentStatus: "미정산",

@@ -62,6 +62,7 @@ export default {
   },
   data() {
     return {
+      mutableCId: '',
       currentPage: 1,
       itemsPerPage: 30,
       searchQuery: '',
@@ -76,6 +77,8 @@ export default {
     };
   },
   mounted() {
+    const storedId = sessionStorage.getItem("cuser");
+    this.mutableCId = storedId;
     this.fetchOrderList();
   },
   methods: {
@@ -100,7 +103,7 @@ export default {
       this.filterOrders(); // Ensure this method updates the displayed items based on currentPage
     },
     fetchOrderList() {
-      axios.get(`http://localhost:8080/api/orders/customer/${this.$route.params.customerCode}`)
+      axios.get(`http://localhost:8080/api/orders/customer/${this.mutableCId}`)
         .then(response => {
           this.orders.data = response.data.map(order => {
             return {
