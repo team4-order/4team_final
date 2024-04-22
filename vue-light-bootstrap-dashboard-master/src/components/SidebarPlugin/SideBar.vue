@@ -5,7 +5,7 @@
        :data-image="backgroundImage">
     <div class="sidebar-wrapper">
       <div class="logo">
-        <a href="/admin/overview1" class="simple-text logo__container">
+        <a href="/admin/overview" class="simple-text logo__container">
           <div class="logo-img">
             <img src="../../../public/img/vue-logo.png" alt="">
           </div>
