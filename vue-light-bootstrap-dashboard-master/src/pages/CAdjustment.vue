@@ -25,14 +25,14 @@
               <button v-if="showAdjustButton" @click="adjustmentAction" class="btn btn-primary">정산 요청</button>
           </div>
           <!-- 카드 컴포넌트로 정산 목록을 표시 -->
-          <card class="striped-tabled-with-hover" body-classes="table-full-width table-responsive">
+          <card2>
             <template slot="header">
               <h4 class="card-title">{{ selectedStatus }} 정산 목록</h4>
               <p class="card-category">거래처의 정산 상태를 확인하는 페이지</p>
             </template>
             <!-- 테이블 컴포넌트로 데이터 표시 -->
             <div class="adjustment">
-              <l-table class="table-hover table-striped" :columns="Cadjustments.columns" :data="Cadjustments.filteredData">
+              <l-table v-if="paginatedData.length > 0" class="table-hover table-striped" :columns="Cadjustments.columns" :data="paginatedData">
                 <template slot="columns">
                   <th>
                     <!-- Bind the select all checkbox to allSelected -->
@@ -52,7 +52,24 @@
                 </template>
               </l-table>
             </div>
-          </card>
+            <div class="pagination-controls">
+                <button class="btn btn-info btn-fill" @click="changePage(1)" :disabled="currentPage === 1">
+                  << </button>
+                    <button class="btn btn-info btn-fill" @click="changePage(currentPage - 1)"
+                      :disabled="currentPage <= 1">
+                      < </button>
+
+                        <span v-for="number in pageNumbers" :key="number" class="page-number" @click="changePage(number)"
+                          :class="{ 'active': currentPage === number }">
+                          {{ number }}
+                        </span>
+
+                        <button class="btn btn-info btn-fill" @click="changePage(currentPage + 1)"
+                          :disabled="currentPage >= totalPages">></button>
+                        <button class="btn btn-info btn-fill" @click="changePage(totalPages)"
+                          :disabled="currentPage === totalPages">>></button>
+              </div>
+          </card2>
         </div>
       </div>
     </div>
@@ -62,23 +79,25 @@
 
 <script>
 import LTable from 'src/components/Table.vue'
-import Card from 'src/components/Cards/Card.vue'
+import Card2 from 'src/components/Cards/Card.vue'
 import BaseCheckbox from 'src/components/Inputs/BaseCheckbox.vue' // 가정: BaseCheckbox 컴포넌트 경로
 import axios from 'axios'
 
 export default {
   components: {
     LTable,
-    Card
+    Card2
   },
   data() {
     return {
+      currentPage: 1,
+      itemsPerPage: 10,
       mutableCId: '',
       selectedStatus: '', // 선택된 정산 상태
       statuses: [], // 정산 상태 카테고리
       allSelected: false, // 추가: 모든 항목이 선택되었는지 여부를 나타냄
       Cadjustments: {
-        columns: ['주문번호', '주문일자', '금액', '정산상태'], // 테이블 컬럼
+        columns: ['주문번호', '주문일자', '금액', '정산상태',''], // 테이블 컬럼
         data: [], // 전체 데이터
         filteredData: [] // 필터링된 데이터
       },
@@ -230,6 +249,14 @@ export default {
     getTotalUnadjustedAmount1(){
       return this.Cadjustments.filteredData.filter(order => order.정산상태 === '미정산').reduce((total, order) => total + order.금액, 0);
     },
+    changePage(pageNumber) {
+      if (pageNumber < 1) {
+        pageNumber = 1;
+      } else if (pageNumber > this.totalPages) {
+        pageNumber = this.totalPages;
+      }
+      this.currentPage = pageNumber;
+    },
   },
   computed: {
     showTotalUnadjustedAmount() {
@@ -249,6 +276,21 @@ export default {
     totalOrderedAmount() {
       const total = this.getTotalOrderedAmount();
       return this.formatCurrency(total);
+    },
+    paginatedData() {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    return this.Cadjustments.filteredData.slice(start, end);
+    },
+    totalPages() {
+      return Math.ceil(this.Cadjustments.filteredData.length / this.itemsPerPage);
+    },
+    pageNumbers() {
+      let numbers = [];
+      for (let i = 1; i <= this.totalPages; i++) {
+        numbers.push(i);
+      }
+      return numbers;
     }
   },
   watch: {

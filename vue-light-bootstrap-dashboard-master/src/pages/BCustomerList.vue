@@ -24,8 +24,29 @@
             <!-- LTable 컴포넌트를 사용하여 테이블을 표시합니다. -->
             <l-table class="table-hover table-striped" 
                      :columns="Bcontacts.columns" 
-                     :data="filteredContacts"
-                     @row-click="handleRowClick"></l-table>
+                     :data="paginatedData"
+                     @row-click="handleRowClick">
+            </l-table>
+            <div class="pagination-controls">
+              <button class="btn btn-info btn-fill" @click="changePage(1)" :disabled="currentPage === 1">
+                &lt;&lt;
+              </button>
+              <button class="btn btn-info btn-fill" @click="changePage(currentPage - 1)" :disabled="currentPage <= 1">
+                &lt;
+              </button>
+
+              <span v-for="number in pageNumbers" :key="number" class="page-number" @click="changePage(number)"
+                    :class="{ 'active': currentPage === number }">
+                {{ number }}
+              </span>
+
+              <button class="btn btn-info btn-fill" @click="changePage(currentPage + 1)" :disabled="currentPage >= totalPages">
+                &gt;
+              </button>
+              <button class="btn btn-info btn-fill" @click="changePage(totalPages)" :disabled="currentPage === totalPages">
+                &gt;&gt;
+              </button>
+            </div>
           </card2>
         </div>
       </div>
@@ -45,6 +66,8 @@ export default {
   },
   data() {
     return {
+      currentPage: 1,
+      itemsPerPage: 10,
       mutableBusinessId: '',
       searchQuery: '',
       selectedStatus: '', // 선택된 정산 상태
@@ -118,11 +141,35 @@ export default {
     handleRowClick(row) {
       const customerCode = row['거래처 코드'];
       window.location.href = `http://localhost:8081/bcustomer_list/b_adjustment/${customerCode}`;
-    }
+    },
+    changePage(pageNumber) {
+      if (pageNumber < 1) {
+        pageNumber = 1;
+      } else if (pageNumber > this.totalPages) {
+        pageNumber = this.totalPages;
+      }
+      this.currentPage = pageNumber;
+    },
   },
+  
   computed: {
     filteredContacts() {
       return this.Bcontacts.filteredData;
+    },
+    paginatedData() {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    return this.Bcontacts.filteredData.slice(start, end);
+    },
+    totalPages() {
+      return Math.ceil(this.Bcontacts.filteredData.length / this.itemsPerPage);
+    },
+    pageNumbers() {
+      let numbers = [];
+      for (let i = 1; i <= this.totalPages; i++) {
+        numbers.push(i);
+      }
+      return numbers;
     }
   }
 }

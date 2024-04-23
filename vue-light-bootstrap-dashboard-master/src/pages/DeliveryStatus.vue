@@ -25,7 +25,7 @@
               <p class="card-category"></p>
             </template>
 
-            <l-table3 class="table-hover table-striped" :columns="orders.columns" :data="orders.data">
+            <l-table3 class="table-hover table-striped" :columns="orders.columns" :data="orders.data" @row-click="handleRowClick">
               
             </l-table3>
             <div class="pagination-controls">
@@ -97,14 +97,19 @@ export default {
           '배송 도착일': order.deliveryArrive ? order.deliveryArrive.split('.')[0].replace('T', ' ') : '-',
               '주문 번호': order.orderNumber,
               '고객명': order.contactName,
-              '배송 상태': order.orderStatus
+              '배송 상태': order.orderStatus,
+              '주문 번호': order.orderNumber
             };
           })
         })
         .catch(error => {
           console.error("배송 현황 목록을 가져오는 데 실패했습니다.", error);
         });
-    }
+    },
+    handleRowClick(row) {
+      const orderNumber = row['주문 번호'];
+      window.location.href = `http://localhost:8081/admin/deliverydetail/${orderNumber}`;
+    },
   },
   computed: {
     totalPages() {
