@@ -122,7 +122,7 @@ export default {
   },
   methods: {
     fetchWarehouses() {
-      axios.get(`http://localhost:8080/api/warehouses/${this.businessId}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/warehouses/${this.businessId}`)
         .then(response => {
           this.warehouses.data = response.data.map(warehouse => ({
             '창고 코드': warehouse.contactCode,
@@ -147,7 +147,7 @@ export default {
     },
     async fetchInventoryData(storageCode) {
       try {
-        const response = await axios.get(`http://localhost:8080/api/inventories/read/${storageCode}`);
+        const response = await axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/inventories/read/${storageCode}`);
         const inventoryData = response.data;
         let productQuantities = {};
 

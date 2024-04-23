@@ -104,7 +104,7 @@ export default {
         return;
       }
       this.loading = true;
-      axios.get(`http://localhost:8080/api/inventories/business/${this.businessId}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/inventories/business/${this.businessId}`)
         .then(response => {
           this.inventories = response.data;
           this.loading = false;

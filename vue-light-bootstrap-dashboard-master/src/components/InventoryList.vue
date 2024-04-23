@@ -153,7 +153,7 @@ export default {
   methods: {
     fetchInventories() {
       const storageCode = this.$route.params.storageCode;
-      axios.get(`http://localhost:8080/api/inventories/read/${storageCode}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/inventories/read/${storageCode}`)
         .then(response => {
           this.inventories = response.data;
         })

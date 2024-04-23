@@ -230,7 +230,7 @@ export default {
 
     fetchStorages() {
       const businessId = localStorage.getItem('user') || sessionStorage.getItem('user');  // 비즈니스 ID를 세션에서 직접 가져옴
-      axios.get(`http://localhost:8080/api/warehouses/${businessId}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/warehouses/${businessId}`)
         .then(response => {
           this.storages = response.data;  // 응답 데이터를 storages 배열에 저장
         })
@@ -241,7 +241,7 @@ export default {
 
 
     updateStorageCode() {
-      axios.put(`http://localhost:8080/api/vendors/updateStorageCode/${this.vendor.contactCode}?storageCode=${this.selectedStorageCode}`)
+      axios.put(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/vendors/updateStorageCode/${this.vendor.contactCode}?storageCode=${this.selectedStorageCode}`)
         .then(response => {
           alert('창고 코드가 성공적으로 업데이트되었습니다.');
           window.location.reload(); //창 새로고침
@@ -255,14 +255,14 @@ export default {
 
 
     fetchVendorDetails() {
-      axios.get(`http://localhost:8080/api/vendors/read/${this.$route.params.contactCode}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/vendors/read/${this.$route.params.contactCode}`)
         .then(response => {
           this.vendor = response.data;
         })
         .catch(error => console.error("공급처 정보를 가져오는 데 실패했습니다.", error));
     },
     fetchVendorInputs() {
-      axios.get(`http://localhost:8080/api/inputs/vendor/${this.$route.params.contactCode}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/inputs/vendor/${this.$route.params.contactCode}`)
         .then(response => {
           this.inputs = response.data;
         })
