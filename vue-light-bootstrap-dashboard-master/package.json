@@ -10,7 +10,9 @@
     "e2e": "node test/e2e/runner.js",
     "lint": "vue-cli-service lint",
     "dev": "vue-cli-service serve --open",
-    "lint-fix": "vue-cli-service lint --fix"
+    "lint-fix": "vue-cli-service lint --fix",
+    // npm run hello를 실행하면, 콘솔에 world가 출력됩니다
+      "hello": "echo world"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
@@ -41,6 +43,7 @@
     "@vue/cli-plugin-eslint": "3.12.1",
     "@vue/cli-plugin-pwa": "3.12.1",
     "@vue/cli-service": "3.12.1",
+    "gh-pages": "^6.1.1",
     "sass": "1.56.2",
     "sass-loader": "10.1.1",
     "vue-template-compiler": "2.7.14"
