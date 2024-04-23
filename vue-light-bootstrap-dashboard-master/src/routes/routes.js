@@ -40,6 +40,7 @@ import UserProfile from 'src/pages/UserProfile.vue'
 import Login from "../loginpage/Login.vue";
 import Register from "../loginpage/Register.vue";
 import TLogin from "../loginpage/TLogin.vue";
+import DeliveryDetail from 'src/pages/DeliveryDetail.vue';
 
 
 // import { component } from 'vue/types/umd.js'
@@ -228,6 +229,11 @@ const routes = [
         name: 'Customer Detail',
         component: CustomerDetail,
         props: true
+      },
+      {
+	      path: 'deliverydetail/:orderNumber',
+        name: 'delivery Detail',
+        component: DeliveryDetail
       }
     ]
   },
@@ -274,12 +280,6 @@ const routes = [
         path: '/customer/icons',
         name: 'Icons',
         component: Icons
-      },
-      {
-
-	      path: 'customer',
-        name: 'customer Adjustment',
-        component: CAdjustment
       }
     ]
   },

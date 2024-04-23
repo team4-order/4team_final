@@ -73,21 +73,14 @@ export default {
       });
     },
     initMap() {
-      if (this.isScriptLoaded) {
+         if (this.isScriptLoaded) {
         const mapOptions = {
-          center: new kakao.maps.LatLng(`${this.sLat}`, `${this.sLong}`),
+          center: new kakao.maps.LatLng(37.56595928, 126.97885624),
           level: 10
         };
-        
         const map = new kakao.maps.Map(document.getElementById('map'), mapOptions);
         this.fetchData().then(() => {
           if (this.storageLatLong && this.customerLatLong) {
-            this.findRoute(map);
-            const mapOptions = {
-              center: new kakao.maps.LatLng(`${this.sLat}`, `${this.sLong}`),
-              level: 10
-            };
-            const map = new kakao.maps.Map(document.getElementById('map'), mapOptions);
             this.findRoute(map);
           } else {
             console.error("위도와 경도 정보가 없습니다.");
@@ -269,7 +262,7 @@ export default {
   align-items: center;
   margin: 0 3%; /* 여백 조정 */
   margin-bottom: 30px;
-  margin-top: -8%;
+  margin-top: -10%;
 }
 
 .map-container {
@@ -285,7 +278,7 @@ export default {
 
 .btn-info {
   margin-left: 60px; /* 버튼과 지도 사이의 간격을 조정합니다. */
-  margin-top: 583px;
+  margin-top: 660px;
   width: 150px;
 }
 </style>

@@ -27,14 +27,14 @@
             <button v-if="showAdjustButton" @click="adjustmentAction" class="btn btn-primary">정산하기</button>
           </div>
           <!-- 카드 컴포넌트로 정산 목록을 표시 -->
-          <card>
+          <card2>
             <template slot="header">
               <h4 class="card-title">{{ selectedStatus }} 정산 목록</h4>
               <p class="card-category">{{ this.$route.params.customerCode }} 거래처의 정산 상태를 확인하는 페이지</p>
             </template>
             <!-- 테이블 컴포넌트로 데이터 표시 -->
             <div class="adjustment">
-              <l-table v-if="filteredData.length > 0" class="table-hover table-striped" :columns="Cadjustments.columns" :data="filteredData">
+              <l-table v-if="paginatedData.length > 0" class="table-hover table-striped" :columns="Cadjustments.columns" :data="paginatedData">
                 <template slot="columns">
                   <th>
                     <input type="checkbox" v-model="allSelected" @change="selectAll">
@@ -53,9 +53,26 @@
                   </td>
                 </template>
               </l-table>
-              <p class="all" v-else>해당 기간에 선택한 정산 상태의 데이터가 없습니다.</p>
-            </div>
-          </card>
+                <p class="all" v-else>해당 기간에 선택한 정산 상태의 데이터가 없습니다.</p>
+              </div>
+              <div class="pagination-controls">
+                <button class="btn btn-info btn-fill" @click="changePage(1)" :disabled="currentPage === 1">
+                  << </button>
+                    <button class="btn btn-info btn-fill" @click="changePage(currentPage - 1)"
+                      :disabled="currentPage <= 1">
+                      < </button>
+
+                        <span v-for="number in pageNumbers" :key="number" class="page-number" @click="changePage(number)"
+                          :class="{ 'active': currentPage === number }">
+                          {{ number }}
+                        </span>
+
+                        <button class="btn btn-info btn-fill" @click="changePage(currentPage + 1)"
+                          :disabled="currentPage >= totalPages">></button>
+                        <button class="btn btn-info btn-fill" @click="changePage(totalPages)"
+                          :disabled="currentPage === totalPages">>></button>
+              </div>
+          </card2>
         </div>
       </div>
     </div>
@@ -64,22 +81,24 @@
 
 <script>
 import LTable from 'src/components/Table.vue'
-import Card from 'src/components/Cards/Card.vue'  
+import Card2 from 'src/components/Cards/Card.vue'  
 import axios from 'axios'
 
 export default {
   components: {
     LTable,
-    Card
+    Card2
   },
   data() {
     return {
+      currentPage: 1,
+      itemsPerPage: 10,
       selectedStatus: '',
       statuses: [],
       startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 2).toISOString().substr(0, 10),
       endDate: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1).toISOString().substr(0, 10),
       Cadjustments: {
-        columns: ['주문번호', '주문일자', '금액', '정산상태'],
+        columns: ['주문번호', '주문일자', '금액','정산상태',''],
         data: [],
       },
       filteredData: [],
@@ -219,6 +238,14 @@ export default {
         row.selected = this.allSelected;
       });
     },
+    changePage(pageNumber) {
+      if (pageNumber < 1) {
+        pageNumber = 1;
+      } else if (pageNumber > this.totalPages) {
+        pageNumber = this.totalPages;
+      }
+      this.currentPage = pageNumber;
+    },
   },
   computed: {
     showTotalUnadjustedAmount() {
@@ -238,8 +265,23 @@ export default {
     totalOrderedAmount() {
       const total = this.getTotalOrderedAmount();
       return this.formatCurrency(total);
+    },
+    paginatedData() {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    return this.filteredData.slice(start, end);
+    },
+    totalPages() {
+      return Math.ceil(this.filteredData.length / this.itemsPerPage);
+    },
+    pageNumbers() {
+      let numbers = [];
+      for (let i = 1; i <= this.totalPages; i++) {
+        numbers.push(i);
+      }
+      return numbers;
     }
-  },
+  }
 }
 </script>
 
