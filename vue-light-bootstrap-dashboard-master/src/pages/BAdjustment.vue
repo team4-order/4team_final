@@ -27,7 +27,7 @@
             <button v-if="showAdjustButton" @click="adjustmentAction" class="btn btn-primary">정산하기</button>
           </div>
           <!-- 카드 컴포넌트로 정산 목록을 표시 -->
-          <card class="striped-tabled-with-hover" body-classes="table-full-width table-responsive">
+          <card>
             <template slot="header">
               <h4 class="card-title">{{ selectedStatus }} 정산 목록</h4>
               <p class="card-category">{{ this.$route.params.customerCode }} 거래처의 정산 상태를 확인하는 페이지</p>

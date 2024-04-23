@@ -8,7 +8,7 @@
           </div>
           
           <!-- Card 컴포넌트로 연락처 목록을 표시합니다. -->
-          <card class="striped-tabled-with-hover" body-classes="table-full-width table-responsive">
+          <card2>
             <template slot="header">
               <!-- 카테고리 선택을 위한 드롭다운 추가 -->
               <div class="search-category float-right">
@@ -26,7 +26,7 @@
                      :columns="Bcontacts.columns" 
                      :data="filteredContacts"
                      @row-click="handleRowClick"></l-table>
-          </card>
+          </card2>
         </div>
       </div>
     </div>
@@ -35,13 +35,13 @@
 
 <script>
 import LTable from 'src/components/Table.vue'
-import Card from 'src/components/Cards/Card.vue'
+import Card2 from 'src/components/Cards/Card2.vue'
 import axios from 'axios'
 
 export default {
   components: {
     LTable,
-    Card
+    Card2
   },
   data() {
     return {
@@ -129,6 +129,13 @@ export default {
 </script>
 
 <style scoped>
+.thead-sticky th {
+  position: sticky;
+  top: 0;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  z-index: 1;
+}
 .search-bar {
   margin-bottom: 20px;
 }

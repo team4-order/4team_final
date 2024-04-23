@@ -6,6 +6,7 @@
     <!-- NAV 영역: 총 재고 요약 -->
     <div class="nav-section">
       <h2 class="section-title">제품별 총 재고</h2>
+      <button @click="navigateToFruitInfo" class="btn btn-secondary mb-3 float-right">과일별 재고량</button>
       <div class="table-responsive">
         <table class="inventory-table">
           <thead class="thead-sticky">
@@ -39,6 +40,7 @@
         <option value="storageCode">창고 코드</option>
         <option value="firstStockDate">재고 입고일</option>
       </select>
+      &nbsp
       <input type="text" v-model="searchQuery" placeholder="검색..." class="form-control d-inline-block w-auto">
       <button @click="performSearch" class="btn btn-primary">조회</button>
     </div>
@@ -145,6 +147,10 @@ export default {
     },
   },
   methods: {
+    navigateToFruitInfo() {
+      this.$router.push({ path: '/admin/fruit' });
+    },
+
     fetchOrderedSummaries() {
       axios.get(`http://localhost:8080/api/inventories/summaries/${this.businessId}`)
         .then(response => {
@@ -346,5 +352,9 @@ export default {
   padding: 20px;
   background: #333;
   border-radius: 10px;
+}
+
+.btn-primary {
+  margin: 15px;
 }
 </style>

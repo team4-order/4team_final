@@ -3,6 +3,7 @@
     <thead>
       <tr>
         <th v-for="column in columns" :key="column">{{ column }}</th>
+        <th>배송 신청</th>
       </tr>
     </thead>
     <tbody>
@@ -13,7 +14,7 @@
         <td v-if="itemValue(item, '주문 상태').toLowerCase() === '주문 완료'">
           <button class="btn btn-info btn-fill" @click="handleBtnClick(item)">배송 신청</button>
         </td>
-        <td v-else></td>
+        <td v-else>-</td>
       </tr>
     </tbody>
   </table>

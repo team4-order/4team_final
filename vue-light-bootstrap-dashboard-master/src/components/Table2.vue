@@ -3,7 +3,7 @@
     <thead>
       <tr>
         <th v-for="column in columns" :key="column">{{ column }}</th>
-        <th></th> <!-- Additional header for the buttons column -->
+        <th>배송 완료 처리</th> <!-- Additional header for the buttons column -->
       </tr>
     </thead>
     <tbody>
