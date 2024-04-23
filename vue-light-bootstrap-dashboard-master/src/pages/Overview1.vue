@@ -565,7 +565,7 @@ export default {
               switch (order.orderStatus) {
                 case '배송 완료':
                   completedOrders++;
-                  totalSales += order.orderPrice; // 주문 상태가 '배송 완료'인 경우에 매출액을 더합니다.
+                  //totalSales += order.orderPrice; // 주문 상태가 '배송 완료'인 경우에 매출액을 더합니다.
                   break;
                 case '배송 중':
                   deliveryOrders++;
@@ -573,6 +573,11 @@ export default {
                 case '출고 준비 중':
                   readyOrders++;
                   break;
+              }
+            }
+            if (orderDate >= startOfWeek) {
+              if (order.adjustmentStatus == '정산 완료') {
+                  totalSales += order.orderPrice; // 주문 상태가 '정산 완료'인 경우에 매출액을 더합니다.
               }
             }
           });
