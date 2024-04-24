@@ -152,6 +152,9 @@ export default {
 
         formData.append("password", this.input.password);
 
+
+        if (formData) {
+
         const response = await axios.post("http://easyoms.store/login", formData);
 
 
@@ -168,22 +171,19 @@ export default {
         sessionStorage.setItem('user', userIn);
 
 
-          if (this.rememberMe) {
-            this.loginRemember();
-          }
-          else
-          {
-            this.loginRemember();
-          }
-
+        if (this.rememberMe) {
+          this.loginRemember();
+        } else {
+          this.loginRemember();
+        }
 
 
         this.$emit("authenticated", true);
-        this.$router.replace({ name: "Overview" });
+        this.$router.replace({name: "Overview"});
         /*this.$router.replace({ name: "Secure" });*/
         console.log("Logged in successfully!");
         console.log(response.data);
-
+      }
       } catch (error) {
         const userIn = "";
 
