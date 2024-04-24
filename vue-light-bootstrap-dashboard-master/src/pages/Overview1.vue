@@ -379,7 +379,7 @@ export default {
     },
     async callAI(message) {
       try {
-        const response = await axios.post('http://localhost:8080/api/ask', { prompt: message });
+        const response = await axios.post('http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/ask', { prompt: message });
         this.messages.push({
           id: this.nextMessageId++,
           type: 'ai',
@@ -400,7 +400,7 @@ export default {
     },
     async askQuestion() {
       try {
-        const response = await axios.post('http://localhost:8080/api/ask', { prompt: this.question });
+        const response = await axios.post('http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/ask', { prompt: this.question });
         this.answer = response.data;
       } catch (error) {
         console.error('Error asking question:', error);
@@ -408,7 +408,7 @@ export default {
       }
     },
     fetchCustomerOrders(customerCode) {
-      axios.get(`http://localhost:8080/api/orders/chart3/${customerCode}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/chart3/${customerCode}`)
         .then(response => {
           const labels = response.data.map(item => `${item.year.toString().slice(-2)}/${item.month.toString().padStart(2, '0')}`);
           const counts = response.data.map(item => item.count);  // Extract counts
@@ -433,7 +433,7 @@ export default {
       });
     },
     fetchCustomerSettlementData(customerCode) {
-      axios.get(`http://localhost:8080/api/orders/${customerCode}/count`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/${customerCode}/count`)
         .then(response => {
           this.updatePieChartData(response.data);
         })
@@ -479,7 +479,7 @@ export default {
       // }
 
       //businessId = this.$route.params.businessId;
-      axios.get(`http://localhost:8080/api/orders/chart2/${this.mutableBusinessId}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/chart2/${this.mutableBusinessId}`)
         .then(response => {
           this.customers = response.data.map(customer => ({
             contactName: customer.contactName,
@@ -500,7 +500,7 @@ export default {
         // } else {
         //   businessId = Standard;
         // }
-        const response = await axios.get(`http://localhost:8080/api/orders/chart1/${this.mutableBusinessId}`);
+        const response = await axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/chart1/${this.mutableBusinessId}`);
         const months = response.data.map(item => `${item.year.toString().slice(-2)}/${item.month.toString().padStart(2, '0')}`);
         const sales = response.data.map(item => item.price);
         this.updateSalesChart(months, sales);
@@ -547,7 +547,7 @@ export default {
       // } else {
       //   businessId = Standard;
       // }
-      axios.get(`http://localhost:8080/api/orders/id/${this.mutableBusinessId}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/id/${this.mutableBusinessId}`)
         .then(response => {
           const data = response.data;
           const startOfWeek = new Date();
@@ -600,7 +600,7 @@ export default {
       // } else {
       //   businessId = Standard;
       // }
-      axios.get(`http://localhost:8080/api/orders/request/${this.mutableBusinessId}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/request/${this.mutableBusinessId}`)
         .then(response => {
           this.tableData.data = response.data.map(item => ({
             '고객명': item.contactName,

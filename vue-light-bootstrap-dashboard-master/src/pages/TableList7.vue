@@ -106,7 +106,7 @@ export default {
     },
     fetchOrderList() {
       //const customerCode = this.$route.params.customerCode;
-      axios.get(`http://localhost:8080/api/storage/${this.mutableCId}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/storage/${this.mutableCId}`)
         .then(response => {
           this.storageCodes = response.data.map(item => item.storageCode);
         })
@@ -115,7 +115,7 @@ export default {
         });
     },
     fetchGoodsList(storageCode) {
-      axios.get(`http://localhost:8080/api/total/storage/${storageCode}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/total/storage/${storageCode}`)
         .then(response => {
           this.goodsList.data = response.data.map((goods, index) => ({
             ...goods,
@@ -162,7 +162,7 @@ submitOrder() {
     adjustmentStatus: "미정산",
     orderStatus: "주문 완료"
   };
-  axios.post('http://localhost:8080/api/orders/post', orderData)
+  axios.post('http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/post', orderData)
     .then(response => {
       console.log('Order created!', response.data);
       const createdOrderNumber = response.data.orderNumber;
@@ -177,7 +177,7 @@ submitOrder() {
           orderQuantity: item['주문 수량'],
           orderPrice: item['금액(원)']
         };
-        return axios.post('http://localhost:8080/api/order/detail/post', orderProductData);
+        return axios.post('http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/order/detail/post', orderProductData);
       });
 
       // Wait for all order detail posts to be successful

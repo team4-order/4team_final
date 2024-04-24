@@ -60,7 +60,7 @@ export default {
     fetchOrderStatus() {
       // Fetch the order's overall status separately
       const orderNumber = this.$route.params.orderNumber;
-      axios.get(`http://localhost:8080/api/orders/${orderNumber}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/${orderNumber}`)
         .then(response => {
           if (response.data) {
             this.orderStatus = response.data.orderStatus;
@@ -77,7 +77,7 @@ export default {
     return;
   } else {
     const orderNumber = this.$route.params.orderNumber;
-    axios.put(`http://localhost:8080/api/orders/${orderNumber}/cancel`)
+    axios.put(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/${orderNumber}/cancel`)
       .then(_response => {
         alert('주문이 취소되었습니다.');
         window.location.reload();
@@ -88,7 +88,7 @@ export default {
     // API에서 주문 목록을 가져와서 orders 배열에 할당
     const orderNumber = this.$route.params.orderNumber;
       // Use the orderNumber variable to fetch data
-      axios.get(`http://localhost:8080/api/order/detail/${orderNumber}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/order/detail/${orderNumber}`)
     .then(response => {
 
       if (response.data.length > 0) {

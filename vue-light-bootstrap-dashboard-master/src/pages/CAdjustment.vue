@@ -114,7 +114,7 @@ export default {
   methods: {
     fetchBAdjustments() {
       // API를 통해 주문 데이터 가져오기
-      axios.get(`http://localhost:8080/api/orders/customer/${this.mutableCId}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/customer/${this.mutableCId}`)
         .then(response => {
           // API 응답을 데이터로 변환하여 저장
           this.Cadjustments.data = response.data.map(Badjustment => ({
@@ -220,7 +220,7 @@ export default {
       const promises = selectedOrders.map(order => {
         order.정산상태 = '정산 요청';
         // API를 통해 서버에 상태 업데이트 요청을 보냅니다.
-        return axios.put(`http://localhost:8080/api/orders/adjustment/${order.주문번호}`, { adjustmentStatus: '정산 요청' });
+        return axios.put(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/adjustment/${order.주문번호}`, { adjustmentStatus: '정산 요청' });
       });
 
       // 모든 요청이 완료될 때까지 기다립니다.

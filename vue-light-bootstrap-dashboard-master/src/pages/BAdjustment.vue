@@ -110,7 +110,7 @@ export default {
   },
   methods: {
     fetchBAdjustments() {
-      axios.get(`http://localhost:8080/api/orders/customer/${this.$route.params.customerCode}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/customer/${this.$route.params.customerCode}`)
         .then(response => {
           this.Cadjustments.data = response.data.map(Badjustment => ({
             '주문번호': Badjustment.orderNumber,
@@ -204,7 +204,7 @@ export default {
       const promises = selectedOrders.map(order => {
         order.정산상태 = '정산 완료';
         // API를 통해 서버에 상태 업데이트 요청을 보냅니다.
-        return axios.put(`http://localhost:8080/api/orders/adjustment/${order.주문번호}`, { adjustmentStatus: '정산 완료' });
+        return axios.put(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/adjustment/${order.주문번호}`, { adjustmentStatus: '정산 완료' });
       });
 
       // 모든 요청이 완료될 때까지 기다립니다.

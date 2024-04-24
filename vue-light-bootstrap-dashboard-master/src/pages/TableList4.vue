@@ -104,7 +104,7 @@ export default {
     },
     fetchOrderList() {
       
-      axios.get(`http://localhost:8080/api/orders/customer/${this.mutableCId}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/customer/${this.mutableCId}`)
         .then(response => {
           this.orders.data = response.data.map(order => {
             return {
@@ -127,7 +127,7 @@ export default {
     handleRowClick(row) {
       const orderNumber = row['주문 번호'];
       // 주문 상세 페이지 URL로 이동
-      window.location.href = `http://localhost:8081/buyer/detail/${orderNumber}`;
+      window.location.href = `http://easyoms.store/buyer/detail/${orderNumber}`;
     }
   },
   computed: {

@@ -92,7 +92,7 @@ export default {
   methods: {
     async fetchBContacts() {
       try {
-        const response = await axios.get(`http://localhost:8080/api/contact/customers/${this.mutableBusinessId}`);
+        const response = await axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/contact/customers/${this.mutableBusinessId}`);
         for (const contact of response.data) {
           const settlementStatus = await this.isPendingSettlement(contact.contactCode);
           const adjustmentStatusCount = await this.adjustmentcount(contact.contactCode);
@@ -114,7 +114,7 @@ export default {
     },
     async isPendingSettlement(customerCode) {
       try {
-        const response = await axios.get(`http://localhost:8080/api/orders/pendingsettlement/${customerCode}`);
+        const response = await axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/pendingsettlement/${customerCode}`);
         return response.data;
       } catch (error) {
         console.error("정산 상태를 확인하는 데 실패했습니다.", error);
@@ -123,7 +123,7 @@ export default {
     },
     async adjustmentcount(customerCode) {
       try {
-        const response = await axios.get(`http://localhost:8080/api/orders/${customerCode}/count`);
+        const response = await axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/${customerCode}/count`);
         return response.data; // 가져온 데이터를 반환
       } catch (error) {
         console.error("정산 상태별 데이터 갯수 가져오는데 실패했습니다.", error);
@@ -140,7 +140,7 @@ export default {
     },
     handleRowClick(row) {
       const customerCode = row['거래처 코드'];
-      window.location.href = `http://localhost:8081/bcustomer_list/b_adjustment/${customerCode}`;
+      window.location.href = `http://easyoms.store/bcustomer_list/b_adjustment/${customerCode}`;
     },
     changePage(pageNumber) {
       if (pageNumber < 1) {

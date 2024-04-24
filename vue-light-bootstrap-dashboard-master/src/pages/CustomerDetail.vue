@@ -121,7 +121,7 @@ export default {
   methods: {
     async fetchCustomerDetails() {
       try {
-        const response = await axios.get(`http://localhost:8080/api/contact/customer/${this.$route.params.customerCode}`);
+        const response = await axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/contact/customer/${this.$route.params.customerCode}`);
         this.customer = { ...response.data };
         this.originalCustomerData = { ...response.data };
          // 비밀번호 필드 데이터를 비워줌
@@ -156,7 +156,7 @@ export default {
           aboutMe: this.customer.aboutMe,
         };
 
-        const response = await axios.put(`http://localhost:8080/api/contact/customers/${contactCode}`, updatedData);
+        const response = await axios.put(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/contact/customers/${contactCode}`, updatedData);
 
         if (response.status === 200) {
           this.customer = { ...response.data };

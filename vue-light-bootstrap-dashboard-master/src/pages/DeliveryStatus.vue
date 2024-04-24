@@ -87,7 +87,7 @@ export default {
   methods: {
     fetchOrderList() {
       //const businessId = this.$route.params.businessId;
-      axios.get(`http://localhost:8080/api/deliveries/status/${this.mutableBusinessId}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/deliveries/status/${this.mutableBusinessId}`)
         .then(response => {
           this.orders.data = response.data.map(order => {
             return {
@@ -108,7 +108,7 @@ export default {
     },
     handleRowClick(row) {
       const orderNumber = row['주문 번호'];
-      window.location.href = `http://localhost:8081/admin/deliverydetail/${orderNumber}`;
+      window.location.href = `http://easyoms.store/admin/deliverydetail/${orderNumber}`;
     },
   },
   computed: {
