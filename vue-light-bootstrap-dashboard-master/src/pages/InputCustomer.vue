@@ -65,7 +65,7 @@ export default {
       const randomCodePassword = this.generateRandomCode();
 
       // 거래처 정보 및 난수를 서버로 전송
-      axios.post('http://localhost:8080/api/contact/inputcustomer', {
+      axios.post('http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/contact/inputcustomer', {
         contactCode: randomCodeId,
         customerPassword: randomCodePassword,
         contactName: this.customer.contactName,

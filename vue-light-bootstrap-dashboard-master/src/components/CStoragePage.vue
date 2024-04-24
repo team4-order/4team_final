@@ -189,7 +189,7 @@ export default {
     },
     navigateToCustomerDetail(contactCode) {
       // 주문 상세 페이지 URL로 이동
-      const url = `http://localhost:8081/admin/customer_list/customer_detail/${contactCode}`;
+      const url = `http://easyoms.store/admin/customer_list/customer_detail/${contactCode}`;
       window.location.href = url;
     },
   },

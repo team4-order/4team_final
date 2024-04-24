@@ -87,7 +87,7 @@
       },
       async fetchData() {
         try {
-          const response = await axios.get(`http://localhost:8080/api/orders/id/${this.mutableBusinessId}/${this.$route.params.orderNumber}`);
+          const response = await axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/id/${this.mutableBusinessId}/${this.$route.params.orderNumber}`);
           if (response && response.data) {
             const storageContact = response.data.storageContact;
             const customerContact = response.data.customerContact;
@@ -223,7 +223,7 @@
       async submitDelivery() {
         try {
           const orderNumber = this.$route.params.orderNumber;
-          const response = await axios.get(`http://localhost:8080/api/orders/id/${this.mutableBusinessId}/${orderNumber}`);
+          const response = await axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/id/${this.mutableBusinessId}/${orderNumber}`);
           
           if (response && response.data) {
             const customerContact = response.data.customerContact;
@@ -232,7 +232,7 @@
             if (customerContact && customerContact.contactAddress) {
               const deliveryAddress = customerContact.contactAddress;
               // 주소를 포함하여 POST 요청
-              await axios.post(`http://localhost:8080/api/deliveries/delivery/${orderNumber}`, {
+              await axios.post(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/deliveries/delivery/${orderNumber}`, {
                 deliveryAddress: deliveryAddress
               });
               this.$router.push('/admin/delivery'); // 페이지 이동

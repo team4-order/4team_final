@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     fetchContacts() {
-      axios.get(`http://localhost:8080/api/contact/customers/${this.mutableBusinessId}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/contact/customers/${this.mutableBusinessId}`)
         .then(response => {
           this.contacts.data = response.data.map(contact => ({
             '거래처 이름': contact.contactName,

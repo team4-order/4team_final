@@ -62,7 +62,7 @@ import Swal from "sweetalert2";
 
         try {
 
-          const response = await axios.post('http://localhost:8079/api/delete-username', { username: username });
+          const response = await axios.post('http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8079/api/delete-username', { username: username });
           this.user.username = ''; // Reset the input after sending
 
           console.log("회원 탈퇴가 완료되었습니다.");

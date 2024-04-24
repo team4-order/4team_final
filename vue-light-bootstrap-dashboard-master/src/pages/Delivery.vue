@@ -94,7 +94,7 @@ export default {
     async fetchData() {
 
       try {
-        const response = await axios.get(`http://localhost:8080/api/orders/id/${this.mutableBusinessId}/${this.$route.params.orderNumber}`);
+        const response = await axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/id/${this.mutableBusinessId}/${this.$route.params.orderNumber}`);
         const storageContact = response.data.storageContact;
         const customerContact = response.data.customerContact;
         

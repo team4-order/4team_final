@@ -67,7 +67,7 @@ export default {
       //   .catch(error => {
       //     console.error("주문 목록을 가져오는 데 실패했습니다.", error);
       //   });
-      axios.get(`http://localhost:8080/api/total/summary/${customerCode}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/total/summary/${customerCode}`)
         .then(response => {
           this.orders.data = response.data.map(order => {
             return {
