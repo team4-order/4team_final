@@ -6,7 +6,7 @@ function resolveSrc(_path) {
 }
 
 module.exports = {
-  outputDir: '../../4team_final_MainSpring/demo2/src/main/resources/static',
+  outputDir: './dist',
   lintOnSave: false,
   configureWebpack: {
     // Set up all the aliases we use in our app.
