@@ -105,7 +105,7 @@ export default {
   },
   mounted() {
     this.checkAndStoreCode();
-
+    this.checkCstatus();
     const idCookie = this.$cookies.get("idCookie");
     if (idCookie) {
       this.input.username = idCookie;
@@ -135,10 +135,13 @@ export default {
     checkAndStoreCode() {
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');
+
       if (code) {
         localStorage.setItem('code', code);
         this.loginstatus = true;
       }
+
+
     },
     async login() {
       try {
@@ -255,6 +258,15 @@ export default {
 
 
 
+
+    },async checkCstatus(){
+
+      const cuser = sessionStorage.getItem("cuser");
+
+      if(!cuser)
+      {
+        this.$emit("authenticated", false);
+      }
 
     }
   }

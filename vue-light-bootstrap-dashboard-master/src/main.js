@@ -57,9 +57,7 @@ router.beforeEach((to, from, next) => {
       localStorage.removeItem('code');
       sessionStorage.removeItem('user');
       sessionStorage.removeItem('cuser');
-      this.authenticated = false;
-      // 값이 없으면 로그인 페이지로 리다이렉트
-      window.location.reload();
+      next("/login");
     }
   } else {
     // 인증이 필요없는 페이지는 바로 다음으로 넘어갑니다.
