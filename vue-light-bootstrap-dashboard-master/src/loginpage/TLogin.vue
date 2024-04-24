@@ -3,7 +3,7 @@
   <div class="login-fg">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-xl-8 col-lg-7 col-md-12 bg" style="background-image:url('http://easyoms.store/img/smarket.png')">
+        <div class="col-xl-8 col-lg-7 col-md-12 bg" style="background-image:url('http://easyoms.store/img/zmarket.png')">
           <div class="info">
             <h1>Easy OMS 거래처 페이지</h1>
             <p>로그인 혹은 회원가입 후 이용해주세요.</p>
