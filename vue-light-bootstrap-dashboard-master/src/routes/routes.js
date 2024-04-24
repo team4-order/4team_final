@@ -243,7 +243,7 @@ const routes = [
     path: '/buyer',
     component: CustomerDashboardLayout,
     redirect: '/buyer/:customerCode',
-    /*meta: { requiresAuth: false },*/
+    meta: { requiresAuth: true },
     children: [
       {
         //주문 목록(판매처)
