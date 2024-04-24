@@ -183,7 +183,15 @@ export default {
         /*this.$router.replace({ name: "Secure" });*/
         console.log("Logged in successfully!");
         console.log(response.data);
-      }
+      }else{
+          await Swal.fire({
+            title: 'Login failed!',
+            text: '아이디 및 비밀번호를 입력해주세요.',
+            icon: 'error',
+            confirmButtonText: '확인'
+          });
+        }
+
       } catch (error) {
         const userIn = "";
 
