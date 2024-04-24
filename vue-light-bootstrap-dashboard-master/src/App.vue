@@ -74,7 +74,7 @@ import { faDolly } from '@fortawesome/free-solid-svg-icons'
           if (code) {
 
                if(code.length > 0) {
-                  const response = await axios.post('http://localhost:8079/api/users/findallusername', {code});
+                  const response = await axios.post('http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8079/api/users/findallusername', {code});
                   this.usernameExists = response.data.usernameExists;
                   console.log(this.usernameExists);
                   if (this.usernameExists == true) {
@@ -129,7 +129,7 @@ import { faDolly } from '@fortawesome/free-solid-svg-icons'
            else if (userNowS) {
 
              if(userNowS.length > 0) {
-               const response = await axios.post('http://localhost:8079/api/ausers/findallusername', {userNowS});
+               const response = await axios.post('http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8079/api/ausers/findallusername', {userNowS});
                this.usernameExists = response.data.usernameExists;
                console.log(this.usernameExists);
                if (this.usernameExists == true) {
@@ -185,7 +185,7 @@ import { faDolly } from '@fortawesome/free-solid-svg-icons'
            else if(cuser)
           {
             if(cuser.length > 0) {
-              const response = await axios.post('http://localhost:8079/api/cusers/findallusername', {cuser});
+              const response = await axios.post('http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8079/api/cusers/findallusername', {cuser});
               this.usernameExists = response.data.usernameExists;
               console.log(this.usernameExists);
               if (this.usernameExists == true) {
