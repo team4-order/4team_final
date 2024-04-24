@@ -46,6 +46,25 @@ router.beforeEach((to, from, next) => {
     if (code || user ||cuser) {
       next();
     } else {
+      Swal.fire({
+        title: 'Login Status Error',
+        text: '세션이 만료되었거나, 로그인 상태 에러입니다.',
+        icon: 'error',
+        confirmButtonText: '돌아가기'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('code');
+          sessionStorage.removeItem('user');
+          sessionStorage.removeItem('cuser');
+
+          // 로그인 페이지로 리다이렉트 후 새로고침
+          window.location.href = '/login';
+          window.location.reload();
+        }
+      });
+      return;  // next() 호출을 방지
+    }/*else {
 
        Swal.fire({
         title: 'Login Status Error',
@@ -58,7 +77,7 @@ router.beforeEach((to, from, next) => {
       sessionStorage.removeItem('user');
       sessionStorage.removeItem('cuser');
       next("/login");
-    }
+    }*/
   } else {
     // 인증이 필요없는 페이지는 바로 다음으로 넘어갑니다.
     next();
