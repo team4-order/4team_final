@@ -229,7 +229,7 @@ import { faDolly } from '@fortawesome/free-solid-svg-icons'
           });
           this.$router.replace(name = "/login");
         }
-      }},
+      }}
   }
 
 

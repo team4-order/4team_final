@@ -105,7 +105,7 @@ export default {
   },
   mounted() {
     this.checkAndStoreCode();
-    this.checkCstatus();
+   /* this.checkCstatus();*/
     const idCookie = this.$cookies.get("idCookie");
     if (idCookie) {
       this.input.username = idCookie;
@@ -259,7 +259,7 @@ export default {
 
 
 
-    },async checkCstatus(){
+    }/*,async checkCstatus(){
 
       const cuser = sessionStorage.getItem("cuser");
 
@@ -268,7 +268,7 @@ export default {
         this.$emit("authenticated", false);
       }
 
-    }
+    }*/
   }
 }
 </script>
