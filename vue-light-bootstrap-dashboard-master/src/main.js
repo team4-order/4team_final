@@ -53,7 +53,11 @@ router.beforeEach((to, from, next) => {
         icon: 'error',
         confirmButtonText: '돌아가기'
       });
-
+      localStorage.removeItem('token');
+      localStorage.removeItem('code');
+      sessionStorage.removeItem('user');
+      sessionStorage.removeItem('cuser');
+      this.authenticated = false;
       // 값이 없으면 로그인 페이지로 리다이렉트
       next({ path: '/login', replace: true });
     }
