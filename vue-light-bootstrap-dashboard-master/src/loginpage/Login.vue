@@ -152,7 +152,7 @@ export default {
 
 
         const response = await axios.post("http://easyoms.store/login", formData);
-
+        console.log(response.status)
         if (response.status === 200) {
         await Swal.fire({
           title: 'Login Success!',
