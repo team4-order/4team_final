@@ -1,8 +1,8 @@
 <template>
   <div class="inventory-page">
-    <div v-if="showLoadingPopup" class="loading-popup">
-      <h1>Loading...</h1>
-    </div>
+<!--    <div v-if="showLoadingPopup" class="loading-popup">-->
+<!--      <h1>Loading...</h1>-->
+<!--    </div>-->
     <!-- NAV 영역: 총 재고 요약 -->
     <div class="nav-section">
       <h2 class="section-title">제품별 총 재고</h2>
@@ -115,7 +115,7 @@ export default {
       businessId: '', // 비즈니스 ID를 저장하는 변수 추가
       totalInventoryByProduct: {},
       loading: false,
-      showLoadingPopup: true, // 로딩 팝업 표시 상태
+      // showLoadingPopup: true, // 로딩 팝업 표시 상태
     };
   },
   computed: {
@@ -152,7 +152,7 @@ export default {
     },
 
     fetchOrderedSummaries() {
-      axios.get(`http://localhost:8080/api/inventories/summaries/${this.businessId}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/inventories/summaries/${this.businessId}`)
         .then(response => {
           this.orderedSummaries = response.data;
           this.updateInventoryDisplay();

@@ -155,7 +155,7 @@ export default {
     },
 
     fetchCStorages() {
-      axios.get('http://localhost:8080/api/cstorage1/list')
+      axios.get('http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/cstorage1/list')
         .then(response => {
           this.cStorages = response.data;
         })
