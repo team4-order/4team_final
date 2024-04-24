@@ -130,8 +130,7 @@ export default {
       else if(localStorage.getItem("code")){
         this.$router.replace("/login");
       }
-    }
-    ,
+    },
     checkAndStoreCode() {
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');
@@ -142,8 +141,7 @@ export default {
       }
 
 
-    },
-    async login() {
+    }, async login() {
       try {
         const formData = new FormData();
 
@@ -153,12 +151,9 @@ export default {
         formData.append("password", this.input.password);
 
 
-
-
         const response = await axios.post("http://easyoms.store/login", formData);
 
-        if (response) {
-
+        if (response.status === 200) {
         await Swal.fire({
           title: 'Login Success!',
           text: '로그인 되었습니다. 메인 페이지로 이동합니다.',
@@ -183,16 +178,17 @@ export default {
         this.$router.replace({name: "Overview"});
         /*this.$router.replace({ name: "Secure" });*/
         console.log("Logged in successfully!");
+
         console.log(response.data);
       }
-        else{
+        /*else{
           await Swal.fire({
             title: 'Login failed!',
             text: '아이디 및 비밀번호를 입력해주세요.',
             icon: 'error',
             confirmButtonText: '확인'
           });
-        }
+        }*/
 
       } catch (error) {
         const userIn = "";
