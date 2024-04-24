@@ -85,7 +85,7 @@ export default {
   },
   provide() {
     return {
-      autoClose: this.autoClose
+      autoClose:  this.autoClose
     }
   },
   computed: {
