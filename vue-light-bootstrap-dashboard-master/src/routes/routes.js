@@ -41,6 +41,7 @@ import Login from "../loginpage/Login.vue";
 import Register from "../loginpage/Register.vue";
 import TLogin from "../loginpage/TLogin.vue";
 import DeliveryDetail from 'src/pages/DeliveryDetail.vue';
+// import { component } from 'vue/types/umd.js';
 
 
 // import { component } from 'vue/types/umd.js'
@@ -280,6 +281,11 @@ const routes = [
         path: '/customer/icons',
         name: 'Icons',
         component: Icons
+      },
+      {
+	      path: 'customer',
+        name: 'customer Adjustment',
+        component: CAdjustment
       }
     ]
   },
