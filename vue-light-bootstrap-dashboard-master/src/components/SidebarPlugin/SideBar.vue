@@ -91,7 +91,7 @@ export default {
   computed: {
     sidebarStyle() {
       return {
-        backgroundImage: `url(http://localhost:8081/img/sidebar-5.jpg)`
+        backgroundImage: `url(http://easyoms.store/img/sidebar-5.jpg)`
       }
     }
   },methods: {
