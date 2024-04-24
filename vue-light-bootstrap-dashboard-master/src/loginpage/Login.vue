@@ -153,10 +153,11 @@ export default {
         formData.append("password", this.input.password);
 
 
-        if (formData) {
+
 
         const response = await axios.post("http://easyoms.store/login", formData);
 
+        if (response) {
 
         await Swal.fire({
           title: 'Login Success!',
@@ -183,7 +184,8 @@ export default {
         /*this.$router.replace({ name: "Secure" });*/
         console.log("Logged in successfully!");
         console.log(response.data);
-      }else{
+      }
+        else{
           await Swal.fire({
             title: 'Login failed!',
             text: '아이디 및 비밀번호를 입력해주세요.',
