@@ -45,7 +45,7 @@ export default {
   methods: {
     fetchVendors() {
       const businessId = localStorage.getItem('user') || sessionStorage.getItem('user'); // 비즈니스 ID 가져오기
-      axios.get(`http://localhost:8080/api/vendors/${businessId}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/vendors/${businessId}`)
         .then(response => {
           this.vendors = response.data;
           this.filteredVendors = response.data;

@@ -132,7 +132,7 @@ export default {
         return;
       }
 
-      axios.delete(`http://localhost:8080/api/cstorage1/delete/${customerCode}/${storageCode}`)
+      axios.delete(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/cstorage1/delete/${customerCode}/${storageCode}`)
         .then(() => {
           alert('창고 코드가 성공적으로 삭제되었습니다.');
           this.fetchCStorages(); // 목록 새로고침
@@ -145,7 +145,7 @@ export default {
 
 
     fetchContacts() {
-      axios.get(`http://localhost:8080/api/cstorage1/contacts/${this.businessId}`)
+      axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/cstorage1/contacts/${this.businessId}`)
         .then(response => {
           this.uniqueCustomers = response.data;
         })
@@ -166,7 +166,7 @@ export default {
         customerCode: this.selectedCustomerCode,
         storageCode: this.newStorageCode,
       };
-      axios.post('http://localhost:8080/api/cstorage1/addOrUpdate', newCStorage)
+      axios.post('http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/cstorage1/addOrUpdate', newCStorage)
         .then(() => {
           alert('창고 코드가 성공적으로 추가되었습니다.');
           this.fetchCStorages();
