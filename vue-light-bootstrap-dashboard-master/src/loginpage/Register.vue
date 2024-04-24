@@ -106,7 +106,7 @@ export default {
           })
           console.log("비밀번호가 너무 단순합니다.")
         }*/
-        const response = await axios.post('http://localhost:8079/join', formData);
+        const response = await axios.post('http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8079/join', formData);
         // Assuming your backend returns some data upon successful registration
         console.log("Registered successfully!");
 
