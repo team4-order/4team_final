@@ -128,7 +128,7 @@ export default {
         this.$router.replace("/buyer/status/nowSession");
       }
       else if(localStorage.getItem("code")){
-        this.$router.replace("/admin/overview");
+        this.$router.replace("/login");
       }
     }
     ,

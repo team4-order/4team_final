@@ -203,7 +203,7 @@ import { faDolly } from '@fortawesome/free-solid-svg-icons'
                 this.$router.replace(name = "/login");
               }
 
-              else if(code.length < 0 ){
+              else if(cuser.length < 0 ){
                 await Swal.fire({
                   title: 'Login Status Error',
                   text: '세션이 만료되었습니다.',
@@ -214,17 +214,6 @@ import { faDolly } from '@fortawesome/free-solid-svg-icons'
                 this.$router.replace(name = "/login");
 
               }
-            }
-            else if(code.length < 0 ){
-              await Swal.fire({
-                title: 'Login Status Error',
-                text: '세션이 만료되었습니다.',
-                icon: 'error',
-                confirmButtonText: '돌아가기',
-              });
-              this.authenticated = false;
-              this.$router.replace(name = "/login");
-
             }
             else {
               await Swal.fire({

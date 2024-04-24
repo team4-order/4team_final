@@ -41,9 +41,9 @@ router.beforeEach((to, from, next) => {
     // localStorage나 sessionStorage에서 값을 가져옵니다.
     const code = localStorage.getItem("code");
     const user = sessionStorage.getItem("user");
-
+    const cuser = sessionStorage.getItem("cuser");
     // code나 user 값이 있으면 다음 페이지로 진행
-    if (code || user) {
+    if (code || user ||cuser) {
       next();
     } else {
 
