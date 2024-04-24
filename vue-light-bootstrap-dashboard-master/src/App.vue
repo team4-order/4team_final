@@ -51,7 +51,7 @@ import { faDolly } from '@fortawesome/free-solid-svg-icons'
         localStorage.removeItem('code');
         sessionStorage.removeItem('user');
         sessionStorage.removeItem('cuser');
-        this.authenticated = false;
+
 
         await Swal.fire({
           title: 'Logout Success!',
@@ -60,7 +60,7 @@ import { faDolly } from '@fortawesome/free-solid-svg-icons'
           confirmButtonText: '확인'
 
         });
-
+        this.authenticated = false;
 
         window.location.reload();
 
