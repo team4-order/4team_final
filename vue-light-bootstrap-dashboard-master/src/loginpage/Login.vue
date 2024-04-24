@@ -151,7 +151,7 @@ export default {
         formData.append("password", this.input.password);
 
 
-        const response = await axios.post("http://easyoms.store/login", formData);
+        const response = await axios.post("http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8079/login", formData);
         console.log(response.status)
         if (response.status === 200) {
         await Swal.fire({
