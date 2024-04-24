@@ -119,7 +119,7 @@ export default {
      async login() {
       // 비밀번호를 안전하게 전송하기 위해 HTTPS를 사용해야 합니다.
       // 여기에서는 예시로 보여주기 위해 간단한 HTTP 요청을 사용하겠습니다.
-      axios.post('http://localhost:8079/omsuser/checkPassword', {
+      axios.post('http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8079/omsuser/checkPassword', {
         contactCode: this.input.contactCode,
         password: this.input.password
       })
@@ -141,7 +141,7 @@ export default {
               icon: 'success',
               confirmButtonText: '확인'
             });
-            window.location.href = 'http://localhost:8081/buyer/status/${cNum}'; // 다음 페이지의 경로를 지정
+            window.location.href = 'http://easyoms.store/buyer/status/${cNum}'; // 다음 페이지의 경로를 지정
           } else {
             await Swal.fire({
               title: 'Login failed!',

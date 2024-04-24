@@ -149,7 +149,7 @@ export default {
 
         formData.append("password", this.input.password);
 
-        const response = await axios.post("http://localhost:8079/login", formData);
+        const response = await axios.post("http://easyoms.store/login", formData);
 
 
         await Swal.fire({
@@ -201,13 +201,13 @@ export default {
         icon: 'info',
         confirmButtonText: '확인'
       });
-      window.location.href = "https://accounts.google.com/o/oauth2/v2/auth?client_id=1074874386105-qlcav64d5j58f07o9aep4snpko0elgs1.apps.googleusercontent.com&redirect_uri=http://localhost:8079/api/v1/oauth2/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
+      window.location.href = "https://accounts.google.com/o/oauth2/v2/auth?client_id=1074874386105-qlcav64d5j58f07o9aep4snpko0elgs1.apps.googleusercontent.com&redirect_uri=http:/ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8079/api/v1/oauth2/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
     },
     async checkUsernameExistence() {
       try {
         const code = localStorage.getItem('code');
         if (code) {
-          const response = await axios.post('http://localhost:8079/api/users/findallusername', { code });
+          const response = await axios.post('http:/ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8079/api/users/findallusername', { code });
           this.usernameExists = response.data.usernameExists;
           console.log(this.usernameExists);
           if (this.usernameExists == true) {
