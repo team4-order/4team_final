@@ -102,9 +102,11 @@ export default {
       showTooltip: false,
       rememberMe: false,
     }
+  },created() {
+    this.isloggedin();
   },
   mounted() {
-
+    this.isloggedin();
     this.gLogged();
     this.checkAndStoreCode();
    /* this.checkCstatus();*/
@@ -114,7 +116,7 @@ export default {
       this.rememberMe = true; // 이전에 체크된 상태로 "Remember me" 체크박스 설정
     }
 
-    this.isloggedin();
+
 
   },
   methods: {
