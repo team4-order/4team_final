@@ -39,7 +39,11 @@ module.exports = {
       '/': {
         target: "http://easyoms.store/",
         changeOrigin: true,
-      }
+      }, '/api/deliveries/': {
+          target: 'http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080',
+          changeOrigin: true,
+          pathRewrite: { '^/api/deliveries/': '' },
+      },
     }
   }
 };
