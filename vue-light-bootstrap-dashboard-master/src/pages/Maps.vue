@@ -50,7 +50,7 @@ export default {
     this.mutableBusinessId = storedId;
     await this.loadKaKaoPostcodeScript();
     kakao.maps.load(() => {
-        this.initMap();
+      this.initMap();
     });
   },
   methods: {
@@ -72,7 +72,7 @@ export default {
       });
     },
     initMap() {
-         if (this.isScriptLoaded) {
+      if (this.isScriptLoaded) {
         const mapOptions = {
           center: new kakao.maps.LatLng(37.56595928, 126.97885624),
           level: 10
@@ -89,7 +89,7 @@ export default {
     },
     async fetchData() {
       try {
-        const response = await axios.get(`http://localhost:8080/api/orders/id/${this.mutableBusinessId}/${this.$route.params.orderNumber}`);
+        const response = await axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/id/${this.mutableBusinessId}/${this.$route.params.orderNumber}`);
         if (response && response.data) {
           const storageContact = response.data.storageContact;
           const customerContact = response.data.customerContact;
@@ -119,11 +119,11 @@ export default {
         if (response && response.data && response.data.documents.length > 0) {
           const lat = parseFloat(response.data.documents[0].y);
           const long = parseFloat(response.data.documents[0].x);
-          this[`${type}LatLong`] = { lat, long };
+          this[`${type}LatLong`] = {lat, long};
           //console.log(this.storageLatLong);
           //this[`${type}LatLong1`] = { lat, long };
           //console.log(this.storageLatLong1);
-          if(`${type}` == 'storage'){
+          if (`${type}` == 'storage') {
             this.sLat = lat;
             this.sLong = long;
           }
@@ -159,68 +159,68 @@ export default {
           'Content-Type': 'application/json'
         }
       })
-      .then(response => {
-        const { result_code, summary, sections } = response.data.routes[0]; //distance : 미터단위, duration : 초 단위
-        if (sections[0]) {
-          const { distance, duration, guides, roads } = sections[0];
-          const detailRoads = [];
-          for (let i = 0; i < roads.length; i++) {
-            const arg = roads[i];
-            const mini = arg.vertexes;
-            let cursor = 0;
-            while (cursor < mini.length) {
-              const obj = new kakao.maps.LatLng(mini[cursor + 1], mini[cursor]);
-              detailRoads.push(obj);
-              cursor = cursor + 2;
-              if (cursor >= 1000000) break;
+        .then(response => {
+          const {result_code, summary, sections} = response.data.routes[0]; //distance : 미터단위, duration : 초 단위
+          if (sections[0]) {
+            const {distance, duration, guides, roads} = sections[0];
+            const detailRoads = [];
+            for (let i = 0; i < roads.length; i++) {
+              const arg = roads[i];
+              const mini = arg.vertexes;
+              let cursor = 0;
+              while (cursor < mini.length) {
+                const obj = new kakao.maps.LatLng(mini[cursor + 1], mini[cursor]);
+                detailRoads.push(obj);
+                cursor = cursor + 2;
+                if (cursor >= 1000000) break;
+              }
             }
-          }
-          // 가이드 수정
-          const modifiedGuides = guides.map(arg => {
-            const { x, y } = arg;
-            if (x && y) {
-              arg.position = new kakao.maps.LatLng(arg.y, arg.x);
-            }
-            return arg;
-          });
-          const { title, position } = modifiedGuides[0]; // 마커 이미지의 이미지 크기 입니다
-          const imageSize = new kakao.maps.Size(24, 35); // 마커 이미지를 생성합니다
-          const image = new kakao.maps.MarkerImage('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png', imageSize); // 마커를 생성합니다
-          const marker1 = new kakao.maps.Marker({
-            map, // 마커를 표시할 지도
-            position,
-            title: title ? title : '', // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-            image // 마커 이미지
-          });
-          const { title: title2, position: position2 } = modifiedGuides[modifiedGuides.length - 1];
-          // 마커 이미지 생성
-          const image2 = new kakao.maps.MarkerImage('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_drag.png', imageSize);
-          // 마커를 생성합니다
-          const marker2 = new kakao.maps.Marker({
-            map,
-            position: position2,
-            title: title2 ? title2 : '',
-            image: image2
-          });
+            // 가이드 수정
+            const modifiedGuides = guides.map(arg => {
+              const {x, y} = arg;
+              if (x && y) {
+                arg.position = new kakao.maps.LatLng(arg.y, arg.x);
+              }
+              return arg;
+            });
+            const {title, position} = modifiedGuides[0]; // 마커 이미지의 이미지 크기 입니다
+            const imageSize = new kakao.maps.Size(24, 35); // 마커 이미지를 생성합니다
+            const image = new kakao.maps.MarkerImage('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png', imageSize); // 마커를 생성합니다
+            const marker1 = new kakao.maps.Marker({
+              map, // 마커를 표시할 지도
+              position,
+              title: title ? title : '', // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+              image // 마커 이미지
+            });
+            const {title: title2, position: position2} = modifiedGuides[modifiedGuides.length - 1];
+            // 마커 이미지 생성
+            const image2 = new kakao.maps.MarkerImage('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_drag.png', imageSize);
+            // 마커를 생성합니다
+            const marker2 = new kakao.maps.Marker({
+              map,
+              position: position2,
+              title: title2 ? title2 : '',
+              image: image2
+            });
 
-          // 지도에 표시할 선을 생성합니다
-          const polyline = new kakao.maps.Polyline({
-            path: detailRoads,
-            strokeWeight: 5,
-            strokeColor: 'red',
-            strokeOpacity: 0.7,
-            strokeStyle: 'solid'
-          });
-          polyline.setMap(map);
-          //커스텀 오버레이 추가
-          this.distance = distance;
-          this.hours = Math.floor(duration / 3600);
-          this.minutes = Math.floor((duration % 3600) / 60);
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
+            // 지도에 표시할 선을 생성합니다
+            const polyline = new kakao.maps.Polyline({
+              path: detailRoads,
+              strokeWeight: 5,
+              strokeColor: 'red',
+              strokeOpacity: 0.7,
+              strokeStyle: 'solid'
+            });
+            polyline.setMap(map);
+            //커스텀 오버레이 추가
+            this.distance = distance;
+            this.hours = Math.floor(duration / 3600);
+            this.minutes = Math.floor((duration % 3600) / 60);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     async submitDelivery() {
       try {
