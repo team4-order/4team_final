@@ -35,15 +35,11 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
-   /* proxy: {
+    proxy: {
       '/': {
-        target: "http://localhost:8081/",
+        target: "http://easyoms.store/",
         changeOrigin: true,
-      },*/
-      /*'/admin': {
-        target : "http://localhost:8081/admin",
-        changeOrigin:true,
-      }*/
-
+      }
+    }
   }
 };
