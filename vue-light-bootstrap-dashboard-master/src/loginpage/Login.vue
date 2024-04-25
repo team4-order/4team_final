@@ -102,12 +102,10 @@ export default {
       showTooltip: false,
       rememberMe: false,
     }
-  },created() {
-    this.isloggedin();
   },
   mounted() {
     this.isloggedin();
-    this.gLogged();
+    this.eraseALL();
     this.checkAndStoreCode();
    /* this.checkCstatus();*/
     const idCookie = this.$cookies.get("idCookie");
@@ -269,23 +267,11 @@ export default {
 
 
 
-    },async gLogged(){
+    },async eraseALL(){
 
-      const gSession = localStorage.getItem("code");
+      const a = localStorage.removeItem()("code");
 
 
-      if(gSession)
-      {
-        await Swal.fire({
-          title: 'Logged In!',
-          text: '이미 로그인되었습니다. 페이지로 넘어갑니다.',
-          icon: 'info',
-          confirmButtonText: '확인'
-        });
-
-        this.$emit("authenticated", true);
-        this.$router.replace({name: "Overview"});
-      }
 
     }
   }
