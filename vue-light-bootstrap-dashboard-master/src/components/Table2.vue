@@ -31,8 +31,10 @@ export default {
     data: Array
   },
   methods: {
-    completeDelivery(item) {
-      axios.post(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/deliveries/${item['주문 번호']}/complete`)
+    async completeDelivery(item) {
+      const a = item['주문 번호'];
+
+      await axios.post(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/deliveries/`+ a +`/complete`)
   .then(_response => {
     alert("배송 완료 처리 되었습니다.");
     item['배송 상태'] = '배송 완료'; // Update the UI
