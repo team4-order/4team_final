@@ -50,7 +50,7 @@
             <div class="or-login clearfix">
               <span v-if="!loginstatus" >Or</span>
             </div>
-            <div class="form-container">
+            <div class="form-container" v-if="!loginstatus">
               <form action="#" method="GET">
                 <div class="form-group form-fg" v-if="!loginstatus">
                   <input type="text" id="username" name="username" v-if="!loginstatus" v-model="input.username" placeholder="Username" />
