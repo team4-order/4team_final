@@ -39,8 +39,16 @@ import { faDolly } from '@fortawesome/free-solid-svg-icons'
     },
     mounted() {
       this.checkUsernameExistence();
-      },
+      window.addEventListener("beforeunload", this.handleBeforeUnload);
+      },beforeUnmount() {
+      // 컴포넌트가 언마운트되기 전에 이벤트 핸들러를 제거합니다.
+      window.removeEventListener("beforeunload", this.handleBeforeUnload);
+    },
     methods: {
+      handleBeforeUnload(event) {
+        // 브라우저 탭이 닫힐 때 localStorage의 값을 삭제합니다.
+        localStorage.clear();
+      },
       setAuthenticated(status) {
         this.authenticated = status;
 
