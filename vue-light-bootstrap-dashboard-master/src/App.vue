@@ -79,6 +79,16 @@ import { faDolly } from '@fortawesome/free-solid-svg-icons'
               console.log(this.usernameExists);
               if (this.usernameExists == true) {
                 this.authenticated = true;
+                await Swal.fire({
+                  title: 'Logged In!',
+                  text: '이미 로그인되었습니다. 페이지로 넘어갑니다.',
+                  icon: 'info',
+                  confirmButtonText: '확인'
+                });
+
+
+                this.$router.replace({name: "Overview"});
+
               } else if (this.usernameExists == false) {
                 await Swal.fire({
                   title: 'Login Status Error',
