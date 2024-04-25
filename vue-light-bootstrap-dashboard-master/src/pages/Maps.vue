@@ -38,7 +38,6 @@ export default {
       isScriptLoaded: false,
       storageLatLong: null,
       customerLatLong: null,
-      storageLatLong: { lat: 0, long: 0 },
       sLat: 0,
       sLong: 0,
       distance: 0, // 거리 데이터
@@ -53,7 +52,7 @@ export default {
     kakao.maps.load(() => {
         this.initMap();
     });
-  },  
+  },
   methods: {
     loadKaKaoPostcodeScript() {
       return new Promise((resolve, reject) => {
@@ -185,13 +184,13 @@ export default {
             return arg;
           });
           const { title, position } = modifiedGuides[0]; // 마커 이미지의 이미지 크기 입니다
-          const imageSize = new kakao.maps.Size(24, 35); // 마커 이미지를 생성합니다    
+          const imageSize = new kakao.maps.Size(24, 35); // 마커 이미지를 생성합니다
           const image = new kakao.maps.MarkerImage('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png', imageSize); // 마커를 생성합니다
           const marker1 = new kakao.maps.Marker({
             map, // 마커를 표시할 지도
             position,
             title: title ? title : '', // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-            image // 마커 이미지 
+            image // 마커 이미지
           });
           const { title: title2, position: position2 } = modifiedGuides[modifiedGuides.length - 1];
           // 마커 이미지 생성
@@ -205,7 +204,7 @@ export default {
           });
 
           // 지도에 표시할 선을 생성합니다
-          const polyline = new kakao.maps.Polyline({ 
+          const polyline = new kakao.maps.Polyline({
             path: detailRoads,
             strokeWeight: 5,
             strokeColor: 'red',
@@ -227,7 +226,7 @@ export default {
       try {
         const orderNumber = this.$route.params.orderNumber;
         const response = await axios.get(`http://localhost:8080/api/orders/id/${this.mutableBusinessId}/${orderNumber}`);
-        
+
         if (response && response.data) {
           const customerContact = response.data.customerContact;
           console.log(customerContact); // customerContact 객체를 콘솔에 출력하여 확인

@@ -16,15 +16,15 @@
           <!-- 지도 영역 -->
           <div id="map" class="map"></div>
         </div>
-        <!-- 출고 등록 버튼 -->       
+        <!-- 출고 등록 버튼 -->
       </div>
     </div>
   </template>
-  
+
   <script>
   import Delivery from 'src/pages/Delivery.vue'; // Delivery 컴포넌트 가져오기
   import axios from 'axios'; // Axios HTTP 클라이언트 가져오기
-  
+
   export default {
     components: {
       Delivery
@@ -35,7 +35,6 @@
         isScriptLoaded: false,
         storageLatLong: null,
         customerLatLong: null,
-        storageLatLong: { lat: 0, long: 0 },
         sLat: 0,
         sLong: 0,
         distance: 0, // 거리 데이터
@@ -50,7 +49,7 @@
       kakao.maps.load(() => {
           this.initMap();
       });
-    },  
+    },
     methods: {
       loadKaKaoPostcodeScript() {
         return new Promise((resolve, reject) => {
@@ -139,7 +138,7 @@
           console.error('위도와 경도 정보가 없습니다.');
           return;
         }
-  
+
         axios.get('https://apis-navi.kakaomobility.com/v1/directions', {
           withCredentials: false, // 이 부분을 추가하여 인증 정보를 포함하지 않도록 설정합니다
           params: {
@@ -182,13 +181,13 @@
               return arg;
             });
             const { title, position } = modifiedGuides[0]; // 마커 이미지의 이미지 크기 입니다
-            const imageSize = new kakao.maps.Size(24, 35); // 마커 이미지를 생성합니다    
+            const imageSize = new kakao.maps.Size(24, 35); // 마커 이미지를 생성합니다
             const image = new kakao.maps.MarkerImage('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png', imageSize); // 마커를 생성합니다
             const marker1 = new kakao.maps.Marker({
               map, // 마커를 표시할 지도
               position,
               title: title ? title : '', // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-              image // 마커 이미지 
+              image // 마커 이미지
             });
             const { title: title2, position: position2 } = modifiedGuides[modifiedGuides.length - 1];
             // 마커 이미지 생성
@@ -200,9 +199,9 @@
               title: title2 ? title2 : '',
               image: image2
             });
-  
+
             // 지도에 표시할 선을 생성합니다
-            const polyline = new kakao.maps.Polyline({ 
+            const polyline = new kakao.maps.Polyline({
               path: detailRoads,
               strokeWeight: 5,
               strokeColor: 'red',
@@ -224,11 +223,11 @@
         try {
           const orderNumber = this.$route.params.orderNumber;
           const response = await axios.get(`http://ec2-13-209-231-193.ap-northeast-2.compute.amazonaws.com:8080/api/orders/id/${this.mutableBusinessId}/${orderNumber}`);
-          
+
           if (response && response.data) {
             const customerContact = response.data.customerContact;
             console.log(customerContact); // customerContact 객체를 콘솔에 출력하여 확인
-  
+
             if (customerContact && customerContact.contactAddress) {
               const deliveryAddress = customerContact.contactAddress;
               // 주소를 포함하여 POST 요청
@@ -246,11 +245,11 @@
           console.error('출고 등록에 실패했습니다:', error);
         }
       },
-  
+
     }
   };
   </script>
-  
+
   <!-- 스타일 부분 -->
   <style scoped>
   .content-container {
@@ -261,23 +260,22 @@
     margin-bottom: 30px;
     margin-top: -8%;
   }
-  
+
   .map-container {
     flex-grow: 1;
     height: 500px; /* 지도의 높이를 설정합니다. */
     margin-top: 5%;
   }
-  
+
   .map {
     width: 100%;
     height: 100%;
     border: 1px solid #ccc; /* 지도의 테두리 스타일을 정의합니다. */
   }
-  
+
   .btn-info {
     margin-left: 60px; /* 버튼과 지도 사이의 간격을 조정합니다. */
     margin-top: 583px;
     width: 150px;
   }
   </style>
-  
