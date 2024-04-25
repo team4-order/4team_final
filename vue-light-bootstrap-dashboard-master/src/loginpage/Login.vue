@@ -104,6 +104,8 @@ export default {
     }
   },
   mounted() {
+
+    this.gLogged();
     this.checkAndStoreCode();
    /* this.checkCstatus();*/
     const idCookie = this.$cookies.get("idCookie");
@@ -265,16 +267,25 @@ export default {
 
 
 
-    }/*,async checkCstatus(){
+    },async gLogged(){
 
-      const cuser = sessionStorage.getItem("cuser");
+      const gSession = localStorage.getItem("code");
 
-      if(!cuser)
+
+      if(gSession)
       {
-        this.$emit("authenticated", false);
+        await Swal.fire({
+          title: 'Logged In!',
+          text: '이미 로그인되었습니다. 페이지로 넘어갑니다.',
+          icon: 'info',
+          confirmButtonText: '확인'
+        });
+
+        this.$emit("authenticated", true);
+        this.$router.replace({name: "Overview"});
       }
 
-    }*/
+    }
   }
 }
 </script>
