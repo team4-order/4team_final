@@ -105,7 +105,7 @@ export default {
   },
   mounted() {
     this.isloggedin();
-    this.eraseALL();
+    this.pass();
     this.checkAndStoreCode();
    /* this.checkCstatus();*/
     const idCookie = this.$cookies.get("idCookie");
@@ -267,10 +267,14 @@ export default {
 
 
 
-    },async eraseALL(){
+    },pass(){
 
-      const a = localStorage.removeItem()("code");
+      const a = localStorage.getItem("code");
 
+      if(a.length >0 )
+      {
+        this.$router.replace({name: "Overview"});
+      }
 
 
     }
